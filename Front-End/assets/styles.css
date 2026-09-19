@@ -29,6 +29,7 @@
 }
 
 .logo img {
+    justify-self: left;
     max-width: 90px !important;
     height: auto;
 }
