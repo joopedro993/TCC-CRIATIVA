@@ -5,8 +5,13 @@
     box-sizing: border-box;
 }
 
-.background {
+body {
     background: url('/Front-End/assets/images/background.png') no-repeat center/cover;
+}
+
+main {
+    padding-top: 80px;
+
 }
 
 .header {
@@ -34,6 +39,12 @@
     height: auto;
 }
 
+.int-text{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 30px;
+    font-weight: 600;
+}
+
 .navbar a {
     color: black;
     font-size: 18px;
@@ -41,6 +52,8 @@
     margin-left: 35px;
     border-bottom: 2px solid transparent;
     transition: 0.3s;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
 }
 
 .navbar a:hover {
