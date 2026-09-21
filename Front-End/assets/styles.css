@@ -39,9 +39,9 @@ main {
     height: auto;
 }
 
-.int-text{
+.int-text {
     font-family: 'Montserrat', sans-serif;
-    font-size: 30px;
+    font-size: 2em;
     font-weight: 600;
 }
 
@@ -58,4 +58,11 @@ main {
 
 .navbar a:hover {
     border-bottom: 2px solid black;
+}
+
+.imagem-gradiente {
+    width: 100%;
+    
+    -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
 }
