@@ -5,16 +5,188 @@
     box-sizing: border-box;
 }
 
+html,
 body {
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+}
+
+main {
+    margin: 0;
+    padding: 0;
+}
+
+.init-section {
     background: url('/Front-End/assets/images/background.png') no-repeat center/cover;
 }
 
 main {
-    padding-top: 80px;
+    margin: 0;
+    padding: 0;
+
 
 }
 
+.hero {
+    position: relative;
+    padding-top: 0;
+    margin: 0;
+    overflow: hidden;
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 70%, #Fffff0 100%), url('/Front-End/assets/images/background.png') no-repeat center/cover;
+}
+
+.hero-conteudo {
+    margin-left: 80px;
+    padding: 24px;
+    background: rgba(170, 170, 170, 0.06);
+    border-radius: 32px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(17px);
+    -webkit-backdrop-filter: blur(17px);
+    border: 2px solid rgb(240, 238, 238);
+}
+
+.hero-botoes .btn-amarelo {
+    background: #FCC003;
+    color: #534D00;
+    font-size: 1.5em;
+    border-radius: 16px;
+    font-weight: 600;
+}
+
+.hero-botoes .btn-roxo {
+    background: #9500ff;
+    color: white;
+    font-size: 1.5em;
+    border-radius: 16px;
+    font-weight: 600;
+}
+
+.features {
+    position: relative;
+    overflow: hidden;
+    min-height: 90vh;
+    display: flex;
+    background: #fffff0;
+}
+
+.feature-conteudo {
+    margin: 15%;
+    padding: 24px;
+    min-height: 65%;
+    background: rgba(170, 170, 170, 0.06);
+    border-radius: 32px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(17px);
+    -webkit-backdrop-filter: blur(17px);
+    border: 2px solid rgb(240, 238, 238);
+}
+
+.feature-citacao {
+    margin: 15%;
+    padding: 24px;
+    min-height: 65%;
+    background: rgba(170, 170, 170, 0.06);
+    border-radius: 32px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(17px);
+    -webkit-backdrop-filter: blur(17px);
+    border: 2px solid rgb(240, 238, 238);
+}
+
+.feature-citacao::before,
+.feature-citacao::after {
+    content: '"';
+    position: absolute;
+    font-family: 'Montserrat', serif;
+    font-size: 8.5rem;
+    font-weight: 700;
+    color: gray;
+    /* cinza das aspas */
+    line-height: 1;
+}
+
+.feature-citacao::before {
+    top: -10px;
+    left: -40px;
+}
+
+.feature-citacao::after {
+    bottom: -60px;
+    right: -40px;
+}
+
+.feature-init-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2em;
+    font-weight: 400;
+}
+
+.feature-init-text span {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1em;
+    font-weight: 700;
+    color: #9500ff;
+}
+
+.feature-init-sub-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5em;
+    font-weight: 400;
+}
+
+.feature-exp-text {
+    padding: 24px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3em;
+    font-weight: 400;
+    color: #000000;
+}
+
+.feature-exp-text span {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1em;
+    font-weight: 700;
+    color: #9500ff;
+}
+
+.feature-exp-sub-text {
+    padding: 24px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2em;
+    font-weight: 400;
+    color: #000000;
+}
+
+.feature-exp-sub-text span {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1em;
+    font-weight: 700;
+    color: #9500ff;
+}
+
+.feature-exp-desc-text {
+    padding: 24px;
+    position: relative;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5em;
+    font-weight: 400;
+    color: #000000;
+}
+
+.feature-exp-desc-text span {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1em;
+    font-weight: 700;
+    color: #9500ff;
+}
+
 .header {
+    z-index: 1000;
     position: fixed;
     align-items: center;
     top: 0;
@@ -41,8 +213,21 @@ main {
 
 .int-text {
     font-family: 'Montserrat', sans-serif;
+    font-size: 3em;
+    font-weight: 400;
+}
+
+.int-text span {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1em;
+    font-weight: 700;
+    color: #9500ff;
+}
+
+.int-sub-text {
+    font-family: 'Montserrat', sans-serif;
     font-size: 2em;
-    font-weight: 600;
+    font-weight: 400;
 }
 
 .navbar a {
@@ -58,11 +243,4 @@ main {
 
 .navbar a:hover {
     border-bottom: 2px solid black;
-}
-
-.imagem-gradiente {
-    width: 100%;
-    
-    -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
 }
