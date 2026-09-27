@@ -1,3 +1,4 @@
+/* Define os padrões de CSS para toda a página */
 * {
     margin: 0;
     padding: 0;
@@ -5,6 +6,7 @@
     box-sizing: border-box;
 }
 
+/* Define os padrões de CSS para o html e o body */
 html,
 body {
     margin: 0;
@@ -12,22 +14,13 @@ body {
     scroll-behavior: smooth;
 }
 
+/* Define os padrões de CSS para a Main */
 main {
     margin: 0;
     padding: 0;
 }
 
-.init-section {
-    background: url('/Front-End/assets/images/background.png') no-repeat center/cover;
-}
-
-main {
-    margin: 0;
-    padding: 0;
-
-
-}
-
+/* Classe responsável por configurar a primeira seção da página inicial */
 .hero {
     position: relative;
     padding-top: 0;
@@ -39,9 +32,11 @@ main {
     background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 70%, #Fffff0 100%), url('/Front-End/assets/images/background.png') no-repeat center/cover;
 }
 
+/* Classe responsável pela caixa de conteúdo que está na primeira seção, com os botões e o texto chamativo */
 .hero-conteudo {
     margin-left: 80px;
     padding: 24px;
+    min-width: 100%;
     background: rgba(170, 170, 170, 0.06);
     border-radius: 32px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -50,12 +45,15 @@ main {
     border: 2px solid rgb(240, 238, 238);
 }
 
+/* Classes hero-botoes que são responsáveis pelos botões da primeira seção, sendo diferenciados pela cor,
+seja .btn-amarelo ou .btn-roxo */
 .hero-botoes .btn-amarelo {
     background: #FCC003;
     color: #534D00;
     font-size: 1.5em;
     border-radius: 16px;
     font-weight: 600;
+    transition: 0.5s;
 }
 
 .hero-botoes .btn-roxo {
@@ -64,8 +62,10 @@ main {
     font-size: 1.5em;
     border-radius: 16px;
     font-weight: 600;
+    transition: 0.5s;
 }
 
+/* Classe que define a segunda seção da página inicial */
 .features {
     position: relative;
     overflow: hidden;
@@ -74,8 +74,9 @@ main {
     background: #fffff0;
 }
 
+/* Classe .feature-conteudo responsável pelo primeiro texto da seção feature */
 .feature-conteudo {
-    margin: 15%;
+    margin: 5%;
     padding: 24px;
     min-height: 65%;
     background: rgba(170, 170, 170, 0.06);
@@ -86,8 +87,9 @@ main {
     border: 2px solid rgb(240, 238, 238);
 }
 
+/* Classe .feature-citacao responsável pela citação da seção feature */
 .feature-citacao {
-    margin: 15%;
+    margin: 5%;
     padding: 24px;
     min-height: 65%;
     background: rgba(170, 170, 170, 0.06);
@@ -98,6 +100,7 @@ main {
     border: 2px solid rgb(240, 238, 238);
 }
 
+/* .feature-citacao before e after são responsáveis pelas aspas localizadas nas extremidades da caixa de citações */
 .feature-citacao::before,
 .feature-citacao::after {
     content: '"';
@@ -106,7 +109,6 @@ main {
     font-size: 8.5rem;
     font-weight: 700;
     color: gray;
-    /* cinza das aspas */
     line-height: 1;
 }
 
@@ -120,6 +122,7 @@ main {
     right: -40px;
 }
 
+/* .feature-init-text e seu respectivo span, definem o texto principal de cada caixa entre as primeiras duas da feature */
 .feature-init-text {
     font-family: 'Montserrat', sans-serif;
     font-size: 2em;
@@ -133,12 +136,14 @@ main {
     color: #9500ff;
 }
 
+/* .feature-init-sub-text, definem o texto descritivo de cada caixa entre as primeiras duas da feature */
 .feature-init-sub-text {
     font-family: 'Montserrat', sans-serif;
     font-size: 1.5em;
     font-weight: 400;
 }
 
+/* .feature-exp-text e seu respectivo span, definem o texto principal da pergunta central da features "Como a CRIATIVA funciona?" */
 .feature-exp-text {
     padding: 24px;
     font-family: 'Montserrat', sans-serif;
@@ -154,6 +159,7 @@ main {
     color: #9500ff;
 }
 
+/* .feature-exp-text e seu respectivo span, definem o título das explicações da features "Como a CRIATIVA funciona?" */
 .feature-exp-sub-text {
     padding: 24px;
     font-family: 'Montserrat', sans-serif;
@@ -169,6 +175,7 @@ main {
     color: #9500ff;
 }
 
+/* .feature-exp-text e seu respectivo span, definem o texto descritivo das explicações de "Como a CRIATIVA funciona?" */
 .feature-exp-desc-text {
     padding: 24px;
     position: relative;
@@ -185,6 +192,41 @@ main {
     color: #9500ff;
 }
 
+.feature-botoes .btn-amarelo {
+    background: #FCC003;
+    margin: 5%;
+    color: #534D00;
+    font-size: 2em;
+    border-radius: 16px;
+    font-weight: 600;
+    transition: 0.5s;
+}
+
+.btn-amarelo:hover {
+    background: #fdc50e;
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px #fcc20352;
+
+}
+
+.feature-botoes .btn-roxo {
+    background: #9500ff;
+    margin: 5%;
+    color: white;
+    font-size: 2em;
+    border-radius: 16px;
+    font-weight: 600;
+    transition: 0.5s;
+}
+
+.btn-roxo:hover {
+    background: #9b0eff;
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px #9500ff5e;
+
+}
+
+/* Classe .header é responsável por definir os parâmetros principais da .navbar, em especial seu aspecto de vidro */
 .header {
     z-index: 1000;
     position: fixed;
@@ -205,12 +247,14 @@ main {
 
 }
 
+/* Classe que manipula a imagem da logo presente na .navbar */
 .logo img {
     justify-self: left;
     max-width: 90px !important;
     height: auto;
 }
 
+/* Classe que manipula o texto da section .hero */
 .int-text {
     font-family: 'Montserrat', sans-serif;
     font-size: 3em;
@@ -224,12 +268,14 @@ main {
     color: #9500ff;
 }
 
+/* Classe que manipula o texto descritivo da section .hero */
 .int-sub-text {
     font-family: 'Montserrat', sans-serif;
     font-size: 2em;
     font-weight: 400;
 }
 
+/* Classe que manipula a navbar e sua hover respectiva */
 .navbar a {
     color: black;
     font-size: 18px;
