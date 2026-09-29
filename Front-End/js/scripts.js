@@ -8,168 +8,201 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// ==============================
+// CONFIGURAÇÃO DA IA
+// ==============================
+
 const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY
+    apiKey: process.env.GEMINI_API_KEY
 });
 
+// ==============================
+// ROTA DE CORREÇÃO DA REDAÇÃO
+// ==============================
+
 app.post('/api/corrigir', async (req, res) => {
-  const { redacao, tema } = req.body;
 
-  if (!redacao || redacao.trim() === '') {
-    return res.status(400).json({
-      error: 'A redação não pode estar vazia.'
-    });
-  }
+    const { redacao, tema } = req.body;
 
-  try {
-    const response = await ai.models.generateContent({
-      model: 'gemini-3.5-flash-lite',
+    // Verifica se existe redação
+    if (!redacao || redacao.trim() === '') {
+        return res.status(400).json({
+            error: 'A redação não pode estar vazia.'
+        });
+    }
 
-      config: {
-        responseMimeType: 'application/json',
+    try {
 
-        systemInstruction: `
-Você é um corretor especializado em redações do ENEM.
+        const response = await ai.models.generateContent({
 
-Analise a redação seguindo os critérios oficiais das cinco competências
-da redação do ENEM.
+            model: 'gemini-3.5-flash-lite',
+
+            config: {
+
+                responseMimeType: 'application/json',
+
+                systemInstruction: `
+Você é o corretor de redações da plataforma CRIATIVA.
+
+Sua função é analisar redações no modelo dissertativo-argumentativo
+utilizado no ENEM.
+
+A redação deve ser avaliada de acordo com as cinco competências
+oficiais do ENEM.
 
 Cada competência deve receber uma nota entre 0 e 200 pontos.
 
 A soma das cinco competências deve resultar na nota final,
-que deve variar entre 0 e 1000 pontos.
-
-Analise a redação inteira antes de atribuir as notas.
+variando de 0 a 1000 pontos.
 
 COMPETÊNCIA 1:
 Avalie o domínio da modalidade escrita formal da língua portuguesa.
-Observe ortografia, acentuação, pontuação, concordância, regência,
-colocação pronominal e construção das frases.
+Analise ortografia, acentuação, pontuação, concordância,
+regência, colocação pronominal e construção das frases.
 
 COMPETÊNCIA 2:
-Avalie se o participante compreendeu corretamente o tema,
-se desenvolveu o assunto proposto e se utilizou adequadamente
-a estrutura dissertativo-argumentativa.
-Avalie também a utilização de repertório sociocultural pertinente.
+Avalie a compreensão do tema, o desenvolvimento do assunto,
+a estrutura dissertativo-argumentativa e o repertório sociocultural.
 
 COMPETÊNCIA 3:
 Avalie a seleção, organização e interpretação das informações,
-fatos, opiniões e argumentos utilizados para defender o ponto de vista.
-Verifique a existência de uma tese clara e argumentos relacionados a ela.
+fatos, opiniões e argumentos utilizados para defender a tese.
 
 COMPETÊNCIA 4:
-Avalie os mecanismos linguísticos utilizados para construir
-a argumentação, especialmente os elementos de coesão,
-conectivos e relações entre as partes do texto.
+Avalie a utilização dos mecanismos de coesão e dos conectivos,
+observando a relação entre as partes do texto.
 
 COMPETÊNCIA 5:
-Avalie a proposta de intervenção para o problema abordado.
-Observe ação, agente, modo/meio, efeito e detalhamento.
-Verifique também o respeito aos direitos humanos.
+Avalie a proposta de intervenção.
+Observe agente, ação, meio/modo, efeito e detalhamento,
+respeitando os direitos humanos.
 
-IMPORTANTE:
-Não invente erros que não existem.
-Explique cada nota de maneira clara.
-Se encontrar problemas, apresente exemplos retirados da própria redação.
-Dê sugestões práticas para melhorar o texto.
+REGRAS IMPORTANTES:
 
-RETORNE SOMENTE JSON, seguindo exatamente esta estrutura:
+- Analise a redação inteira antes de atribuir as notas.
+- Não invente erros.
+- Utilize exemplos reais retirados da redação.
+- Explique claramente cada avaliação.
+- Apresente pontos positivos.
+- Apresente pontos que podem ser melhorados.
+- Dê sugestões práticas.
+- A nota final deve ser exatamente a soma das cinco competências.
+- Retorne SOMENTE JSON válido.
+
+Use exatamente esta estrutura:
 
 {
-  "nota_final": 0,
+    "nota_final": 0,
 
-  "competencias": {
-    "c1": {
-      "nome": "Competência 1 — Domínio da modalidade escrita formal",
-      "nota": 0,
-      "avaliacao": "texto",
-      "pontos_positivos": ["texto"],
-      "pontos_melhorar": ["texto"]
+    "competencias": {
+
+        "c1": {
+            "nome": "Competência 1 — Domínio da modalidade escrita formal",
+            "nota": 0,
+            "avaliacao": "",
+            "pontos_positivos": [],
+            "pontos_melhorar": []
+        },
+
+        "c2": {
+            "nome": "Competência 2 — Compreensão do tema",
+            "nota": 0,
+            "avaliacao": "",
+            "pontos_positivos": [],
+            "pontos_melhorar": []
+        },
+
+        "c3": {
+            "nome": "Competência 3 — Seleção e organização dos argumentos",
+            "nota": 0,
+            "avaliacao": "",
+            "pontos_positivos": [],
+            "pontos_melhorar": []
+        },
+
+        "c4": {
+            "nome": "Competência 4 — Coesão",
+            "nota": 0,
+            "avaliacao": "",
+            "pontos_positivos": [],
+            "pontos_melhorar": []
+        },
+
+        "c5": {
+            "nome": "Competência 5 — Proposta de intervenção",
+            "nota": 0,
+            "avaliacao": "",
+            "pontos_positivos": [],
+            "pontos_melhorar": []
+        }
     },
 
-    "c2": {
-      "nome": "Competência 2 — Compreensão do tema",
-      "nota": 0,
-      "avaliacao": "texto",
-      "pontos_positivos": ["texto"],
-      "pontos_melhorar": ["texto"]
-    },
+    "comentarios_gerais": [],
 
-    "c3": {
-      "nome": "Competência 3 — Seleção e organização dos argumentos",
-      "nota": 0,
-      "avaliacao": "texto",
-      "pontos_positivos": ["texto"],
-      "pontos_melhorar": ["texto"]
-    },
-
-    "c4": {
-      "nome": "Competência 4 — Coesão",
-      "nota": 0,
-      "avaliacao": "texto",
-      "pontos_positivos": ["texto"],
-      "pontos_melhorar": ["texto"]
-    },
-
-    "c5": {
-      "nome": "Competência 5 — Proposta de intervenção",
-      "nota": 0,
-      "avaliacao": "texto",
-      "pontos_positivos": ["texto"],
-      "pontos_melhorar": ["texto"]
-    }
-  },
-
-  "comentarios_gerais": [
-    "texto"
-  ],
-
-  "correcoes": [
-    {
-      "trecho_errado": "trecho da redação",
-      "motivo": "explicação do problema",
-      "sugestao": "forma sugerida de melhorar"
-    }
-  ]
+    "correcoes": [
+        {
+            "trecho_errado": "",
+            "motivo": "",
+            "sugestao": ""
+        }
+    ]
 }
 `
-      },
+            },
 
-      contents: `
+            contents: `
 Tema da redação:
 ${tema || 'Tema não informado'}
 
 Redação do aluno:
 ${redacao}
 `
-    });
+        });
 
+        // ==============================
+        // RECEBE RESPOSTA DA GEMINI
+        // ==============================
 
-    const textoResposta = response.text.trim();
+        const textoResposta = response.text.trim();
 
-    console.log("RESPOSTA DA GEMINI:");
-    console.log(textoResposta);
+        console.log('\n==============================');
+        console.log('RESPOSTA DA GEMINI');
+        console.log('==============================');
+        console.log(textoResposta);
+        console.log('==============================\n');
 
-    const resultadoJson = JSON.parse(textoResposta);
+        // Converte resposta para JSON
+        const resultadoJson = JSON.parse(textoResposta);
 
-    res.json(resultadoJson);
+        // Envia para o Front-End
+        res.json(resultadoJson);
 
-  } catch (error) {
+    } catch (error) {
 
-    console.error('--- ERRO DETALHADO NO SEU TERMINAL ---');
-    console.error(error);
-    console.error('--------------------------------------');
+        console.error('\n================================');
+        console.error('ERRO AO CORRIGIR REDAÇÃO');
+        console.error('================================');
+        console.error(error);
+        console.error('================================\n');
 
-    res.status(500).json({
-      error: 'Erro interno ao processar a correção.'
-    });
-  }
+        res.status(500).json({
+            error: 'Erro interno ao processar a correção da redação.'
+        });
+    }
 });
+
+// ==============================
+// SERVIDOR
+// =============================
 
 const PORT = 3001;
 
 app.listen(PORT, () => {
-  console.log(
-    `🚀 O SEU Servidor de Redação está rodando com sucesso na porta ${PORT}!`
-  );
+
+    console.log('======================================');
+    console.log('🚀 CRIATIVA');
+    console.log(`🚀 Servidor rodando na porta ${PORT}`);
+    console.log(`🚀 http://localhost:${PORT}`);
+    console.log('======================================');
+
 });
