@@ -1,3 +1,30 @@
+/* Garante que o navegador use a animação ao trocar de página */
+@view-transition {
+  navigation: auto;
+}
+
+/* Animação da página que está SAINDO */
+::view-transition-old(root) {
+  animation: fadeOut 0.3s ease-out forwards;
+}
+
+/* Animação da página que está ENTRANDO */
+::view-transition-new(root) {
+  animation: fadeIn 0.3s ease-in forwards;
+}
+
+/* Definição dos movimentos */
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+
 /* Define os padrões de CSS para toda a página */
 * {
     margin: 0;
@@ -339,6 +366,10 @@ seja .btn-amarelo ou .btn-roxo */
     color: #666;
 }
 
+.logo-sobre-nos{
+    max-width: 100%;
+}
+
 @media (max-width: 991.98px) {
     .header {
         padding: 12px 24px;
@@ -387,7 +418,15 @@ seja .btn-amarelo ou .btn-roxo */
     }
 
     .hero {
-        max-width: 60vh;
+        max-height: 60vh;
+    }
+
+    .hero-conteudo{
+        font-size: 2em;
+    }
+
+    .features{
+        font-size: 1.5em;
     }
 
     .feature-init-sub-text {
@@ -406,9 +445,13 @@ seja .btn-amarelo ou .btn-roxo */
         font-size: 1.1em;
     }
 
+    .features label{
+        font-size: .75em;
+    }
+
     .feature-botoes .btn-amarelo,
     .feature-botoes .btn-roxo {
-        font-size: 1.3em;
+        font-size: 1.25em;
     }
 
     .hero-botoes .btn-amarelo,

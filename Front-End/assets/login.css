@@ -9,7 +9,7 @@
     display: flex;
     align-items: center;
     padding: 120px 0 48px;
-    background: url('/Front-End/assets/images/background.png') no-repeat center/cover;;
+    background: url('/Front-End/assets/images/background.png') no-repeat center/cover;
 }
 
 .login::before,
@@ -222,6 +222,10 @@
     border-radius: 16px;
 }
 
+.form-control{
+    font-size: 1em;
+}
+
 /* Tablet e celular */
 @media (max-width: 991.98px) {
     .header {
@@ -234,24 +238,27 @@
     }
 
     .login-titulo {
-        font-size: 2.2em;
+        font-size: 2.75em;
     }
 
     .login-subtitulo {
-        font-size: 1.2em;
+        font-size: 1.75em;
     }
 }
 
 @media (max-width: 575.98px) {
     .login {
         padding-top: 140px;
+        
     }
 
     .login-card {
         padding: 28px 20px;
+        font-size: 1.5em;
     }
 
     .login-card-titulo {
-        font-size: 1.6em;
+        font-size: 2.15em;
     }
+
 }

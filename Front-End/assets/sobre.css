@@ -1,0 +1,169 @@
+/* Estilos da página "Sobre Nós".
+   Carregue depois de styles.css: <link rel="stylesheet" href="assets/sobre.css"> */
+
+.sobre {
+    position: relative;
+    overflow: hidden;
+    min-height: 100vh;
+    padding: 130px 0 64px;
+    background: url('/Front-End/assets/images/background.png') no-repeat center/cover;
+}
+
+/* Manchas de cor para o efeito de vidro ter o que desfocar */
+.sobre::before,
+.sobre::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    z-index: 0;
+}
+
+.sobre::before {
+    width: 420px;
+    height: 420px;
+    top: -80px;
+    left: -100px;
+    background: rgba(149, 0, 255, 0.25);
+}
+
+.sobre::after {
+    width: 380px;
+    height: 380px;
+    bottom: -100px;
+    right: -100px;
+    background: rgba(252, 192, 3, 0.4);
+}
+
+.sobre .container-fluid {
+    position: relative;
+    z-index: 1;
+}
+
+/* Título da página */
+.sobre-titulo {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3em;
+    font-weight: 400;
+    margin-bottom: 32px;
+}
+
+.sobre-titulo span {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1em;
+    font-weight: 700;
+    color: #9500ff;
+}
+
+/* Caixa de vidro com o texto */
+.sobre-conteudo {
+    padding: 40px;
+    background: rgba(170, 170, 170, 0.06);
+    border-radius: 32px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(17px);
+    -webkit-backdrop-filter: blur(17px);
+    border: 2px solid rgb(240, 238, 238);
+}
+
+.sobre-texto {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.3em;
+    font-weight: 400;
+    line-height: 1.7;
+    text-indent: 2em;
+    margin-bottom: 1.2em;
+}
+
+.sobre-texto:last-child {
+    margin-bottom: 0;
+}
+
+.sobre-texto strong {
+    font-weight: 700;
+    font-family: "Montserrat", sans-serif;
+    color: #9500ff;
+}
+
+/* Último parágrafo, com barra roxa lateral */
+.sobre-fecho {
+    text-indent: 0;
+    padding-left: 20px;
+    border-left: 4px solid #9500ff;
+}
+
+/* Chamada final com os botões de acesso */
+.sobre-acesso {
+    margin-top: 48px;
+}
+
+.sobre-acesso .btn-amarelo,
+.sobre-acesso .btn-roxo {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5em;
+    border-radius: 16px;
+    font-weight: 600;
+    transition: 0.5s;
+}
+
+.sobre-acesso .btn-amarelo {
+    background: #FCC003;
+    color: #534D00;
+}
+
+.sobre-acesso .btn-roxo {
+    background: #9500ff;
+    color: white;
+}
+
+.sobre-acesso-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2em;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.logo-sobre-nos{
+    max-width: 20%;
+}
+
+/* Tablet e celular */
+@media (max-width: 991.98px) {
+    .header {
+        padding: 12px 24px;
+    }
+
+    .navbar a {
+        margin-left: 16px;
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .sobre {
+        padding-top: 140px;
+    }
+
+    .sobre-titulo {
+        font-size: 2.75em;
+    }
+
+    .sobre-conteudo {
+        padding: 24px 20px;
+    }
+
+    .sobre-texto {
+        font-size: 1.75em;
+        text-indent: 1.5em;
+    }
+
+    .sobre-fecho {
+        padding-left: 14px;
+    }
+
+    .sobre-acesso .btn-amarelo,
+    .sobre-acesso .btn-roxo {
+        font-size: 1.75em;
+        width: 100%;
+    }
+}
