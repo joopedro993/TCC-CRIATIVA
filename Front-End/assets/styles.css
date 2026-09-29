@@ -34,15 +34,20 @@ main {
 
 /* Classe responsável pela caixa de conteúdo que está na primeira seção, com os botões e o texto chamativo */
 .hero-conteudo {
-    margin-left: 80px;
+    margin: 0 auto;
     padding: 24px;
-    min-width: 100%;
+    width: 100%;
+    max-width: 100%;
     background: rgba(170, 170, 170, 0.06);
     border-radius: 32px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(17px);
     -webkit-backdrop-filter: blur(17px);
     border: 2px solid rgb(240, 238, 238);
+}
+
+.hero .container-fluid {
+    width: 100%;
 }
 
 /* Classes hero-botoes que são responsáveis pelos botões da primeira seção, sendo diferenciados pela cor,
@@ -289,4 +294,142 @@ seja .btn-amarelo ou .btn-roxo */
 
 .navbar a:hover {
     border-bottom: 2px solid black;
+}
+
+/* Classe .footer responsável pelo rodapé do site */
+.footer {
+    position: relative;
+    padding: 24px 40px;
+    background: rgba(170, 170, 170, 0.06);
+    border-top: 1px solid rgba(170, 170, 170, 0.4);
+    backdrop-filter: blur(17px);
+    -webkit-backdrop-filter: blur(17px);
+}
+
+.footer-logo {
+    max-width: 70px;
+    height: auto;
+}
+
+.footer-tagline {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 8px;
+}
+
+.footer-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1em;
+    font-weight: 700;
+    color: #9500ff;
+    margin-bottom: 4px;
+}
+
+.footer-devs {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9em;
+    font-weight: 400;
+    color: #000;
+}
+
+.footer-copy {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85em;
+    color: #666;
+}
+
+@media (max-width: 991.98px) {
+    .header {
+        padding: 12px 24px;
+    }
+
+    .hero {
+        max-width: 70vh;
+    }
+
+    .navbar a {
+        margin-left: 16px;
+        font-size: 15px;
+    }
+
+    .int-text {
+        font-size: 2.2em;
+    }
+
+    .int-sub-text {
+        font-size: 1.2em;
+    }
+
+    * {
+        font-size: 95%;
+    }
+
+
+    .feature-conteudo {
+        margin: 0;
+    }
+}
+
+
+
+@media (max-width: 767.98px) {
+    .int-text {
+        font-size: 2em;
+    }
+
+    .int-sub-text {
+        font-size: 1.2em;
+    }
+
+    .feature-init-text {
+        font-size: 1.5em;
+    }
+
+    .hero {
+        max-width: 60vh;
+    }
+
+    .feature-init-sub-text {
+        font-size: 1.1em;
+    }
+
+    .feature-exp-text {
+        font-size: 2em;
+    }
+
+    .feature-exp-sub-text {
+        font-size: 1.5em;
+    }
+
+    .feature-exp-desc-text {
+        font-size: 1.1em;
+    }
+
+    .feature-botoes .btn-amarelo,
+    .feature-botoes .btn-roxo {
+        font-size: 1.3em;
+    }
+
+    .hero-botoes .btn-amarelo,
+    .hero-botoes .btn-roxo {
+        font-size: 1.1em;
+        width: 100%;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .hero {
+        padding-top: 140px;
+    }
+
+    .hero-conteudo {
+        padding: 28px 20px;
+    }
+
+    .int-text {
+        font-size: 1.6em;
+    }
+
+
 }

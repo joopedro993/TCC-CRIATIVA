@@ -18,13 +18,13 @@
 <body>
     <!--<img src="/Front-End/assets/images/background.png" class="background">-->
     <header class="header">
-        <a href="#" class="logo">
+        <a href="dashboard.html" class="logo">
             <img src="assets/images/logo-criativa.png"></a>
 
         <nav class="navbar">
-            <a href="#">Home</a>
-            <a href="#">Como Criar?</a>
-            <a href="#">Área do Professor</a>
+            <a href="dashboard.html">Home</a>
+            <a href="#como-funciona">Como Criar?</a>
+            <a href="login-professor.html">Área do Professor</a>
             <a href="#">Sobre Nós</a>
 
         </nav>
@@ -36,7 +36,7 @@
 
             <div class="container-fluid">
                 <div class="row align-items-center" style="min-height: 90vh;">
-                    <div class="col-12 col-md-8 col-lg-5 ps-md-5">
+                    <div class="col-12 col-md-10 col-lg-6 px-3 ps-md-5 mx-auto mx-lg-0">
                         <div class="hero-conteudo">
                             <h1 class="int-text">A <span>melhor</span> plataforma para suas <span>dissertações</span>!
                             </h1>
@@ -44,8 +44,8 @@
                                 opção certa para
                                 desenvolver sua escrita!</p>
                             <div class="hero-botoes d-flex gap-3 flex-wrap">
-                                <button class="btn btn-amarelo">Acessar como Professor</button>
-                                <button class="btn btn-roxo">Acessar como Estudante</button>
+                                <a href="login-professor.html"><button class="btn btn-amarelo">Acessar como Professor</button></a>
+                                <a href="#"><button class="btn btn-roxo">Acessar como Estudante</button></a>
                             </div>
                         </div>
                     </div>
@@ -54,7 +54,7 @@
         </section>
         <section class="features position-relative">
             <div class="container-fluid">
-                <div class="row align-items-top mx-5">
+                <div class="row align-items-top mx-2 mx-md-5">
 
                     <div class="col-12">
                         <div class="feature-citacao">
@@ -69,7 +69,7 @@
                     </div>
 
                     <div class="col-12 text-center">
-                        <h1 class="feature-exp-text">Como a <span>CRIATIVA</span> funciona
+                        <h1 class="feature-exp-text" id="como-funciona">Como a <span>CRIATIVA</span> funciona
                             <span>?</span>
                         </h1>
                     </div>
@@ -85,7 +85,7 @@
                         </div>
                     </div>
 
-                    <div class="col-4 align-items-center">
+                    <div class="col-4 col-12 col-md-4 align-items-center">
                         <h1 class="feature-exp-sub-text">Escolha do <span>Tema:</span></h1>
                         <p class="feature-exp-desc-text"><span>1. </span> Os alunos recebem o tema escolhido pelo
                             professor direto de
@@ -93,13 +93,13 @@
 
                     </div>
 
-                    <div class="col-4 align-items-center">
+                    <div class="col-4 col-12 col-md-4 align-items-center">
                         <h1 class="feature-exp-sub-text">Construa sua <span>Redação:</span></h1>
                         <p class="feature-exp-desc-text"><span>2. </span>Organize suas ideias, argumentos, parágrafos e
                             repertórios.</p>
                     </div>
 
-                    <div class="col-4 align-items-center">
+                    <div class="col-4 col-12 col-md-4 align-items-center">
                         <h1 class="feature-exp-sub-text">Aprenda com o <span>Processo:</span></h1>
                         <p class="feature-exp-desc-text"><span>3. </span>A IA oferece sugestões para auxiliar na
                             construção, sem substituir o pensamento do estudante.</p>
@@ -121,7 +121,7 @@
                         <div class="feature-botoes text-center">
                             <label for="btn btn-amarelo" class="label-text mb-0">Acesse como professor</label><br>
                             <button class="btn btn-amarelo mt-0">Comece a Corrigir</button>
-                            
+
                         </div>
                     </div>
 
@@ -138,6 +138,29 @@
         </section>
 
     </main>
+
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="row align-items-center py-4">
+                <div class="col-12 col-md-4 text-center text-md-start mb-3 mb-md-0">
+                    <img src="assets/images/logo-criativa.png" class="footer-logo">
+                    <p class="footer-tagline">Projeto acadêmico de TCC</p>
+                </div>
+
+                <div class="col-12 col-md-4 text-center mb-3 mb-md-0">
+                    <p class="footer-title">Desenvolvido por</p>
+                    <p class="footer-devs">
+                        João Pedro Jesus &middot; Maria Victória Ferreira<br>
+                        Alexandre Dangoni &middot; Elias Gabriel Félix
+                    </p>
+                </div>
+
+                <div class="col-12 col-md-4 text-center text-md-end">
+                    <p class="footer-copy">&copy; 2026 CRIATIVA. Todos os direitos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
