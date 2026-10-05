@@ -1,0 +1,238 @@
+/* Estilos da página de construção de redação.
+   Carregue depois de styles.css: <link rel="stylesheet" href="assets/redacao.css"> */
+
+.redacao {
+    position: relative;
+    overflow: hidden;
+    min-height: 100vh;
+    padding: 130px 0 64px;
+    background: url('/Front-End/assets/images/background.png') no-repeat center/cover;
+}
+
+.redacao::before,
+.redacao::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    z-index: 0;
+}
+
+.redacao::before {
+    width: 420px;
+    height: 420px;
+    top: -80px;
+    right: -100px;
+    background: rgba(149, 0, 255, 0.25);
+}
+
+.redacao::after {
+    width: 380px;
+    height: 380px;
+    bottom: -100px;
+    left: -100px;
+    background: rgba(252, 192, 3, 0.4);
+}
+
+.redacao .container-fluid {
+    position: relative;
+    z-index: 1;
+}
+
+/* Cartão de vidro (mesmo visual das outras páginas) */
+.redacao-card {
+    padding: 28px;
+    background: rgba(170, 170, 170, 0.06);
+    border-radius: 32px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(17px);
+    -webkit-backdrop-filter: blur(17px);
+    border: 2px solid rgb(240, 238, 238);
+}
+
+/* Títulos */
+.redacao-titulo {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3em;
+    font-weight: 400;
+}
+
+.redacao-titulo span,
+.redacao-subtitulo span {
+    font-weight: 700;
+    color: #9500ff;
+}
+
+.redacao-subtitulo {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5em;
+    font-weight: 400;
+    margin-bottom: 12px;
+}
+
+.redacao-texto {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.05em;
+    line-height: 1.6;
+}
+
+.redacao-tema {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.3em;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+/* Área de escrita */
+.redacao-editor {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1em;
+    line-height: 1.7;
+    min-height: 380px;
+    padding: 16px 18px;
+    resize: vertical;
+    border-radius: 16px;
+    border: 2px solid rgb(225, 223, 223);
+    background: rgba(255, 255, 255, 0.75);
+    transition: 0.3s;
+}
+
+.redacao-editor:focus {
+    border-color: #9500ff;
+    box-shadow: 0 0 0 4px rgba(149, 0, 255, 0.15);
+    background: #fff;
+}
+
+/* Contador e barra de progresso */
+.redacao-contador {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1em;
+    font-weight: 600;
+}
+
+.redacao-contador.aviso {
+    color: #8a6a00;
+}
+
+.redacao-contador.limite {
+    color: #c62828;
+}
+
+.redacao-progresso {
+    height: 10px;
+    border-radius: 10px;
+    background: rgba(170, 170, 170, 0.25);
+    overflow: hidden;
+}
+
+.redacao-progresso .progress-bar {
+    background: #9500ff;
+    transition: width 0.2s, background 0.3s;
+}
+
+.redacao-progresso .progress-bar.aviso {
+    background: #FCC003;
+}
+
+.redacao-progresso .progress-bar.limite {
+    background: #c62828;
+}
+
+.redacao-estatisticas {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95em;
+    color: #555;
+}
+
+/* Botões (amarelo = enviar ao professor, roxo = ações do estudante) */
+.redacao-botoes .btn-amarelo,
+.redacao-botoes .btn-roxo,
+.redacao-ia .btn-roxo {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2em;
+    border-radius: 16px;
+    font-weight: 600;
+    transition: 0.5s;
+}
+
+.redacao-botoes .btn-amarelo {
+    background: #FCC003;
+    color: #534D00;
+}
+
+.redacao-botoes .btn-roxo,
+.redacao-ia .btn-roxo {
+    background: #9500ff;
+    color: white;
+}
+
+.redacao-status {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9em;
+    color: #555;
+}
+
+/* Guia de estrutura */
+.redacao-guia {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1em;
+    line-height: 1.5;
+    padding-left: 0;
+    list-style: none;
+    margin: 0;
+}
+
+.redacao-guia li {
+    margin-bottom: 10px;
+}
+
+.redacao-guia li span {
+    font-weight: 700;
+    color: #9500ff;
+}
+
+/* Caixa de sugestão da IA */
+.redacao-sugestao {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95em;
+    line-height: 1.5;
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: rgba(149, 0, 255, 0.07);
+    border: 1px solid rgba(149, 0, 255, 0.25);
+}
+
+/* Tablet e celular */
+@media (max-width: 991.98px) {
+    .header {
+        padding: 12px 24px;
+    }
+
+    .navbar a {
+        margin-left: 16px;
+        font-size: 15px;
+    }
+
+    .redacao-titulo {
+        font-size: 2.2em;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .redacao {
+        padding-top: 140px;
+    }
+
+    .redacao-card {
+        padding: 20px 16px;
+    }
+
+    .redacao-editor {
+        min-height: 300px;
+    }
+
+    .redacao-botoes .btn-amarelo,
+    .redacao-botoes .btn-roxo {
+        width: 100%;
+    }
+}

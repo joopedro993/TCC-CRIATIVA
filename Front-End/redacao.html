@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construa sua Redação | CRIATIVA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/styles.css">
+    <link rel="stylesheet" href="assets/redacao.css">
+    <link rel="icon" href="assets/images/Logo-Simplificada.png">
+</head>
+
+<body>
+    <header class="header">
+        <a href="index.html" class="logo">
+            <img src="assets/images/logo-criativa.png" alt="CRIATIVA"></a>
+
+        <nav class="navbar">
+            <a href="index.html">Home</a>
+            <a href="index.html#como-funciona">Como Criar?</a>
+            <a href="login-professor.html">Área do Professor</a>
+            <a href="sobre-nos.html">Sobre Nós</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="redacao">
+            <div class="container-fluid">
+                <div class="row justify-content-center px-md-5">
+                    <div class="col-12 col-xl-11">
+
+                        <h1 class="redacao-titulo mb-4">Construa sua <span>redação</span></h1>
+
+                        <div class="row gy-4">
+
+                            <!-- Coluna principal: tema + editor -->
+                            <div class="col-12 col-lg-8">
+
+                                <div class="redacao-card mb-4">
+                                    <h2 class="redacao-subtitulo">Escolha do <span>tema:</span></h2>
+                                    <!-- O tema deve vir do banco de temas, definido pelo professor -->
+                                    <p class="redacao-tema mb-0" id="tema">Desafios para a valorização da leitura no
+                                        Brasil</p>
+                                </div>
+
+                                <div class="redacao-card">
+                                    <h2 class="redacao-subtitulo">Escreva o seu <span>texto:</span></h2>
+
+                                    <label for="editor" class="visually-hidden">Texto da redação</label>
+                                    <textarea id="editor" class="form-control redacao-editor" maxlength="1862"
+                                        placeholder="Organize suas ideias, argumentos, parágrafos e repertórios..."
+                                        aria-describedby="contador"></textarea>
+
+                                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mt-3">
+                                        <span id="contador" class="redacao-contador" aria-live="polite">0 / 1862
+                                            caracteres</span>
+                                        <span class="redacao-estatisticas"><span id="palavras">0</span> palavras
+                                            &middot; <span id="paragrafos">0</span> parágrafos</span>
+                                    </div>
+
+                                    <div class="progress redacao-progresso mt-2" role="progressbar"
+                                        aria-label="Uso do limite de caracteres" aria-valuemin="0" aria-valuemax="1862"
+                                        aria-valuenow="0" id="progressoWrap">
+                                        <div class="progress-bar" id="barra" style="width: 0%"></div>
+                                    </div>
+
+                                    <div class="redacao-botoes d-flex flex-wrap gap-3 mt-4">
+                                        <button type="button" class="btn btn-roxo" id="btnSalvar">Salvar rascunho</button>
+                                        <button type="button" class="btn btn-amarelo" id="btnEnviar">Enviar ao
+                                            professor</button>
+                                    </div>
+                                    <p class="redacao-status mt-3 mb-0" id="status" aria-live="polite"></p>
+                                </div>
+                            </div>
+
+                            <!-- Coluna lateral: guia + sugestões da IA -->
+                            <div class="col-12 col-lg-4">
+
+                                <div class="redacao-card mb-4">
+                                    <h2 class="redacao-subtitulo">Estrutura <span>sugerida</span></h2>
+                                    <ul class="redacao-guia">
+                                        <li><span>1. Introdução:</span> apresente o tema e a sua tese.</li>
+                                        <li><span>2. Desenvolvimento:</span> argumento com repertório.</li>
+                                        <li><span>3. Desenvolvimento:</span> segundo argumento, aprofundando a tese.</li>
+                                        <li><span>4. Conclusão:</span> retome a tese e proponha uma solução.</li>
+                                    </ul>
+                                </div>
+
+                                <div class="redacao-card redacao-ia">
+                                    <h2 class="redacao-subtitulo">Aprenda com o <span>processo:</span></h2>
+                                    <p class="redacao-texto">A IA oferece sugestões para auxiliar na construção, sem
+                                        substituir o pensamento do estudante.</p>
+                                    <button type="button" class="btn btn-roxo w-100" id="btnSugestao">Pedir
+                                        sugestão</button>
+                                    <div class="redacao-sugestao mt-3 d-none" id="sugestao" aria-live="polite"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="row align-items-center py-4">
+                <div class="col-12 col-md-4 text-center text-md-start mb-3 mb-md-0">
+                    <img src="assets/images/logo-criativa.png" class="footer-logo" alt="CRIATIVA">
+                    <p class="footer-tagline">Projeto acadêmico de TCC</p>
+                </div>
+
+                <div class="col-12 col-md-4 text-center mb-3 mb-md-0">
+                    <p class="footer-title">Desenvolvido por</p>
+                    <p class="footer-devs">
+                        João Pedro Jesus &middot; Maria Victória Ferreira<br>
+                        Alexandre Dangoni &middot; Elias Gabriel Félix
+                    </p>
+                </div>
+
+                <div class="col-12 col-md-4 text-center text-md-end">
+                    <p class="footer-copy">&copy; 2026 CRIATIVA. Todos os direitos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script src="js/scripts-redacao.js"></script>
+</body>
+</html>
