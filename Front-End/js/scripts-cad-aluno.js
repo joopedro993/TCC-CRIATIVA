@@ -1,6 +1,4 @@
-const api_escola_url = "http://127.0.0.1:5003";
-const api_turma_url = "http://127.0.0.1:5004";
-const api_aluno_url = "http://127.0.0.1:5000";
+const api_url = "http://127.0.0.1:5010";
 
 const email = document.getElementById('input-email');
 const senha = document.getElementById('input-senha');
