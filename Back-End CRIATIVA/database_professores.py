@@ -123,3 +123,17 @@ def verificar_login(email, senha):
         "nome": professor["nome"],
         "email": professor["email"]
     }
+
+def buscar_professor_por_id(id_professor):
+    conexao = criar_conexao()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT *
+        FROM professores
+        WHERE id_professor = ?
+    """, (id_professor,))
+
+    professor = cursor.fetchone()
+    conexao.close()
+    return dict(professor) if professor else None

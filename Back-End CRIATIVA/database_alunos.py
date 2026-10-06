@@ -108,3 +108,18 @@ def verificar_login(email,senha):
         "nome": aluno["nome"],
         "email": aluno["email"]
     }
+
+def buscar_aluno_por_id(id_aluno):
+    conexao = criar_conexao()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT *
+        FROM alunos
+        WHERE id_aluno = ?
+
+    """, (id_aluno,))
+
+    aluno = cursor.fetchone()
+    conexao.close()
+    return dict(aluno) if aluno else None
