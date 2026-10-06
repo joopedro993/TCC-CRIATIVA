@@ -49,3 +49,17 @@ def adicionar_turma(nome):
     conexao.close()
     
     return nome
+
+def buscar_turma_por_id(id_turma):
+    conexao = criar_conexao()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT * FROM turmas
+        WHERE id_turma = ?
+    """, (id_turma,))
+
+    turma = cursor.fetchone()
+    conexao.close()
+
+    return dict(turma) if turma else None
