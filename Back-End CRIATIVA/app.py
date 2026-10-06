@@ -6,6 +6,7 @@ from database_professores import *
 from database_escolas import *
 from database_turma import *
 from database_redacao import *
+from database_atividades import *
 import os
 
 serializador = URLSafeTimedSerializer(os.environ.get("SECRET_KEY", "criativa-dev123"))
@@ -389,6 +390,89 @@ def deletar_redacao(id_redacao):
 
     return jsonify({
         "mensagem": "Redação removida com sucesso"
+    })
+
+#===============================ESCOLAS====================================================================
+
+
+@app.route("/atividades", methods=["GET"])
+def buscar_atividades():
+    return jsonify(listar_atividades())
+
+
+@app.route("/atividades", methods=["POST"])
+def cadastrar_atividade():
+    dados = request.get_json()
+
+    titulo = dados.get("titulo")
+    tema = dados.get("tema")
+    descricao = dados.get("descricao")
+    data_disponibilizacao = dados.get("data_disponibilizacao")
+    prazo = dados.get("prazo")
+    id_turma = dados.get("id_turma")
+
+    if not all([
+        titulo,
+        tema,
+        descricao,
+        data_disponibilizacao,
+        prazo,
+        id_turma
+    ]):
+        return jsonify({
+            "erro": "Todos os campos são obrigatórios"
+        }), 400
+
+    adicionar_atividade(
+        titulo,
+        tema,
+        descricao,
+        data_disponibilizacao,
+        prazo,
+        id_turma
+    )
+
+    return jsonify({
+        "mensagem": "Atividade cadastrada com sucesso"
+    }), 201
+
+
+@app.route("/atividades/<int:id_atividade>", methods=["GET"])
+def obter_atividade(id_atividade):
+    atividade = buscar_atividade_por_id(id_atividade)
+
+    if not atividade:
+        return jsonify({
+            "erro": "Atividade não encontrada"
+        }), 404
+
+    return jsonify(atividade)
+
+
+@app.route("/atividades/<int:id_atividade>", methods=["PUT"])
+def editar_atividade(id_atividade):
+    dados = request.get_json()
+
+    atualizar_atividade(
+        id_atividade,
+        dados.get("titulo"),
+        dados.get("tema"),
+        dados.get("descricao"),
+        dados.get("data_disponibilizacao"),
+        dados.get("prazo")
+    )
+
+    return jsonify({
+        "mensagem": "Atividade atualizada com sucesso"
+    })
+
+
+@app.route("/atividades/<int:id_atividade>", methods=["DELETE"])
+def deletar_atividade(id_atividade):
+    excluir_atividade(id_atividade)
+
+    return jsonify({
+        "mensagem": "Atividade removida com sucesso"
     })
 
 if __name__ == "__main__":
