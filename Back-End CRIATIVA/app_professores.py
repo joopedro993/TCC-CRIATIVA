@@ -1,7 +1,10 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from database_professores import *
+import os
+from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 
+serializador = URLSafeTimedSerializer(os.environ.get("SECRET_KEY", "criativa-dev123"))
 
 app = Flask(__name__)
 
@@ -88,14 +91,14 @@ def deletar_professor(id_professor):
         "mensagem": "Professor excluído com sucesso"
     }), 200
 
-@app.route("/login", methods=["POST"])
+@app.route("/professores/login", methods=["POST"])
 def login():
     dados = request.get_json()
 
     print("DADOS RECEBIDOS:", dados)
 
-    email = dados.get("email")
-    senha = dados.get("senha")
+    email = dados.get("emailLancar")
+    senha = dados.get("senhaLancar")
 
     print("EMAIL:", email)
     print("SENHA RECEBIDA:", senha)
@@ -113,10 +116,17 @@ def login():
         return jsonify({
             "erro": "Email ou senha incorretos"
         }), 401
+        
+    token = serializador.dumps(
+        {"id":professor["id_professor"],
+         "tipo":"professor"}
+        )
+    serializador.loads(token, max_age=3600)
 
     return jsonify({
         "mensagem": "Login realizado com sucesso",
-        "professor": professor
+        "professor": professor,
+        "token":token
     }), 200
 
 if __name__ == "__main__":

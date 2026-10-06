@@ -236,3 +236,28 @@
         width: 100%;
     }
 }
+
+@view-transition {
+  navigation: auto;
+}
+
+/* Animação da página que está SAINDO */
+::view-transition-old(root) {
+  animation: fadeOut 0.3s ease-out forwards;
+}
+
+/* Animação da página que está ENTRANDO */
+::view-transition-new(root) {
+  animation: fadeIn 0.3s ease-in forwards;
+}
+
+/* Definição dos movimentos */
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

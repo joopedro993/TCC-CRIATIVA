@@ -63,6 +63,8 @@ formulario.addEventListener("submit", async function (event) {
         const novoAluno = await resposta.json();
         console.log(novoAluno);
 
+        window.alert("Cadastro efetuado, faça seu Login!")
+
         formulario.reset();
     };
 });
