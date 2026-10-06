@@ -32,13 +32,14 @@ async function efetuarLogin() {
     const emailLancar = document.getElementById('email').value;
     const senhaLancar = document.getElementById('senha').value;
     const resposta = await fetch(
-        `${apiProfessoresUrl}/professores/login`,
+        `${apiProfessoresUrl}/alunos/login`,
         {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({emailLancar, senhaLancar })
         }
     );
+
     const body = await resposta.json();
 
     if (resposta.ok){
