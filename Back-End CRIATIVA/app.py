@@ -24,6 +24,10 @@ def criar_bancos():
     criar_banco_escolas()
     criar_banco_turma()
     criar_banco_redacao()
+    criar_banco_correcoes()
+    criar_banco_temas()
+    criar_banco_consultas()
+    criar_banco_atividade()
 
 criar_bancos()
 
@@ -45,8 +49,9 @@ def cadastrar_professor():
     nome = dados.get("nome")
     email = dados.get("email")
     senha = dados.get("senha")
+    escola = dados.get("escola")
 
-    if not nome or not email or not senha:
+    if not nome or not email or not senha or not escola:
         return jsonify({
             "erro": "Nome, email e senha são obrigatórios"
         }), 400
@@ -54,7 +59,8 @@ def cadastrar_professor():
     id_professor = adicionar_professor(
         nome,
         email,
-        senha
+        senha,
+        escola
     )
 
     return jsonify({
@@ -70,8 +76,9 @@ def atualizar_professor(id_professor):
     nome = dados.get("nome")
     email = dados.get("email")
     senha = dados.get("senha")
+    escola = dados.get("id_escola_fk")
 
-    if not nome or not email or not senha:
+    if not nome or not email or not senha or not escola:
         return jsonify({
             "erro": "Nome, email e senha são obrigatórios"
         }), 400
@@ -80,7 +87,8 @@ def atualizar_professor(id_professor):
         id_professor,
         nome,
         email,
-        senha
+        senha,
+        escola
     )
 
     if resultado == 0:
@@ -117,6 +125,12 @@ def obter_professor(id_professor):
         }),404
 
     return jsonify(professor), 200
+
+@app.route("/professores/escola/<int:id_escola>", methods=["GET"])
+def buscar_professores_por_escola(id_escola):
+    professores = listar_professores_por_escola(id_escola)
+
+    return jsonify(professores)
 
 @app.route("/professores/login", methods=["POST"])
 def login_professores():
@@ -172,7 +186,7 @@ def cadastrar_aluno():
     senha = dados.get("senha")
     turma = dados.get("turma")
 
-    if not nome or not email or not senha:
+    if not nome or not email or not senha or not turma:
         return jsonify({
             "erro": "Nome, email e senha são obrigatórios"
         }), 400
@@ -208,13 +222,14 @@ def editar_aluno(id_aluno):
     nome = dados.get("nome")
     email = dados.get("email")
     senha = dados.get("senha")
+    turma = dados.get("turma")
 
-    if not nome or not email or not senha:
+    if not nome or not email or not senha or not turma:
         return jsonify({
             "erro": "Nome, email e senha são obrigatórios"
         }), 400
     
-    resultado = atualizar_aluno(id_aluno,nome,email,senha)
+    resultado = atualizar_aluno(id_aluno,nome,email,senha,turma)
 
     if resultado == 0:
         return jsonify({
@@ -241,8 +256,8 @@ def login_alunos():
     dados = request.get_json()
     print("DADOS RECEBIDOS:", dados)
 
-    email = dados.get("email")
-    senha = dados.get("senha")
+    email = dados.get("emailLancar")
+    senha = dados.get("senhaLancar")
 
     print("EMAIL:", email)
     print("SENHA RECEBIDA:", senha)
@@ -252,7 +267,7 @@ def login_alunos():
             "erro": "Email e senha são obrigatórios"
         }), 400
 
-    aluno = verificar_login(email, senha)
+    aluno = verificar_login_aluno(email, senha)
 
     print("RESULTADO DO LOGIN:", aluno)
 
@@ -260,10 +275,17 @@ def login_alunos():
         return jsonify({
             "erro": "Email ou senha incorretos"
         }), 401
+        
+    token = serializador.dumps(
+            {"id":aluno["id_aluno"],
+             "tipo":"aluno"}
+            )
+    serializador.loads(token, max_age=3600)
 
     return jsonify({
         "mensagem": "Login realizado com sucesso",
-        "aluno": aluno
+        "aluno": aluno,
+        "token":token
     }), 200
 
 #===============================ESCOLAS====================================================================
@@ -317,13 +339,14 @@ def buscar_turma():
 def cadastrar_turma():
     dados = request.get_json()
     nome = dados.get("nome")
+    id_professor = dados.get("professor")
 
-    if not nome:
+    if not nome or not id_professor:
         return jsonify({
             "erro": "O nome da turma é obrigatório"
         }), 400
     
-    adicionar_turma(nome)
+    adicionar_turma(nome, id_professor)
 
     return jsonify({
         "mensagem": "Turma cadastrada com sucesso."
@@ -338,6 +361,12 @@ def obter_turma(id_turma):
 
     return jsonify(turma), 200
 
+@app.route("/turmas/professores/<int:id_professor>", methods=["GET"])
+def buscar_turmas_por_professor(id_professor):
+    turmas = listar_turmas_por_professor(id_professor)
+
+    return jsonify(turmas)
+
 #===============================REDAÇÕES====================================================================
 
 @app.route("/redacoes", methods=["GET"])
@@ -351,13 +380,14 @@ def cadastrar_redacao():
     tema = dados.get("tema")
     texto = dados.get("texto")
     id_aluno = dados.get("id_aluno")
+    id_atividade = dados.get("id_atividade")
 
-    if not tema or not texto or not id_aluno:
+    if not tema or not texto or not id_aluno or not id_atividade:
         return jsonify({
             "erro":"tema, texto e id_aluno são obrigatorios"
         }), 400
 
-    adicionar_redacao(tema,texto,id_aluno)
+    adicionar_redacao(tema,texto,id_aluno, id_atividade)
 
     return jsonify({
         "mensagem":"Redação cadastrada com sucesso"

@@ -32,16 +32,16 @@ def criar_banco_professores():
     conexao.close()
 
 
-def adicionar_professor(nome, email, senha):
+def adicionar_professor(nome, email, senha,id_escola_fk):
     conexao = criar_conexao()
     cursor = conexao.cursor()
 
     senha_hash = generate_password_hash(senha)
 
     cursor.execute("""
-        INSERT INTO professores (nome, email, senha)
-        VALUES (?, ?, ?)
-    """, (nome, email, senha_hash))
+        INSERT INTO professores (nome, email, senha, id_escola_fk)
+        VALUES (?, ?, ?, ?)
+    """, (nome, email, senha_hash,id_escola_fk))
 
     conexao.commit()
 
@@ -143,3 +143,19 @@ def buscar_professor_por_id(id_professor):
     professor = cursor.fetchone()
     conexao.close()
     return dict(professor) if professor else None
+
+def listar_professores_por_escola(id_escola):
+    conexao = criar_conexao()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT id_professor,nome 
+        FROM professores
+        WHERE id_escola_fk = ?
+    """, (id_escola,))
+
+    professores = cursor.fetchall()
+
+    conexao.close()
+
+    return [dict(professor) for professor in professores]

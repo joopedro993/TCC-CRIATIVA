@@ -1,14 +1,14 @@
 import sqlite3
 
 def criar_conexao():
-    conexao = sqlite3.connect("banco_temas.db")
+    conexao = sqlite3.connect("banco.db")
     conexao.row_factory = sqlite3.Row
     conexao.execute("PRAGMA foreign_keys = ON")
     
     return conexao
     
 
-def criar_banco_consultas():
+def criar_banco_temas():
     conexao = criar_conexao()
     cursor = conexao.cursor()
     
@@ -26,7 +26,7 @@ def listar_tema():
 
     cursor.execute("""
         SELECT id_tema,titulo,textos_motivadores
-        FROM turmas
+        FROM temas
     """)
 
     temas = cursor.fetchall()

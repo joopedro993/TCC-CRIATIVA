@@ -24,7 +24,7 @@ def criar_banco_alunos():
         
         
         FOREIGN KEY (id_turma_fk)
-        REFERENCES alunos(id_turma)
+        REFERENCES turmas(id_turma)
         )
     """)
 
@@ -45,16 +45,16 @@ def listar_aluno():
 
     return [dict(aluno) for aluno in alunos]
 
-def adicionar_aluno(nome,email,senha):
+def adicionar_aluno(nome,email,senha,id_turma_fk):
     conexao = criar_conexao()
     cursor = conexao.cursor()
 
     senha_hash = generate_password_hash(senha)
 
     cursor.execute("""
-        INSERT INTO alunos (nome,email,senha)
-        VALUES (?,?,?)
-    """, (nome,email,senha_hash))
+        INSERT INTO alunos (nome,email,senha,id_turma_fk)
+        VALUES (?,?,?,?)
+    """, (nome,email,senha_hash,id_turma_fk))
 
     conexao.commit()
     conexao.close()
@@ -93,7 +93,7 @@ def atualizar_aluno(id_aluno,nome,email,senha):
 
     return linhas_afetadas
 
-def verificar_login(email,senha):
+def verificar_login_aluno(email,senha):
     conexao = criar_conexao()
     cursor = conexao.cursor()
 

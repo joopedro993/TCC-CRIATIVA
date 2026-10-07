@@ -1,7 +1,7 @@
 import sqlite3
 
 def criar_conexao():
-    conexao = sqlite3.connect("banco_escolas.db")
+    conexao = sqlite3.connect("banco.db")
     conexao.row_factory = sqlite3.Row
     conexao.execute("PRAGMA foreign_keys = ON")
     

@@ -10,7 +10,7 @@ def criar_conexao():
 
 def criar_banco_atividade():
     conexao = criar_conexao()
-    cursor = conexao.cursor
+    cursor = conexao.cursor()
 
 
     cursor.execute("""
@@ -38,29 +38,15 @@ def criar_banco_atividade():
 
 
 
-def adicionar_atividade(
-    titulo,
-    tema,
-    descricao,
-    data_disponibilizacao,
-    prazo,
-    id_turma
-):
+def adicionar_atividade(titulo,tema,descricao,data_disponibilizacao,prazo,id_turma,id_tema_fk,id_turma_fk):
     conexao = criar_conexao()
     cursor = conexao.cursor()
 
     cursor.execute("""
         INSERT INTO atividades
-        (titulo, tema, descricao, data_disponibilizacao, prazo, id_turma)
-        VALUES (?, ?, ?, ?, ?, ?)
-    """, (
-        titulo,
-        tema,
-        descricao,
-        data_disponibilizacao,
-        prazo,
-        id_turma
-    ))
+        (titulo, tema, descricao, data_disponibilizacao, prazo, id_turma,id_tema_fk,id_turma_fk)
+        VALUES (?, ?, ?, ?, ?, ?,?,?)
+    """, (titulo,tema,descricao,data_disponibilizacao,prazo,id_turma,id_tema_fk,id_turma_fk))
 
     conexao.commit()
     conexao.close()

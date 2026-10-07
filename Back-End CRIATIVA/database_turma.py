@@ -43,14 +43,14 @@ def listar_turma():
     
     return [dict(turma)for turma in turmas]
 
-def adicionar_turma(nome):
+def adicionar_turma(nome, id_professor):
     conexao = criar_conexao()
     cursor = conexao.cursor()
 
     cursor.execute("""
-        INSERT INTO turmas (nome)
-        VALUES (?)
-    """, (nome,))
+        INSERT INTO turmas (nome, id_professor_fk)
+        VALUES (?,?)
+    """, (nome,id_professor))
     
     conexao.commit()
     conexao.close()
@@ -70,3 +70,19 @@ def buscar_turma_por_id(id_turma):
     conexao.close()
 
     return dict(turma) if turma else None
+
+def listar_turmas_por_professor(id_professor):
+    conexao = criar_conexao()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT id_turma,nome
+        FROM turmas
+        WHERE id_professor_fk = ?
+    """, (id_professor,))
+
+    turmas = cursor.fetchall()
+
+    conexao.close()
+
+    return [dict(turma) for turma in turmas]

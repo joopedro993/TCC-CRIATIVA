@@ -37,7 +37,7 @@ formulario.addEventListener('submit', (event) => {
     [email, senha, nome, escola, turma, professor].forEach((campo) =>
         campo.addEventListener("input", () => campo.classList.remove("is-invalid")));
 
-    efetuarCadastro();
+    efetuarCadastro(event);
 
     console.log('Cadastro enviado: ', email.value)
 
@@ -79,7 +79,7 @@ async function carregarProfessores(id_escola) {
 
     const selectProfessores = document.getElementById("select-professor");
 
-    selectProfessores.innerHTML = "";
+    selectProfessores.innerHTML = `<option value="">Selecione seu professor</option>`;
 
     professores.forEach(professor => {
         selectProfessores.innerHTML += `
@@ -93,12 +93,12 @@ async function carregarProfessores(id_escola) {
 }
 
 async function carregarTurmas(id_professor) {
-    const resposta = await fetch(`${api_url}/turmas/professor/${id_professor}`);
+    const resposta = await fetch(`${api_url}/turmas/professores/${id_professor}`);
     const turmas = await resposta.json();
 
     const selectTurmas = document.getElementById("select-turma");
 
-    selectTurmas.innerHTML = "";
+    selectTurmas.innerHTML = `<option value="">Selecione sua turma</option>`;
 
     turmas.forEach(turma => {
         selectTurmas.innerHTML += `
@@ -110,9 +110,10 @@ async function carregarTurmas(id_professor) {
 
 };
 
-async function efetuarCadastro() {
+async function efetuarCadastro(event) {
+    if (event) event.preventDefault();
 
-    const emailAluno = email.value;
+    const emailAluno = email.value.toLowerCase();
     const nomeAluno = nome.value.trim();
     const turmaAluno = document.getElementById("select-turma").value;
     const senhaAluno = senha.value;
@@ -139,6 +140,9 @@ async function efetuarCadastro() {
         if (resposta.ok) {
             window.alert("Cadastro efetuado, faça seu Login!");
             window.location.replace("login-alunos.html");
+        } else {
+            mostrarErro(corpo.erro || "Não foi possível concluir o cadastro.");
+            return;
         }
 
         formulario.reset();

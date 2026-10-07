@@ -3,7 +3,7 @@ const email = document.getElementById('email');
 const senha = document.getElementById('senha');
 const alerta = document.getElementById('alerta');
 const toggle = document.getElementById('toggleSenha');
-const apiProfessoresUrl = "http://127.0.0.1:5001"
+const api_url = "http://127.0.0.1:5010"
 
 toggle.addEventListener('click', () => {
     const visivel = senha.type === 'text';
@@ -29,10 +29,10 @@ form.addEventListener('submit', (event) => {
 });
 
 async function efetuarLogin() {
-    const emailLancar = document.getElementById('email').value;
+    const emailLancar = document.getElementById('email').value.toLowerCase();
     const senhaLancar = document.getElementById('senha').value;
     const resposta = await fetch(
-        `${apiProfessoresUrl}/alunos/login`,
+        `${api_url}/alunos/login`,
         {
             method: "POST",
             headers: { "Content-Type": "application/json" },

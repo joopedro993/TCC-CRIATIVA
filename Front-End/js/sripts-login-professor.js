@@ -29,7 +29,7 @@ form.addEventListener('submit', (event) => {
 });
 
 async function efetuarLogin() {
-    const emailLancar = document.getElementById('email').value;
+    const emailLancar = document.getElementById('email').value.toLowerCase();
     const senhaLancar = document.getElementById('senha').value;
     const resposta = await fetch(
         `${apiProfessoresUrl}/professores/login`,

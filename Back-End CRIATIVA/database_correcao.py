@@ -8,7 +8,7 @@ def criar_conexao():
     return conexao
     
 
-def criar_banco_consultas():
+def criar_banco_correcoes():
     conexao = criar_conexao()
     cursor = conexao.cursor()
     
@@ -40,7 +40,7 @@ def listar_correcao():
     cursor = conexao.cursor()
 
     cursor.execute("""
-        SELECT id_correcao, id_correcao_fk, id_professor_fk, competencia_1, competencia_2, competencia_3, competencia_4, competencia_5, nota_total, comentario, data_correcao
+        SELECT id_correcao, id_redacao_fk, id_professor_fk, competencia_1, competencia_2, competencia_3, competencia_4, competencia_5, nota_total, comentario, data_correcao
         FROM correcoes
     """)
 
@@ -85,7 +85,7 @@ def atualizar_correcao(id_correcao,id_professor_fk, competencia_1, competencia_2
         UPDATE correcoes
         SET id_professor_fk = ?, competencia_1 = ?, competencia_2 = ?, competencia_3 = ?, competencia_4 = ?, competencia_5 = ?, nota_total = ?, comentario = ?, data_correcao = ?
         WHERE id_correcao = ?
-    """,(id_correcao,id_professor_fk, competencia_1, competencia_2, competencia_3, competencia_4, competencia_5, nota_total, comentario, data_correcao))
+    """,(id_professor_fk, competencia_1, competencia_2, competencia_3, competencia_4, competencia_5, nota_total, comentario, data_correcao,id_correcao))
 
     conexao.commit()
     linhas_afetadas = cursor.rowcount

@@ -23,6 +23,9 @@ def criar_banco_consultas():
             REFERENCES redacoes(id_redacao)
         )               
     """)
+    
+    conexao.commit()
+    conexao.close()
 
 def listar_consultas():
     conexao = criar_conexao()
