@@ -15,7 +15,9 @@ def criar_banco_turma():
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS turmas(
         id_turma INTEGER PRIMARY KEY AUTOINCREMENT,
-        nome TEXT NOT NULL
+        nome TEXT NOT NULL,
+        id_professor_fk INTEGER NOT NULL FOREIGN KEY
+        REFERENCES professores
         )
     """)
 
@@ -27,7 +29,7 @@ def listar_turma():
     cursor = conexao.cursor()
 
     cursor.execute("""
-        SELECT id_turma,nome
+        SELECT id_turma,id_professor_fk,nome
         FROM turmas
     """)
 

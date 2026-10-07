@@ -17,7 +17,9 @@ def criar_banco_alunos():
         id_aluno INTEGER PRIMARY KEY AUTOINCREMENT,
         nome TEXT NOT NULL,
         email TEXT NOT NULL UNIQUE,
-        senha TEXT NOT NULL
+        senha TEXT NOT NULL,
+        id_turma_fk INTEGER NOT NULL FOREIGN KEY
+        REFERENCES alunos
         )
     """)
 

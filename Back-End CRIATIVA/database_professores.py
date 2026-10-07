@@ -18,7 +18,9 @@ def criar_banco_professores():
             id_professor INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT NOT NULL,
             email TEXT NOT NULL UNIQUE,
-            senha TEXT NOT NULL
+            senha TEXT NOT NULL,
+            id_escola_fk INTEGER NOT NULL FOREIGN KEY 
+            REFERENCES escolas
         )
     """)
 

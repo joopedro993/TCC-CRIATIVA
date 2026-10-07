@@ -19,7 +19,10 @@ def criar_banco_atividade():
             descricao TEXT NOT NULL,
             data_disponibilizacao TEXT NOT NULL,
             prazo TEXT NOT NULL,
-            id_turma INTEGER NOT NULL
+            id_tema_fk INTEGER NOT NULL FOREIGN KEY
+            REFERENCES temas,
+            id_turma_fk INTEGER NOT NULL FOREIGN KEY 
+            REFERENCES turmas
         )
     """)
 

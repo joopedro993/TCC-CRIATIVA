@@ -16,10 +16,11 @@ def criar_banco_redacao():
             texto TEXT NOT NULL,
             nota REAL,
             feedback TEXT,
-            id_aluno INTEGER NOT NULL
-
-            
-            
+            id_aluno INTEGER NOT NULL,
+            id_aluno_fk INTEGER NOT NULL FOREIGN KEY
+            REFERENCES alunos,
+            id_atividade_fk INTEGER NOT NULL FOREIGN KEY
+            REFERENCES atividades
             )
 
     """)
