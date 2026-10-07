@@ -5,6 +5,7 @@ def criar_conexao():
     conexao.row_factory = sqlite3.Row
     
     return conexao
+    conexao.execute("PRAGMA foreign_keys = ON")
 
 def criar_banco_escolas():
     conexao = criar_conexao()
