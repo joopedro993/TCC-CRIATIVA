@@ -3,9 +3,10 @@ import sqlite3
 def criar_conexao():
     conexao = sqlite3.connect("banco.db")
     conexao.row_factory = sqlite3.Row
+    conexao.execute("PRAGMA foreign_keys = ON")
     
     return conexao
-    conexao.execute("PRAGMA foreign_keys = ON")
+    
 
 def criar_banco_consultas():
     conexao = criar_conexao()
@@ -15,7 +16,7 @@ def criar_banco_consultas():
         CREATE TABLE IF NOT EXISTS consultas(
             id_consulta INTEGER PRIMARY KEY AUTOINCREMENT,
             conteudo TEXT NOT NULL,
-            id_redacao_fk INTEGER NOT NULL
+            id_redacao_fk INTEGER NOT NULL,
             
             
             FOREIGN KEY (id_redacao_fk)

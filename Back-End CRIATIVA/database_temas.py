@@ -3,9 +3,10 @@ import sqlite3
 def criar_conexao():
     conexao = sqlite3.connect("banco_temas.db")
     conexao.row_factory = sqlite3.Row
+    conexao.execute("PRAGMA foreign_keys = ON")
     
     return conexao
-    conexao.execute("PRAGMA foreign_keys = ON")
+    
 
 def criar_banco_consultas():
     conexao = criar_conexao()

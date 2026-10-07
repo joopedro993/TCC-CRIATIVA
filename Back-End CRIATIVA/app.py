@@ -7,6 +7,9 @@ from database_escolas import *
 from database_turma import *
 from database_redacao import *
 from database_atividades import *
+from database_temas import *
+from database_correcao import *
+from database_consultas import *
 import os
 
 serializador = URLSafeTimedSerializer(os.environ.get("SECRET_KEY", "criativa-dev123"))
@@ -106,7 +109,7 @@ def deletar_professor(id_professor):
 
 @app.route("/professores/<int:id_professor>", methods=["GET"])
 def obter_professor(id_professor):
-    professor = buscar_professor(id_professor)
+    professor = buscar_professor_por_id(id_professor)
 
     if professor is None:
         return jsonify({
@@ -116,7 +119,7 @@ def obter_professor(id_professor):
     return jsonify(professor), 200
 
 @app.route("/professores/login", methods=["POST"])
-def login():
+def login_professores():
     dados = request.get_json()
 
     print("DADOS RECEBIDOS:", dados)
@@ -233,8 +236,8 @@ def obter_aluno(id_aluno):
 
     return jsonify(aluno), 200
 
-@app.route("/login", methods=["POST"])
-def login():
+@app.route("/alunos/login", methods=["POST"])
+def login_alunos():
     dados = request.get_json()
     print("DADOS RECEBIDOS:", dados)
 
@@ -362,7 +365,7 @@ def cadastrar_redacao():
 
 
 
-@app.route("/redacoes/<int_redacao>",methods=["GET"])
+@app.route("/redacoes/<int:id_redacao>",methods=["GET"])
 def obter_redacao(id_redacao):
     redacao = buscar_redacao_por_id(id_redacao)
 
@@ -479,14 +482,13 @@ def deletar_atividade(id_atividade):
 #=======================================CORREÇÃO=======================================================
 @app.route("/correcao", methods=["GET"])
 def buscar_correcao():
-    lista_correcao = listar_correcoes()
+    lista_correcao = listar_correcao()
 
-<<<<<<< HEAD
     return jsonify(lista_correcao)
 
 @app.route("/correcao/<int:id_correcao>", methods=["GET"])
-def obter_correcao(id):
-    correcao = buscar_correcao_por_id(id)
+def obter_correcao(id_correcao):
+    correcao = buscar_correcao_por_id(id_correcao)
 
     if not correcao:
         return jsonify({
@@ -499,17 +501,17 @@ def obter_correcao(id):
 def cadastrar_correcao():
     dados = request.get_json()
 
-    id_correcao = dados("id_correcao")
-    id_redacao_fk = dados("id_redacao")
-    id_professor_fk = dados("id_professor")
-    competencia_1 = dados("competencia_1")
-    competencia_2 = dados("competencia_2")
-    competencia_3 = dados("competencia_3")
-    competencia_4 = dados("competencia_4")
-    competencia_5 = dados("competencia_5")
+    id_correcao = dados["id_correcao"]
+    id_redacao_fk = dados["id_redacao"]
+    id_professor_fk = dados["id_professor"]
+    competencia_1 = dados["competencia_1"]
+    competencia_2 = dados["competencia_2"]
+    competencia_3 = dados["competencia_3"]
+    competencia_4 = dados["competencia_4"]
+    competencia_5 = dados["competencia_5"]
     nota_total = competencia_1 + competencia_2 + competencia_3 + competencia_4 + competencia_5
-    comentario = dados("comentario")
-    data_correcao = dados("data_correcao")
+    comentario = dados["comentario"]
+    data_correcao = dados["data_correcao"]
 
     if not all([
         id_correcao,
@@ -546,9 +548,20 @@ def cadastrar_correcao():
         "mensagem": "Correção cadastrada com sucesso"
     }), 201
 
-@app.route("/correcao/<int:id>", methods=["PUT"])
-def editar_correcao():
+@app.route("/correcao/<int:id_correcao>", methods=["PUT"])
+def editar_correcao(id_correcao):
     dados = request.get_json()
+    
+    id_redacao_fk = dados("id_redacao")
+    id_professor_fk = dados("id_professor")
+    competencia_1 = dados("competencia_1")
+    competencia_2 = dados("competencia_2")
+    competencia_3 = dados("competencia_3")
+    competencia_4 = dados("competencia_4")
+    competencia_5 = dados("competencia_5")
+    nota_total = competencia_1 + competencia_2 + competencia_3 + competencia_4 + competencia_5
+    comentario = dados("comentario")
+    data_correcao = dados("data_correcao")
 
     atualizar_correcao(
         id_correcao,
@@ -571,7 +584,7 @@ def editar_correcao():
 #=========================================TEMA============================================================
 @app.route("/temas", methods=["GET"])
 def buscar_tema():
-    lista_temas = listar_temas()
+    lista_temas = listar_tema()
 
     return jsonify(lista_temas)
 
@@ -586,17 +599,11 @@ def obter_tema(id):
 
     return jsonify(tema)
 
-@app.route("/temas", methods=["POST"])
-def cadastrar_tema():
-    dados = request.get_json()
+
 
     
 
 
 
-=======
-
-
->>>>>>> e6ecd655283a7b7fe5f6fe7a75c5112270ab63a0
 if __name__ == "__main__":
     app.run(debug=True, port=5010)

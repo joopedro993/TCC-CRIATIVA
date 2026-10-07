@@ -5,9 +5,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 def criar_conexao():
     conexao = sqlite3.connect("banco.db")
     conexao.row_factory = sqlite3.Row
+    conexao.execute("PRAGMA foreign_keys = ON")
 
     return conexao
-    conexao.execute("PRAGMA foreign_keys = ON")
+    
 
 def criar_banco_turma():
     conexao = criar_conexao()
@@ -17,7 +18,7 @@ def criar_banco_turma():
         CREATE TABLE IF NOT EXISTS turmas(
         id_turma INTEGER PRIMARY KEY AUTOINCREMENT,
         nome TEXT NOT NULL,
-        id_professor_fk INTEGER NOT NULL
+        id_professor_fk INTEGER NOT NULL,
         
         
         FOREIGN KEY (id_professor_fk)

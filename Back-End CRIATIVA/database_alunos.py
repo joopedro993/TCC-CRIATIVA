@@ -5,9 +5,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 def criar_conexao():
     conexao = sqlite3.connect("banco.db")
     conexao.row_factory = sqlite3.Row
+    conexao.execute("PRAGMA foreign_keys = ON")
 
     return conexao
-    conexao.execute("PRAGMA foreign_keys = ON")
+    
 
 def criar_banco_alunos():
     conexao = criar_conexao()
