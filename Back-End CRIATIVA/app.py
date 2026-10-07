@@ -474,6 +474,122 @@ def deletar_atividade(id_atividade):
     return jsonify({
         "mensagem": "Atividade removida com sucesso"
     })
+#=======================================CORREÇÃO=======================================================
+@app.route("/correcao", methods=["GET"])
+def buscar_correcao():
+    lista_correcao = listar_correcoes()
+
+    return jsonify(lista_correcao)
+
+@app.route("/correcao/<int:id_correcao>", methods=["GET"])
+def obter_correcao(id):
+    correcao = buscar_correcao_por_id(id)
+
+    if not correcao:
+        return jsonify({
+            "erro":"Correção não encontrada!"
+        }), 404
+
+    return jsonify(correcao)
+
+@app.route("/correcao", methods=["POST"])
+def cadastrar_correcao():
+    dados = request.get_json()
+
+    id_correcao = dados("id_correcao")
+    id_redacao_fk = dados("id_redacao")
+    id_professor_fk = dados("id_professor")
+    competencia_1 = dados("competencia_1")
+    competencia_2 = dados("competencia_2")
+    competencia_3 = dados("competencia_3")
+    competencia_4 = dados("competencia_4")
+    competencia_5 = dados("competencia_5")
+    nota_total = competencia_1 + competencia_2 + competencia_3 + competencia_4 + competencia_5
+    comentario = dados("comentario")
+    data_correcao = dados("data_correcao")
+
+    if not all([
+        id_correcao,
+        id_redacao_fk,
+        id_professor_fk,
+        competencia_1,
+        competencia_2,
+        competencia_3,
+        competencia_4,
+        competencia_5,
+        nota_total,
+        comentario,
+        data_correcao
+    ]):
+        return jsonify({
+            "erro": "Todos os campos são obrigatórios"
+        }), 400
+
+    adicionar_correcao(
+        id_correcao,
+        id_redacao_fk,
+        id_professor_fk,
+        competencia_1,
+        competencia_2,
+        competencia_3,
+        competencia_4,
+        competencia_5,
+        nota_total,
+        comentario,
+        data_correcao
+    )
+
+    return jsonify({
+        "mensagem": "Correção cadastrada com sucesso"
+    }), 201
+
+@app.route("/correcao/<int:id>", methods=["PUT"])
+def editar_correcao():
+    dados = request.get_json()
+
+    atualizar_correcao(
+        id_correcao,
+        id_redacao_fk,
+        id_professor_fk,
+        competencia_1,
+        competencia_2,
+        competencia_3,
+        competencia_4,
+        competencia_5,
+        nota_total,
+        comentario,
+        data_correcao
+    )
+
+    return jsonify({
+        "mensagem": "Atividade atualizada com sucesso"
+    }), 200
+
+#=========================================TEMA============================================================
+@app.route("/temas", methods=["GET"])
+def buscar_tema():
+    lista_temas = listar_temas()
+
+    return jsonify(lista_temas)
+
+@app.route("/temas/<int:id>", methods=["GET"])
+def obter_tema(id):
+    tema = buscar_tema_por_id(id)
+
+    if not tema:
+        return jsonify({
+            "erro":"Correção não encontrada!"
+        }), 404
+
+    return jsonify(tema)
+
+@app.route("/temas", methods=["POST"])
+def cadastrar_tema():
+    dados = request.get_json()
+
+    
+
+
 
 
 
