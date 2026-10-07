@@ -167,6 +167,7 @@ def cadastrar_aluno():
     nome = dados.get("nome")
     email = dados.get("email")
     senha = dados.get("senha")
+    turma = dados.get("turma")
 
     if not nome or not email or not senha:
         return jsonify({
@@ -176,7 +177,8 @@ def cadastrar_aluno():
     id_aluno = adicionar_aluno(
         nome,
         email,
-        senha
+        senha,
+        turma
     )
 
     return jsonify({

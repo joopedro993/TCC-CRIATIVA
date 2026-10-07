@@ -4,6 +4,7 @@ const email = document.getElementById('input-email');
 const senha = document.getElementById('input-senha');
 const nome = document.getElementById("input-nome");
 const escola = document.getElementById("select-escola");
+const professor = document.getElementById("select-professor")
 const turma = document.getElementById("select-turma");
 const alerta = document.getElementById('alerta');
 const toggle = document.getElementById('toggleSenha');
@@ -13,26 +14,28 @@ const formulario = document.getElementById("form-cadastro");
 
 carregarEscolas();
 
-formulario.addEventListener('submit', (event) =>{
+formulario.addEventListener('submit', (event) => {
     event.preventDefault();
     alerta.classList.add("d-none");
 
     const emailOk = email.checkValidity();
     const senhaOk = senha.checkValidity();
     const nomeOk = !!nome.value.trim();
-    const escolaOk = !!escola.value.trim(); 
-    const turmaOk = !!turma.value.trim(); 
+    const escolaOk = !!escola.value.trim();
+    const turmaOk = !!turma.value.trim();
+    const professorOk = !!professor.value.trim();
 
     email.classList.toggle("is-invalid", !emailOk);
     senha.classList.toggle('is-invalid', !senhaOk);
     nome.classList.toggle('is-invalid', !nomeOk);
     escola.classList.toggle('is-invalid', !escolaOk);
     turma.classList.toggle('is-invalid', !turmaOk);
+    professor.classList.toggle('is-invalid', !professorOk);
 
-    if (!emailOk || !senhaOk || !nomeOk || escolaOk || turmaOk) return;
+    if (!emailOk || !senhaOk || !nomeOk || !escolaOk || !turmaOk || !professorOk) return;
 
-    [email, senha, nome].forEach((campo) =>
-    campo.addEventListener("input", () => campo.classList.remove("is-invalid")));
+    [email, senha, nome, escola, turma, professor].forEach((campo) =>
+        campo.addEventListener("input", () => campo.classList.remove("is-invalid")));
 
     efetuarCadastro();
 
@@ -40,8 +43,20 @@ formulario.addEventListener('submit', (event) =>{
 
 });
 
+document.getElementById("select-escola").addEventListener("change", function () {
+    const id_escola = this.value;
+
+    carregarProfessores(id_escola);
+});
+
+document.getElementById("select-professor").addEventListener("change", function () {
+    const id_professor = this.value;
+
+    carregarTurmas(id_professor);
+});
+
 async function carregarEscolas() {
-    const resposta = await fetch(`${api_escola_url}/escolas`);
+    const resposta = await fetch(`${api_url}/escolas`);
     const escolas = await resposta.json();
 
     const selectEscolas = document.getElementById("select-escola");
@@ -54,21 +69,45 @@ async function carregarEscolas() {
         `
 
     });
+
+
 };
 
-async function carregarTurmas() {
-    const resposta = await fetch(`${api_turma_url}/turmas`);
+async function carregarProfessores(id_escola) {
+    const resposta = await fetch(`${api_url}/professores/escola/${id_escola}`);
+    const professores = await resposta.json();
+
+    const selectProfessores = document.getElementById("select-professor");
+
+    selectProfessores.innerHTML = "";
+
+    professores.forEach(professor => {
+        selectProfessores.innerHTML += `
+        <option value="${professor.id_professor}">
+            ${professor.nome}
+        </option>
+        `
+    });
+
+
+}
+
+async function carregarTurmas(id_professor) {
+    const resposta = await fetch(`${api_url}/turmas/professor/${id_professor}`);
     const turmas = await resposta.json();
 
-    const selectCursos = document.getElementById("select-turma");
+    const selectTurmas = document.getElementById("select-turma");
+
+    selectTurmas.innerHTML = "";
 
     turmas.forEach(turma => {
-        selectCursos.innerHTML += `
+        selectTurmas.innerHTML += `
         <option value="${turma.id_turma}">
             ${turma.nome}
         </option>
         `
     });
+
 };
 
 async function efetuarCadastro() {
@@ -82,23 +121,23 @@ async function efetuarCadastro() {
         const aluno = {
             email: emailAluno,
             nome: nomeAluno,
-            senha: senhaAluno
+            senha: senhaAluno,
+            turma: turmaAluno
         }
 
         const resposta = await fetch(
-            `${api_aluno_url}/alunos`,
+            `${api_url}/alunos`,
             {
                 method: "POST",
-                headers: {"Content-Type": "application/json"},
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(aluno)
             });
 
         const novoAluno = await resposta.json();
         console.log(novoAluno);
 
-        window.alert("Cadastro efetuado, faça seu Login!")
-
-        if (resposta.ok){
+        if (resposta.ok) {
+            window.alert("Cadastro efetuado, faça seu Login!");
             window.location.replace("login-alunos.html");
         }
 
