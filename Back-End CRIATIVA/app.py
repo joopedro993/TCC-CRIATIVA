@@ -481,6 +481,7 @@ def deletar_atividade(id_atividade):
 def buscar_correcao():
     lista_correcao = listar_correcoes()
 
+<<<<<<< HEAD
     return jsonify(lista_correcao)
 
 @app.route("/correcao/<int:id_correcao>", methods=["GET"])
@@ -593,7 +594,9 @@ def cadastrar_tema():
 
 
 
+=======
 
 
+>>>>>>> e6ecd655283a7b7fe5f6fe7a75c5112270ab63a0
 if __name__ == "__main__":
     app.run(debug=True, port=5010)

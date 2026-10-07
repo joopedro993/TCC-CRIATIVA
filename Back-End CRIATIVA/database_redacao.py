@@ -1,9 +1,11 @@
 import sqlite3
 
 def criar_conexao():
-    conexao = sqlite3.connect("banco_redacao.db")
+    conexao = sqlite3.connect("banco.db")
     conexao.row_factory = sqlite3.Row
     return conexao
+
+    conexao.execute("PRAGMA foreign_keys = ON")
 
 def criar_banco_redacao():
     conexao = criar_conexao()
@@ -16,11 +18,15 @@ def criar_banco_redacao():
             texto TEXT NOT NULL,
             nota REAL,
             feedback TEXT,
+            id_atividade_fk INTEGER NOT NULL,
             id_aluno INTEGER NOT NULL,
-            id_aluno_fk INTEGER NOT NULL FOREIGN KEY
-            REFERENCES alunos,
-            id_atividade_fk INTEGER NOT NULL FOREIGN KEY
-            REFERENCES atividades
+            id_aluno_fk INTEGER NOT NULL
+            
+            
+            FOREIGN KEY(id_aluno_fk)
+            REFERENCES alunos(id_aluno),
+            FOREIGN KEY (id_atividade_fk)
+            REFERENCES atividades(id_atividade)
             )
 
     """)

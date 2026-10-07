@@ -1,10 +1,10 @@
 import sqlite3
 
 def criar_conexao():
-    conexao = sqlite3.connect("banco_atividade.db")
+    conexao = sqlite3.connect("banco.db")
     conexao.row_factory = sqlite3.Row
     return conexao
-
+    conexao.execute("PRAGMA foreign_keys = ON") 
 
 def criar_banco_atividade():
     conexao = criar_conexao()
@@ -19,10 +19,15 @@ def criar_banco_atividade():
             descricao TEXT NOT NULL,
             data_disponibilizacao TEXT NOT NULL,
             prazo TEXT NOT NULL,
-            id_tema_fk INTEGER NOT NULL FOREIGN KEY
-            REFERENCES temas,
-            id_turma_fk INTEGER NOT NULL FOREIGN KEY 
-            REFERENCES turmas
+            id_tema_fk INTEGER NOT NULL,
+            id_turma_fk INTEGER NOT NULL,
+            
+            
+            FOREIGN KEY (id_tema_fk)
+            REFERENCES temas(id_tema),
+
+            FOREIGN KEY (id_turma_fk)
+            REFERENCES turmas(id_turma)
         )
     """)
 

@@ -1,10 +1,11 @@
 import sqlite3
 
 def criar_conexao():
-    conexao = sqlite3.connect("banco_correcoes.db")
+    conexao = sqlite3.connect("banco.db")
     conexao.row_factory = sqlite3.Row
     
     return conexao
+    conexao.execute("PRAGMA foreign_keys = ON")
 
 def criar_banco_consultas():
     conexao = criar_conexao()
@@ -22,10 +23,14 @@ def criar_banco_consultas():
             nota_total INTEGER,
             comentario TEXT NOT NULL,
             data_correcao DATE NOT NULL,
-            id_redacao_fk INTEGER NOT NULL FOREIGN KEY
-            REFERENCES redacoes,
-            id_professor_fk INTEGER NOT NULL FOREIGN KEY
-            REFERENCES professores
+            id_redacao_fk INTEGER NOT NULL,
+            id_professor_fk INTEGER NOT NULL,
+            
+            FOREIGN KEY (id_redacao_fk)
+            REFERENCES redacoes(id_redacao),
+
+            FOREIGN KEY(id_professor_fk)
+            REFERENCES professores(id_professor)
         )               
     """)
     
