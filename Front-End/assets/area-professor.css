@@ -1,0 +1,206 @@
+/* Área do Professor.
+   Carregue depois de styles.css e turmas.css (reaproveita .turmas, .turmas-vidro,
+   botões, modal, .turma-pendentes e .btn-excluir). */
+
+/* Cartões de números no topo */
+.area-stat {
+    padding: 20px 24px;
+    height: 100%;
+}
+
+.area-stat-num {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.6em;
+    font-weight: 700;
+    color: #9500ff;
+    line-height: 1.1;
+}
+
+.area-stat-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1em;
+    font-weight: 600;
+    color: #444;
+}
+
+/* Abas em formato de botão */
+.area-abas {
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.area-abas .nav-link {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 1.05em;
+    color: #444;
+    border-radius: 16px;
+    padding: 10px 20px;
+    background: rgba(170, 170, 170, 0.1);
+    border: 2px solid rgb(240, 238, 238);
+    transition: 0.3s;
+}
+
+.area-abas .nav-link:hover {
+    color: #9500ff;
+}
+
+.area-abas .nav-link.active {
+    background: #9500ff;
+    border-color: #9500ff;
+    color: #fff;
+}
+
+.area-abas .contagem {
+    display: inline-block;
+    min-width: 24px;
+    margin-left: 6px;
+    padding: 0 8px;
+    border-radius: 999px;
+    font-size: 0.85em;
+    background: #FCC003;
+    color: #534D00;
+}
+
+/* Painel de cada aba */
+.area-painel {
+    padding: 24px;
+}
+
+/* Lista de turmas (accordion do Bootstrap com o visual do site) */
+.area-acordeao .accordion-item {
+    background: transparent;
+    border: 2px solid rgb(240, 238, 238);
+    border-radius: 24px !important;
+    margin-bottom: 12px;
+    overflow: hidden;
+}
+
+.area-acordeao .accordion-button {
+    font-family: 'Montserrat', sans-serif;
+    background: rgba(255, 255, 255, 0.6);
+    gap: 12px 20px;
+    flex-wrap: wrap;
+    padding: 18px 24px;
+    box-shadow: none;
+}
+
+.area-acordeao .accordion-button:not(.collapsed) {
+    background: rgba(149, 0, 255, 0.08);
+    color: inherit;
+}
+
+.area-acordeao .accordion-button:focus {
+    border-color: #9500ff;
+    box-shadow: 0 0 0 4px rgba(149, 0, 255, 0.15);
+}
+
+.acordeao-nome {
+    font-size: 1.4em;
+    font-weight: 700;
+    color: #9500ff;
+}
+
+.acordeao-info {
+    color: #555;
+    font-weight: 600;
+}
+
+.area-acordeao .accordion-body {
+    font-family: 'Montserrat', sans-serif;
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* Tabelas */
+.area-tabela {
+    font-family: 'Montserrat', sans-serif;
+    margin-bottom: 0;
+    --bs-table-bg: transparent;
+}
+
+.area-tabela th {
+    font-weight: 700;
+    color: #444;
+    border-bottom: 2px solid rgb(225, 223, 223);
+    white-space: nowrap;
+}
+
+.area-tabela td {
+    vertical-align: middle;
+}
+
+.area-tabela .btn {
+    white-space: nowrap;
+}
+
+/* Etiqueta de situação da atividade */
+.situacao {
+    display: inline-block;
+    padding: 2px 12px;
+    border-radius: 999px;
+    font-size: 0.9em;
+    font-weight: 600;
+}
+
+.situacao.aberta {
+    background: rgba(149, 0, 255, 0.12);
+    color: #6a00b8;
+}
+
+.situacao.agendada {
+    background: rgba(252, 192, 3, 0.35);
+    color: #534D00;
+}
+
+.situacao.encerrada {
+    background: rgba(170, 170, 170, 0.25);
+    color: #555;
+}
+
+/* Filtro de situação ao lado do botão */
+.area-filtro {
+    font-family: 'Montserrat', sans-serif;
+    border-radius: 16px;
+    border: 2px solid rgb(225, 223, 223);
+    background-color: rgba(255, 255, 255, 0.75);
+    padding: 12px 16px;
+    max-width: 240px;
+}
+
+.area-filtro:focus {
+    border-color: #9500ff;
+    box-shadow: 0 0 0 4px rgba(149, 0, 255, 0.15);
+}
+
+/* Selects e datas dentro do modal */
+.turmas-modal .form-select {
+    font-family: 'Montserrat', sans-serif;
+    padding: 12px 16px;
+    border-radius: 16px;
+    border: 2px solid rgb(225, 223, 223);
+    background-color: rgba(255, 255, 255, 0.75);
+}
+
+.turmas-modal .form-select:focus {
+    border-color: #9500ff;
+    box-shadow: 0 0 0 4px rgba(149, 0, 255, 0.15);
+}
+
+.turmas-modal .form-select.is-invalid {
+    border-color: #c62828;
+}
+
+@media (max-width: 575.98px) {
+    .area-painel {
+        padding: 16px 12px;
+    }
+
+    .area-abas .nav-link {
+        padding: 8px 14px;
+        font-size: 0.95em;
+    }
+
+    .area-stat-num {
+        font-size: 2em;
+    }
+}

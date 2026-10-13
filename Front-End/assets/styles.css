@@ -50,13 +50,10 @@ main {
 /* Classe responsável por configurar a primeira seção da página inicial */
 .hero {
     position: relative;
-    padding-top: 0;
-    margin: 0;
     overflow: hidden;
-    min-height: 90vh;
-    display: flex;
-    align-items: center;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 70%, #Fffff0 100%), url('/Front-End/assets/images/background.png') no-repeat center/cover;
+    min-height: 100vh;
+    padding: 130px 0 64px;
+    background: url('/Front-End/assets/images/background.png') no-repeat center/cover;
 }
 
 /* Classe responsável pela caixa de conteúdo que está na primeira seção, com os botões e o texto chamativo */
@@ -283,6 +280,12 @@ seja .btn-amarelo ou .btn-roxo */
 .logo img {
     justify-self: left;
     max-width: 90px !important;
+    height: auto;
+}
+
+.professor .logo img {
+    justify-self: left;
+    max-width: 180px !important;
     height: auto;
 }
 

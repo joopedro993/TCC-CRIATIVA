@@ -104,7 +104,7 @@ def excluir_professor(id_professor):
 
     return linhas_afetadas
 
-def verificar_login(email, senha):
+def verificar_login_professores(email, senha):
     conexao = criar_conexao()
     cursor = conexao.cursor()
 

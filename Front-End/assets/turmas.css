@@ -1,6 +1,11 @@
 *{
     font-family: "Montserrat", sans-serif;
 }
+
+.bd-off-white{
+    background-color: #fffff0 !important;
+}
+
 .turmas {
     position: relative;
     overflow: hidden;
@@ -155,24 +160,24 @@
 }
  
 /* Botões (amarelo e roxo, como no resto do site) */
-.turmas .btn-amarelo,
-.turmas .btn-roxo,
+.nav-btn .btn-amarelo,
+.nav-btn .btn-roxo,
 .turmas-modal .btn-amarelo,
 .turmas-modal .btn-roxo {
     font-family: 'Montserrat', sans-serif;
-    font-size: 1.05em;
+    font-size: 1.5em;
     border-radius: 16px;
     font-weight: 600;
     transition: 0.5s;
 }
  
-.turmas .btn-amarelo,
+.nav-btn .btn-amarelo,
 .turmas-modal .btn-amarelo {
     background: #FCC003;
     color: #534D00;
 }
  
-.turmas .btn-roxo,
+.nav-btn .btn-roxo,
 .turmas-modal .btn-roxo {
     background: #9500ff;
     color: white;

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Atividades | CRIATIVA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/styles.css">
+    <link rel="stylesheet" href="assets/turmas.css">
+    <link rel="stylesheet" href="assets/area-professor.css">
+</head>
+
+<body class="professor">
+    <header class="header">
+        <a href="area-professor.html" class="logo"><img src="assets/images/Logo-AreaProfessor.png" alt="CRIATIVA"></a>
+        <nav class="navbar">
+            <a href="area-professor.html">Visão geral</a>
+            <a href="turmas-professor.html">Turmas e alunos</a>
+            <a href="atividades-professor.html">Atividades</a>
+            <a href="correcoes-pendentes.html">Correções pendentes</a>
+
+            <button id="btnSair" class="link-sair" type="button">Sair</button>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container-fluid px-5">
+                <h1 class="turmas-titulo">Atividades</h1>
+                <p class="turmas-resumo mb-4">Área do professor — CRIATIVA</p>
+                <div id="alerta" class="alert alert-danger d-none"></div>
+                <div class="area-painel turmas-vidro">
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <select id="filtroSituacao" class="form-select" style="max-width:260px">
+                            <option value="">Todas as situações</option>
+                            <option value="aberta">Abertas</option>
+                            <option value="agendada">Agendadas</option>
+                            <option value="encerrada">Encerradas</option>
+                        </select><button id="btnNovaAtividade" class="btn btn-amarelo">+ Nova atividade</button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table area-tabela">
+                            <thead>
+                                <tr>
+                                    <th>Tema</th>
+                                    <th>Turma</th>
+                                    <th>Abertura</th>
+                                    <th>Prazo</th>
+                                    <th>Situação</th>
+                                    <th>Enviadas</th>
+                                    <th>Corrigidas</th>
+                                </tr>
+                            </thead>
+                            <tbody id="corpoAtividades"></tbody>
+                        </table>
+                    </div>
+                    <p id="vazioAtividades" class="d-none">Nenhuma atividade cadastrada.</p>
+                </div>
+                <div class="modal fade" id="modalAtividade" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form id="formAtividade">
+                                <div class="modal-header">
+                                    <h2 class="modal-title fs-5">Nova atividade</h2><button type="button"
+                                        class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body"><label class="form-label" for="selTema">Tema</label><select
+                                        id="selTema" class="form-select mb-3" required></select><label
+                                        class="form-label" for="selTurmaAtv">Turma</label><select id="selTurmaAtv"
+                                        class="form-select mb-3" required></select>
+                                    <div class="row">
+                                        <div class="col"><label class="form-label"
+                                                for="dataAbertura">Abertura</label><input id="dataAbertura" type="date"
+                                                class="form-control" required></div>
+                                        <div class="col"><label class="form-label" for="dataPrazo">Prazo</label><input
+                                                id="dataPrazo" type="date" class="form-control" required></div>
+                                    </div>
+                                    <div id="erroModalAtividade" class="text-danger mt-2"></div>
+                                </div>
+                                <div class="modal-footer"><button type="button" class="btn btn-roxo"
+                                        data-bs-dismiss="modal">Cancelar</button><button class="btn btn-amarelo">Criar
+                                        atividade</button></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="row align-items-center py-4">
+                <div class="col-12 col-md-4 text-center text-md-start mb-3 mb-md-0">
+                    <img src="assets/images/logo-criativa.png" class="footer-logo">
+                    <p class="footer-tagline">Projeto acadêmico de TCC</p>
+                </div>
+
+                <div class="col-12 col-md-4 text-center mb-3 mb-md-0">
+                    <p class="footer-title">Desenvolvido por</p>
+                    <p class="footer-devs">
+                        João Pedro Jesus &middot; Maria Victória Ferreira<br>
+                        Alexandre Dangoni &middot; Elias Gabriel Félix
+                    </p>
+                </div>
+
+                <div class="col-12 col-md-4 text-center text-md-end">
+                    <p class="footer-copy">&copy; 2026 CRIATIVA. Todos os direitos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/base-professor.js"></script>
+    <script src="js/atividades.js"></script>
+</body>
+
+</html>

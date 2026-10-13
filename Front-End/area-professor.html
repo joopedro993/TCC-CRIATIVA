@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Visão geral | CRIATIVA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/styles.css">
+    <link rel="stylesheet" href="assets/turmas.css">
+    <link rel="stylesheet" href="assets/area-professor.css">
+</head>
+
+<body class="professor">
+    <header class="header">
+        <a href="area-professor.html" class="logo"><img src="assets/images/Logo-AreaProfessor.png" alt="CRIATIVA"></a>
+        <nav class="navbar">
+            <a href="area-professor.html">Visão geral</a>
+            <a href="turmas-professor.html">Turmas e alunos</a>
+            <a href="atividades-professor.html">Atividades</a>
+            <a href="correcoes-pendentes.html">Correções pendentes</a>
+            <button id="btnSair" class="link-sair" type="button">Sair</button></nav>
+    </header>
+
+
+
+    <main>
+        <section class="hero">
+            <div class="container-fluid px-5">
+
+
+                <h1 class="turmas-titulo">Visão geral</h1>
+                <p class="turmas-resumo mb-4">Área do professor — CRIATIVA</p>
+                <div id="alerta" class="alert alert-danger d-none"></div>
+                <div class="row g-3">
+                    <div class="col-6 col-lg-3">
+                        <div class="area-stat turmas-vidro">
+                            <div id="statTurmas" class="area-stat-num">0</div>
+                            <div class="area-stat-label">Turmas</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="area-stat turmas-vidro">
+                            <div id="statAlunos" class="area-stat-num">0</div>
+                            <div class="area-stat-label">Alunos</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="area-stat turmas-vidro">
+                            <div id="statAtividades" class="area-stat-num">0</div>
+                            <div class="area-stat-label">Atividades</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="area-stat turmas-vidro">
+                            <div id="statPendentes" class="area-stat-num">0</div>
+                            <div class="area-stat-label">Redações pendentes</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="area-painel turmas-vidro mt-4">
+                    <h2 class="int-text">Bem-vindo(a), <span id="nomeProfessor">professor</span>!</h2>
+                    <p class="int-sub-text">Escolha uma seção no menu para gerenciar suas turmas, atividades e
+                        correções.</p>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a class="nav-btn px-2" href="turmas-professor.html"><button class="btn btn-roxo">Gerenciar turmas</button></a>
+                        <a class="nav-btn px-2" href="atividades-professor.html"><button class="btn btn-roxo">Ver atividades</button></a>
+                        <a class="nav-btn px-2" href="correcoes-pendentes.html"><button class="btn btn-amarelo">Corrigir redações</button></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="row align-items-center py-4">
+                <div class="col-12 col-md-4 text-center text-md-start mb-3 mb-md-0">
+                    <img src="assets/images/logo-criativa.png" class="footer-logo">
+                    <p class="footer-tagline">Projeto acadêmico de TCC</p>
+                </div>
+
+                <div class="col-12 col-md-4 text-center mb-3 mb-md-0">
+                    <p class="footer-title">Desenvolvido por</p>
+                    <p class="footer-devs">
+                        João Pedro Jesus &middot; Maria Victória Ferreira<br>
+                        Alexandre Dangoni &middot; Elias Gabriel Félix
+                    </p>
+                </div>
+
+                <div class="col-12 col-md-4 text-center text-md-end">
+                    <p class="footer-copy">&copy; 2026 CRIATIVA. Todos os direitos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/base-professor.js"></script>
+    <script src="js/visao-geral.js"></script>
+</body>
+
+</html>

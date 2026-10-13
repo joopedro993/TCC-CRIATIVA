@@ -130,3 +130,19 @@ def buscar_aluno_por_id(id_aluno):
     aluno = cursor.fetchone()
     conexao.close()
     return dict(aluno) if aluno else None
+
+def listar_alunos_por_turma(id_turma):
+    conexao = criar_conexao()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT id_aluno,nome, email 
+        FROM alunos
+        WHERE id_turma_fk = ?
+    """, (id_turma,))
+
+    alunos = cursor.fetchall()
+
+    conexao.close()
+
+    return [dict(aluno) for aluno in alunos]

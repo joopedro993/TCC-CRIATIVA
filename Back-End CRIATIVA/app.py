@@ -1,4 +1,4 @@
-from flask import Flask,request,jsonify
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 from database_alunos import *
@@ -11,12 +11,14 @@ from database_temas import *
 from database_correcao import *
 from database_consultas import *
 import os
+import json
 
 serializador = URLSafeTimedSerializer(os.environ.get("SECRET_KEY", "criativa-dev123"))
 
 app = Flask(__name__)
 
 CORS(app)
+
 
 def criar_bancos():
     criar_banco_alunos()
@@ -29,9 +31,11 @@ def criar_bancos():
     criar_banco_consultas()
     criar_banco_atividade()
 
+
 criar_bancos()
 
-#===============================PROFESSORES====================================================================
+# ===============================PROFESSORES====================================================================
+
 
 @app.route("/professores", methods=["GET"])
 def buscar_professor():
@@ -52,20 +56,11 @@ def cadastrar_professor():
     escola = dados.get("escola")
 
     if not nome or not email or not senha or not escola:
-        return jsonify({
-            "erro": "Nome, email e senha são obrigatórios"
-        }), 400
+        return jsonify({"erro": "Nome, email e senha são obrigatórios"}), 400
 
-    id_professor = adicionar_professor(
-        nome,
-        email,
-        senha,
-        escola
-    )
+    id_professor = adicionar_professor(nome, email, senha, escola)
 
-    return jsonify({
-        "mensagem": f"O professor {id_professor} foi adicionado"
-    }), 201
+    return jsonify({"mensagem": f"O professor {id_professor} foi adicionado"}), 201
 
 
 @app.route("/professores/<int:id_professor>", methods=["PUT"])
@@ -79,26 +74,14 @@ def atualizar_professor(id_professor):
     escola = dados.get("id_escola_fk")
 
     if not nome or not email or not senha or not escola:
-        return jsonify({
-            "erro": "Nome, email e senha são obrigatórios"
-        }), 400
+        return jsonify({"erro": "Nome, email e senha são obrigatórios"}), 400
 
-    resultado = editar_professor(
-        id_professor,
-        nome,
-        email,
-        senha,
-        escola
-    )
+    resultado = editar_professor(id_professor, nome, email, senha, escola)
 
     if resultado == 0:
-        return jsonify({
-            "erro": "Professor não encontrado"
-        }), 404
+        return jsonify({"erro": "Professor não encontrado"}), 404
 
-    return jsonify({
-        "mensagem": "Professor editado com sucesso"
-    }), 200
+    return jsonify({"mensagem": "Professor editado com sucesso"}), 200
 
 
 @app.route("/professores/<int:id_professor>", methods=["DELETE"])
@@ -107,24 +90,20 @@ def deletar_professor(id_professor):
     resultado = excluir_professor(id_professor)
 
     if resultado == 0:
-        return jsonify({
-            "erro": "Professor não encontrado"
-        }), 404
+        return jsonify({"erro": "Professor não encontrado"}), 404
 
-    return jsonify({
-        "mensagem": "Professor excluído com sucesso"
-    }), 200
+    return jsonify({"mensagem": "Professor excluído com sucesso"}), 200
+
 
 @app.route("/professores/<int:id_professor>", methods=["GET"])
 def obter_professor(id_professor):
     professor = buscar_professor_por_id(id_professor)
 
     if professor is None:
-        return jsonify({
-            "erro":"Professor não encontrado"
-        }),404
+        return jsonify({"erro": "Professor não encontrado"}), 404
 
     return jsonify(professor), 200
+
 
 @app.route("/professores/escola/<int:id_escola>", methods=["GET"])
 def buscar_professores_por_escola(id_escola):
@@ -132,51 +111,59 @@ def buscar_professores_por_escola(id_escola):
 
     return jsonify(professores)
 
+
 @app.route("/professores/login", methods=["POST"])
 def login_professores():
     dados = request.get_json()
 
     print("DADOS RECEBIDOS:", dados)
 
-    email = dados.get("emailLancar")
+    email = dados.get("emailLancar").strip().lower()
     senha = dados.get("senhaLancar")
 
     print("EMAIL:", email)
     print("SENHA RECEBIDA:", senha)
 
     if not email or not senha:
-        return jsonify({
-            "erro": "Email e senha são obrigatórios"
-        }), 400
+        return jsonify({"erro": "Email e senha são obrigatórios"}), 400
 
-    professor = verificar_login(email, senha)
+    professor = verificar_login_professores(email, senha)
 
     print("RESULTADO DO LOGIN:", professor)
 
     if professor is None:
-        return jsonify({
-            "erro": "Email ou senha incorretos"
-        }), 401
-        
-    token = serializador.dumps(
-        {"id":professor["id_professor"],
-         "tipo":"professor"}
-        )
+        return jsonify({"erro": "Email ou senha incorretos"}), 401
+
+    token = serializador.dumps({"id": professor["id_professor"], "tipo": "professor"})
     serializador.loads(token, max_age=3600)
 
-    return jsonify({
-        "mensagem": "Login realizado com sucesso",
-        "professor": professor,
-        "token":token
-    }), 200
+    return (
+        jsonify(
+            {
+                "mensagem": "Login realizado com sucesso",
+                "professor": professor,
+                "token": token,
+            }
+        ),
+        200,
+    )
 
-#===============================ALUNOS====================================================================
+
+# ===============================ALUNOS====================================================================
+
 
 @app.route("/alunos", methods=["GET"])
 def buscar_aluno():
     lista_alunos = listar_aluno()
 
     return jsonify(lista_alunos)
+
+
+@app.route("/alunos/turmas/<int:id_turma>", methods=["GET"])
+def buscar_aluno_por_turma(id_turma):
+    alunos = listar_alunos_por_turma(id_turma)
+    return jsonify(alunos)
+
 
 @app.route("/alunos", methods=["POST"])
 def cadastrar_aluno():
@@ -187,33 +174,22 @@ def cadastrar_aluno():
     turma = dados.get("turma")
 
     if not nome or not email or not senha or not turma:
-        return jsonify({
-            "erro": "Nome, email e senha são obrigatórios"
-        }), 400
+        return jsonify({"erro": "Nome, email e senha são obrigatórios"}), 400
 
-    id_aluno = adicionar_aluno(
-        nome,
-        email,
-        senha,
-        turma
-    )
+    id_aluno = adicionar_aluno(nome, email, senha, turma)
 
-    return jsonify({
-        "mensagem": f"O aluno {id_aluno} foi adicionado"
-    }), 201
+    return jsonify({"mensagem": f"O aluno {id_aluno} foi adicionado"}), 201
+
 
 @app.route("/alunos/<int:id_aluno>", methods=["DELETE"])
 def excluir_aluno(id_aluno):
     resultado = deletar_aluno(id_aluno)
 
     if resultado == 0:
-        return jsonify({
-            "erro": "aluno não encontrado"
-        }), 404
-    
-    return jsonify({
-        "mensagem": "aluno excluído com sucesso."
-    }), 200
+        return jsonify({"erro": "aluno não encontrado"}), 404
+
+    return jsonify({"mensagem": "aluno excluído com sucesso."}), 200
+
 
 @app.route("/alunos/<int:id_aluno>", methods=["PUT"])
 def editar_aluno(id_aluno):
@@ -225,31 +201,25 @@ def editar_aluno(id_aluno):
     turma = dados.get("turma")
 
     if not nome or not email or not senha or not turma:
-        return jsonify({
-            "erro": "Nome, email e senha são obrigatórios"
-        }), 400
-    
-    resultado = atualizar_aluno(id_aluno,nome,email,senha,turma)
+        return jsonify({"erro": "Nome, email e senha são obrigatórios"}), 400
+
+    resultado = atualizar_aluno(id_aluno, nome, email, senha, turma)
 
     if resultado == 0:
-        return jsonify({
-            "erro": "aluno não encontrado."
-        }), 404
-    
-    return jsonify({
-        "mensagem": "aluno editado com sucesso."
-    }), 200
+        return jsonify({"erro": "aluno não encontrado."}), 404
+
+    return jsonify({"mensagem": "aluno editado com sucesso."}), 200
+
 
 @app.route("/alunos/<int:id_aluno>", methods=["GET"])
 def obter_aluno(id_aluno):
     aluno = buscar_aluno_por_id(id_aluno)
 
     if aluno is None:
-        return jsonify({
-            "erro": "Aluno não encontrado"
-        }), 404
+        return jsonify({"erro": "Aluno não encontrado"}), 404
 
     return jsonify(aluno), 200
+
 
 @app.route("/alunos/login", methods=["POST"])
 def login_alunos():
@@ -263,32 +233,28 @@ def login_alunos():
     print("SENHA RECEBIDA:", senha)
 
     if not email or not senha:
-        return jsonify({
-            "erro": "Email e senha são obrigatórios"
-        }), 400
+        return jsonify({"erro": "Email e senha são obrigatórios"}), 400
 
     aluno = verificar_login_aluno(email, senha)
 
     print("RESULTADO DO LOGIN:", aluno)
 
     if aluno is None:
-        return jsonify({
-            "erro": "Email ou senha incorretos"
-        }), 401
-        
-    token = serializador.dumps(
-            {"id":aluno["id_aluno"],
-             "tipo":"aluno"}
-            )
+        return jsonify({"erro": "Email ou senha incorretos"}), 401
+
+    token = serializador.dumps({"id": aluno["id_aluno"], "tipo": "aluno"})
     serializador.loads(token, max_age=3600)
 
-    return jsonify({
-        "mensagem": "Login realizado com sucesso",
-        "aluno": aluno,
-        "token":token
-    }), 200
+    return (
+        jsonify(
+            {"mensagem": "Login realizado com sucesso", "aluno": aluno, "token": token}
+        ),
+        200,
+    )
 
-#===============================ESCOLAS====================================================================
+
+# ===============================ESCOLAS====================================================================
+
 
 @app.route("/escolas", methods=["GET"])
 def buscar_escola():
@@ -296,44 +262,39 @@ def buscar_escola():
 
     return jsonify(lista_escolas)
 
+
 @app.route("/escolas", methods=["POST"])
 def cadastrar_escola():
     dados = request.get_json()
     nome = dados.get("nome")
 
     if not nome:
-        return jsonify({
-            "erro": "Nome, email e senha são obrigatórios"
-        }), 400
+        return jsonify({"erro": "Nome, email e senha são obrigatórios"}), 400
 
-    id_escola = adicionar_escola(
-        nome
-    )
+    id_escola = adicionar_escola(nome)
 
-    return jsonify({
-        "mensagem": f"A escola {id_escola} foi adicionada"
-    }), 201
+    return jsonify({"mensagem": f"A escola {id_escola} foi adicionada"}), 201
+
 
 @app.route("/escolas/<int:id_escola>", methods=["DELETE"])
 def deletar_escola(id_escola):
     resultado = excluir_escolas(id_escola)
 
     if resultado == 0:
-        return jsonify({
-            "erro": "escola não encontrada"
-        }), 404
-    
-    return jsonify({
-        "mensagem": "escola excluída com sucesso."
-    }), 200
+        return jsonify({"erro": "escola não encontrada"}), 404
 
-#===============================TURMA====================================================================
+    return jsonify({"mensagem": "escola excluída com sucesso."}), 200
+
+
+# ===============================TURMA====================================================================
+
 
 @app.route("/turmas", methods=["GET"])
 def buscar_turma():
     lista_turma = listar_turma()
 
     return jsonify(lista_turma)
+
 
 @app.route("/turmas", methods=["POST"])
 def cadastrar_turma():
@@ -342,24 +303,22 @@ def cadastrar_turma():
     id_professor = dados.get("professor")
 
     if not nome or not id_professor:
-        return jsonify({
-            "erro": "O nome da turma é obrigatório"
-        }), 400
-    
+        return jsonify({"erro": "O nome da turma é obrigatório"}), 400
+
     adicionar_turma(nome, id_professor)
 
-    return jsonify({
-        "mensagem": "Turma cadastrada com sucesso."
-    }), 200
+    return jsonify({"mensagem": "Turma cadastrada com sucesso."}), 200
+
 
 @app.route("/turmas/<int:id_turma>", methods=["GET"])
 def obter_turma(id_turma):
     turma = buscar_turma_por_id(id_turma)
-    
+
     if turma is None:
-        return jsonify({"erro":"Turma não encontrada"}), 404
+        return jsonify({"erro": "Turma não encontrada"}), 404
 
     return jsonify(turma), 200
+
 
 @app.route("/turmas/professores/<int:id_professor>", methods=["GET"])
 def buscar_turmas_por_professor(id_professor):
@@ -367,11 +326,14 @@ def buscar_turmas_por_professor(id_professor):
 
     return jsonify(turmas)
 
-#===============================REDAÇÕES====================================================================
+
+# ===============================REDAÇÕES====================================================================
+
 
 @app.route("/redacoes", methods=["GET"])
 def buscar_redacoes():
     return jsonify(listar_redacoes())
+
 
 @app.route("/redacoes", methods=["POST"])
 def cadastrar_redacao():
@@ -383,28 +345,22 @@ def cadastrar_redacao():
     id_atividade = dados.get("id_atividade")
 
     if not tema or not texto or not id_aluno or not id_atividade:
-        return jsonify({
-            "erro":"tema, texto e id_aluno são obrigatorios"
-        }), 400
+        return jsonify({"erro": "tema, texto e id_aluno são obrigatorios"}), 400
 
-    adicionar_redacao(tema,texto,id_aluno, id_atividade)
+    adicionar_redacao(tema, texto, id_aluno, id_atividade)
 
-    return jsonify({
-        "mensagem":"Redação cadastrada com sucesso"
-    }),201
+    return jsonify({"mensagem": "Redação cadastrada com sucesso"}), 201
 
 
-
-@app.route("/redacoes/<int:id_redacao>",methods=["GET"])
+@app.route("/redacoes/<int:id_redacao>", methods=["GET"])
 def obter_redacao(id_redacao):
     redacao = buscar_redacao_por_id(id_redacao)
 
     if not redacao:
-        return jsonify({
-            "erro":"Redação não encontrada"
-        }), 404
+        return jsonify({"erro": "Redação não encontrada"}), 404
 
     return jsonify(redacao)
+
 
 @app.route("/redacoes/<int:id_redacao>", methods=["PUT"])
 def editar_redacao(id_redacao):
@@ -415,19 +371,17 @@ def editar_redacao(id_redacao):
 
     atualizar_redacao(id_redacao, nota, feedback)
 
-    return jsonify({
-        "mensagem": "Redação atualizada com sucesso"
-    })
+    return jsonify({"mensagem": "Redação atualizada com sucesso"})
+
 
 @app.route("/redacoes/<int:id_redacao>", methods=["DELETE"])
 def deletar_redacao(id_redacao):
     excluir_redacao(id_redacao)
 
-    return jsonify({
-        "mensagem": "Redação removida com sucesso"
-    })
+    return jsonify({"mensagem": "Redação removida com sucesso"})
 
-#===============================ESCOLAS====================================================================
+
+# ===============================ESCOLAS====================================================================
 
 
 @app.route("/atividades", methods=["GET"])
@@ -446,30 +400,12 @@ def cadastrar_atividade():
     prazo = dados.get("prazo")
     id_turma = dados.get("id_turma")
 
-    if not all([
-        titulo,
-        tema,
-        descricao,
-        data_disponibilizacao,
-        prazo,
-        id_turma
-    ]):
-        return jsonify({
-            "erro": "Todos os campos são obrigatórios"
-        }), 400
+    if not all([titulo, tema, descricao, data_disponibilizacao, prazo, id_turma]):
+        return jsonify({"erro": "Todos os campos são obrigatórios"}), 400
 
-    adicionar_atividade(
-        titulo,
-        tema,
-        descricao,
-        data_disponibilizacao,
-        prazo,
-        id_turma
-    )
+    adicionar_atividade(titulo, tema, descricao, data_disponibilizacao, prazo, id_turma)
 
-    return jsonify({
-        "mensagem": "Atividade cadastrada com sucesso"
-    }), 201
+    return jsonify({"mensagem": "Atividade cadastrada com sucesso"}), 201
 
 
 @app.route("/atividades/<int:id_atividade>", methods=["GET"])
@@ -477,9 +413,7 @@ def obter_atividade(id_atividade):
     atividade = buscar_atividade_por_id(id_atividade)
 
     if not atividade:
-        return jsonify({
-            "erro": "Atividade não encontrada"
-        }), 404
+        return jsonify({"erro": "Atividade não encontrada"}), 404
 
     return jsonify(atividade)
 
@@ -494,38 +428,36 @@ def editar_atividade(id_atividade):
         dados.get("tema"),
         dados.get("descricao"),
         dados.get("data_disponibilizacao"),
-        dados.get("prazo")
+        dados.get("prazo"),
     )
 
-    return jsonify({
-        "mensagem": "Atividade atualizada com sucesso"
-    })
+    return jsonify({"mensagem": "Atividade atualizada com sucesso"})
 
 
 @app.route("/atividades/<int:id_atividade>", methods=["DELETE"])
 def deletar_atividade(id_atividade):
     excluir_atividade(id_atividade)
 
-    return jsonify({
-        "mensagem": "Atividade removida com sucesso"
-    })
-#=======================================CORREÇÃO=======================================================
+    return jsonify({"mensagem": "Atividade removida com sucesso"})
+
+
+# =======================================CORREÇÃO=======================================================
 @app.route("/correcao", methods=["GET"])
 def buscar_correcao():
     lista_correcao = listar_correcao()
 
     return jsonify(lista_correcao)
 
+
 @app.route("/correcao/<int:id_correcao>", methods=["GET"])
 def obter_correcao(id_correcao):
     correcao = buscar_correcao_por_id(id_correcao)
 
     if not correcao:
-        return jsonify({
-            "erro":"Correção não encontrada!"
-        }), 404
+        return jsonify({"erro": "Correção não encontrada!"}), 404
 
     return jsonify(correcao)
+
 
 @app.route("/correcao", methods=["POST"])
 def cadastrar_correcao():
@@ -539,26 +471,28 @@ def cadastrar_correcao():
     competencia_3 = dados["competencia_3"]
     competencia_4 = dados["competencia_4"]
     competencia_5 = dados["competencia_5"]
-    nota_total = competencia_1 + competencia_2 + competencia_3 + competencia_4 + competencia_5
+    nota_total = (
+        competencia_1 + competencia_2 + competencia_3 + competencia_4 + competencia_5
+    )
     comentario = dados["comentario"]
     data_correcao = dados["data_correcao"]
 
-    if not all([
-        id_correcao,
-        id_redacao_fk,
-        id_professor_fk,
-        competencia_1,
-        competencia_2,
-        competencia_3,
-        competencia_4,
-        competencia_5,
-        nota_total,
-        comentario,
-        data_correcao
-    ]):
-        return jsonify({
-            "erro": "Todos os campos são obrigatórios"
-        }), 400
+    if not all(
+        [
+            id_correcao,
+            id_redacao_fk,
+            id_professor_fk,
+            competencia_1,
+            competencia_2,
+            competencia_3,
+            competencia_4,
+            competencia_5,
+            nota_total,
+            comentario,
+            data_correcao,
+        ]
+    ):
+        return jsonify({"erro": "Todos os campos são obrigatórios"}), 400
 
     adicionar_correcao(
         id_correcao,
@@ -571,17 +505,16 @@ def cadastrar_correcao():
         competencia_5,
         nota_total,
         comentario,
-        data_correcao
+        data_correcao,
     )
 
-    return jsonify({
-        "mensagem": "Correção cadastrada com sucesso"
-    }), 201
+    return jsonify({"mensagem": "Correção cadastrada com sucesso"}), 201
+
 
 @app.route("/correcao/<int:id_correcao>", methods=["PUT"])
 def editar_correcao(id_correcao):
     dados = request.get_json()
-    
+
     id_redacao_fk = dados("id_redacao")
     id_professor_fk = dados("id_professor")
     competencia_1 = dados("competencia_1")
@@ -589,7 +522,9 @@ def editar_correcao(id_correcao):
     competencia_3 = dados("competencia_3")
     competencia_4 = dados("competencia_4")
     competencia_5 = dados("competencia_5")
-    nota_total = competencia_1 + competencia_2 + competencia_3 + competencia_4 + competencia_5
+    nota_total = (
+        competencia_1 + competencia_2 + competencia_3 + competencia_4 + competencia_5
+    )
     comentario = dados("comentario")
     data_correcao = dados("data_correcao")
 
@@ -604,35 +539,44 @@ def editar_correcao(id_correcao):
         competencia_5,
         nota_total,
         comentario,
-        data_correcao
+        data_correcao,
     )
 
-    return jsonify({
-        "mensagem": "Atividade atualizada com sucesso"
-    }), 200
+    return jsonify({"mensagem": "Correção atualizada com sucesso"}), 200
 
-#=========================================TEMA============================================================
+
+# =========================================TEMA============================================================
 @app.route("/temas", methods=["GET"])
 def buscar_tema():
     lista_temas = listar_tema()
 
     return jsonify(lista_temas)
 
+
 @app.route("/temas/<int:id>", methods=["GET"])
 def obter_tema(id):
     tema = buscar_tema_por_id(id)
 
     if not tema:
-        return jsonify({
-            "erro":"Correção não encontrada!"
-        }), 404
+        return jsonify({"erro": "Correção não encontrada!"}), 404
 
     return jsonify(tema)
 
 
+@app.route("/temas", methods=["POST"])
+def cadastrar_tema():
+    dados = request.get_json()
 
-    
+    titulo = dados["titulo"]
+    textos_motivadores = json.dumps(dados["textos_motivadores"], ensure_ascii=False)
 
+    if not all([titulo, textos_motivadores]):
+
+        return jsonify({"erro": "Todos os campos são obrigatórios"}), 400
+
+    adicionar_tema(titulo, textos_motivadores)
+
+    return jsonify({"mensagem": "Tema cadastrado com sucesso"}), 201
 
 
 if __name__ == "__main__":

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Correções pendentes | CRIATIVA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/styles.css">
+    <link rel="stylesheet" href="assets/turmas.css">
+    <link rel="stylesheet" href="assets/area-professor.css">
+</head>
+
+<body class="professor">
+    <header class="header">
+        <a href="area-professor.html" class="logo"><img src="assets/images/Logo-AreaProfessor.png" alt="CRIATIVA"></a>
+        <nav class="navbar">
+            <a href="area-professor.html">Visão geral</a>
+            <a href="turmas-professor.html">Turmas e alunos</a>
+            <a href="atividades-professor.html">Atividades</a>
+            <a href="correcoes-pendentes.html">Correções pendentes</a>
+            <button id="btnSair" class="link-sair" type="button">Sair</button>
+        </nav>
+    </header>
+    <main>
+        <section class="hero">
+            <div class="container-fluid px-5">
+                <h1 class="turmas-titulo">Correções pendentes</h1>
+                <p class="turmas-resumo mb-4">Área do professor — CRIATIVA</p>
+                <div id="alerta" class="alert alert-danger d-none"></div>
+                <div class="area-painel turmas-vidro">
+                    <div class="table-responsive">
+                        <table class="table area-tabela">
+                            <thead>
+                                <tr>
+                                    <th>Aluno</th>
+                                    <th>Turma</th>
+                                    <th>Tema</th>
+                                    <th>Enviada em</th>
+                                    <th>Prazo</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="corpoPendentes"></tbody>
+                        </table>
+                    </div>
+                    <p id="vazioPendentes" class="d-none">Nenhuma redação aguardando correção.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="row align-items-center py-4">
+                <div class="col-12 col-md-4 text-center text-md-start mb-3 mb-md-0">
+                    <img src="assets/images/logo-criativa.png" class="footer-logo">
+                    <p class="footer-tagline">Projeto acadêmico de TCC</p>
+                </div>
+
+                <div class="col-12 col-md-4 text-center mb-3 mb-md-0">
+                    <p class="footer-title">Desenvolvido por</p>
+                    <p class="footer-devs">
+                        João Pedro Jesus &middot; Maria Victória Ferreira<br>
+                        Alexandre Dangoni &middot; Elias Gabriel Félix
+                    </p>
+                </div>
+
+                <div class="col-12 col-md-4 text-center text-md-end">
+                    <p class="footer-copy">&copy; 2026 CRIATIVA. Todos os direitos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/base-professor.js"></script>
+    <script src="js/pendentes.js"></script>
+</body>
+
+</html>
