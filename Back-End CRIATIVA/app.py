@@ -381,7 +381,7 @@ def deletar_redacao(id_redacao):
     return jsonify({"mensagem": "Redação removida com sucesso"})
 
 
-# ===============================ESCOLAS====================================================================
+# ===============================ATIVIDADES====================================================================
 
 
 @app.route("/atividades", methods=["GET"])
@@ -399,11 +399,12 @@ def cadastrar_atividade():
     data_disponibilizacao = dados.get("data_disponibilizacao")
     prazo = dados.get("prazo")
     id_turma = dados.get("id_turma")
+    id_tema = dados.get("id_tema")
 
     if not all([titulo, tema, descricao, data_disponibilizacao, prazo, id_turma]):
         return jsonify({"erro": "Todos os campos são obrigatórios"}), 400
 
-    adicionar_atividade(titulo, tema, descricao, data_disponibilizacao, prazo, id_turma)
+    adicionar_atividade(titulo, tema, descricao, data_disponibilizacao, prazo, id_tema, id_turma)
 
     return jsonify({"mensagem": "Atividade cadastrada com sucesso"}), 201
 
@@ -439,6 +440,12 @@ def deletar_atividade(id_atividade):
     excluir_atividade(id_atividade)
 
     return jsonify({"mensagem": "Atividade removida com sucesso"})
+
+@app.route("/atividades/turma/<int:id_turma>", methods=["GET"])
+def buscar_atividades_por_turma(id_turma):
+    atividades = listar_atividades_por_turma(id_turma)
+
+    return jsonify(atividades)
 
 
 # =======================================CORREÇÃO=======================================================

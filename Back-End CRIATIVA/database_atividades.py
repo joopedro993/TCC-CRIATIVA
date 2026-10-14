@@ -38,15 +38,15 @@ def criar_banco_atividade():
 
 
 
-def adicionar_atividade(titulo,tema,descricao,data_disponibilizacao,prazo,id_turma,id_tema_fk,id_turma_fk):
+def adicionar_atividade(titulo,tema,descricao,data_disponibilizacao,prazo,id_tema_fk,id_turma_fk):
     conexao = criar_conexao()
     cursor = conexao.cursor()
 
     cursor.execute("""
         INSERT INTO atividades
-        (titulo, tema, descricao, data_disponibilizacao, prazo, id_turma,id_tema_fk,id_turma_fk)
-        VALUES (?, ?, ?, ?, ?, ?,?,?)
-    """, (titulo,tema,descricao,data_disponibilizacao,prazo,id_turma,id_tema_fk,id_turma_fk))
+        (titulo, tema, descricao, data_disponibilizacao, prazo,id_tema_fk,id_turma_fk)
+        VALUES (?, ?, ?, ?, ?,?,?)
+    """, (titulo,tema,descricao,data_disponibilizacao,prazo,id_tema_fk,id_turma_fk))
 
     conexao.commit()
     conexao.close()
@@ -134,3 +134,18 @@ def excluir_atividade(id_atividade):
 
     conexao.commit()
     conexao.close()
+    
+def listar_atividades_por_turma(id_turma):
+    conexao = criar_conexao()
+    cursor = conexao.cursor()
+    
+    cursor.execute("""
+                   SELECT id_atividade, titulo, tema, data_disponibilizacao, prazo
+                   FROM atividades
+                   WHERE id_turma_fk = ?""",
+                   (id_turma,))
+    
+    atividades = cursor.fetchall()
+    conexao.close()
+    
+    return [dict (atividade) for atividade in atividades]

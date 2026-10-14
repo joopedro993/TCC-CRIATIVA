@@ -283,7 +283,7 @@ seja .btn-amarelo ou .btn-roxo */
     height: auto;
 }
 
-.professor .logo img {
+.areas .logo img {
     justify-self: left;
     max-width: 180px !important;
     height: auto;

@@ -168,7 +168,20 @@ pegarPorId("formAtividade").addEventListener("submit", async (evento) => {
 
         // O título e a descrição da atividade vêm do tema escolhido
         const tituloDoTema = temaEscolhido?.titulo ?? temaEscolhido?.nome;
-        const descricaoDoTema = temaEscolhido?.textos_motivadores ?? temaEscolhido?.descricao ?? tituloDoTema;
+        let descricaoDoTema = temaEscolhido?.textos_motivadores ?? temaEscolhido?.descricao ?? tituloDoTema;
+        if (Array.isArray(descricaoDoTema)) {
+            descricaoDoTema = descricaoDoTema.join("\n\n");
+        } else if (typeof descricaoDoTema === 'string' && descricaoDoTema.startsWith('[')) {
+            try {
+                const parsed = JSON.parse(descricaoDoTema);
+                if (Array.isArray(parsed)) descricaoDoTema = parsed.join("\n\n");
+            } catch (e) {}
+        }
+
+        const idTemaValor = Number(pegarPorId("selTema").value);
+        if (!idTemaValor) {
+            throw Error("Por favor, selecione um tema válido.");
+        }
 
         // O POST /atividades da API exige estes seis campos
         await chamarApi("/atividades", {
@@ -179,7 +192,8 @@ pegarPorId("formAtividade").addEventListener("submit", async (evento) => {
                 descricao: descricaoDoTema,
                 data_disponibilizacao: dataDeAbertura,
                 prazo: dataLimite,
-                id_turma: Number(pegarPorId("selTurmaAtv").value)
+                id_turma: Number(pegarPorId("selTurmaAtv").value),
+                id_tema: temaEscolhido.id_tema
             })
         });
 

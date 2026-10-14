@@ -45,7 +45,7 @@ def adicionar_redacao(tema,texto,id_aluno_fk,id_atividade_fk):
     cursor.execute("""
         INSERT INTO redacoes
         (tema, texto, id_aluno_fk,id_atividade_fk)
-        VALUES(?,?,?)
+        VALUES(?,?,?,?)
 
 
     """, (tema,texto,id_aluno_fk,id_atividade_fk))

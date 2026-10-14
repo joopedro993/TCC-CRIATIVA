@@ -44,7 +44,7 @@ async function efetuarLogin() {
 
     if (resposta.ok){
         localStorage.setItem("token", body.token);
-        window.location.replace("professor-turmas.html");
+        window.location.replace("atividades-aluno.html");
     } else{
         window.alert(body.erro)
     }
