@@ -343,11 +343,12 @@ def cadastrar_redacao():
     texto = dados.get("texto")
     id_aluno = dados.get("id_aluno")
     id_atividade = dados.get("id_atividade")
+    data_envio = dados.get("data_envio")
 
     if not tema or not texto or not id_aluno or not id_atividade:
         return jsonify({"erro": "tema, texto e id_aluno são obrigatorios"}), 400
 
-    adicionar_redacao(tema, texto, id_aluno, id_atividade)
+    adicionar_redacao(tema, texto, id_aluno, id_atividade, data_envio)
 
     return jsonify({"mensagem": "Redação cadastrada com sucesso"}), 201
 
@@ -470,19 +471,17 @@ def obter_correcao(id_correcao):
 def cadastrar_correcao():
     dados = request.get_json()
 
-    id_correcao = dados["id_correcao"]
-    id_redacao_fk = dados["id_redacao"]
-    id_professor_fk = dados["id_professor"]
-    competencia_1 = dados["competencia_1"]
-    competencia_2 = dados["competencia_2"]
-    competencia_3 = dados["competencia_3"]
-    competencia_4 = dados["competencia_4"]
-    competencia_5 = dados["competencia_5"]
-    nota_total = (
-        competencia_1 + competencia_2 + competencia_3 + competencia_4 + competencia_5
-    )
-    comentario = dados["comentario"]
-    data_correcao = dados["data_correcao"]
+    id_correcao = dados.get("id_correcao")
+    id_redacao_fk = dados.get("id_redacao")
+    id_professor_fk = dados.get("id_professor")
+    competencia_1 = dados.get("competencia_1")
+    competencia_2 = dados.get("competencia_2")
+    competencia_3 = dados.get("competencia_3")
+    competencia_4 = dados.get("competencia_4")
+    competencia_5 = dados.get("competencia_5")
+    
+    comentario = dados.get("comentario")
+    data_correcao = dados.get("data_correcao")
 
     if not all(
         [
@@ -494,13 +493,16 @@ def cadastrar_correcao():
             competencia_3,
             competencia_4,
             competencia_5,
-            nota_total,
             comentario,
             data_correcao,
         ]
     ):
         return jsonify({"erro": "Todos os campos são obrigatórios"}), 400
 
+    nota_total = (
+            competencia_1 + competencia_2 + competencia_3 + competencia_4 + competencia_5
+        )
+    
     adicionar_correcao(
         id_correcao,
         id_redacao_fk,
@@ -518,7 +520,7 @@ def cadastrar_correcao():
     return jsonify({"mensagem": "Correção cadastrada com sucesso"}), 201
 
 
-@app.route("/correcao/<int:id_correcao>", methods=["PUT"])
+"""@app.route("/correcao/<int:id_correcao>", methods=["PUT"])
 def editar_correcao(id_correcao):
     dados = request.get_json()
 
@@ -549,7 +551,7 @@ def editar_correcao(id_correcao):
         data_correcao,
     )
 
-    return jsonify({"mensagem": "Correção atualizada com sucesso"}), 200
+    return jsonify({"mensagem": "Correção atualizada com sucesso"}), 200"""
 
 
 # =========================================TEMA============================================================

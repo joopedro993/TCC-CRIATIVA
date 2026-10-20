@@ -213,7 +213,8 @@ botaoEnviar?.addEventListener("click", async () => {
                 tema: obterTituloDaAtividade(atividadeAtual),
                 texto: texto,
                 id_aluno: idAluno,
-                id_atividade: idDaAtividade
+                id_atividade: idDaAtividade,
+                data_envio: dataDeHoje()
             })
         });
 

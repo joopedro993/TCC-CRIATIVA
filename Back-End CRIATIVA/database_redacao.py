@@ -18,8 +18,7 @@ def criar_banco_redacao():
             id_redacao INTEGER PRIMARY KEY AUTOINCREMENT,
             tema TEXT NOT NULL,
             texto TEXT NOT NULL,
-            nota REAL,
-            feedback TEXT,
+            data_envio TEXT NOT NULL,
             id_atividade_fk INTEGER NOT NULL,
             id_aluno_fk INTEGER NOT NULL,
             
@@ -37,18 +36,18 @@ def criar_banco_redacao():
 
 
 
-def adicionar_redacao(tema,texto,id_aluno_fk,id_atividade_fk):
+def adicionar_redacao(tema,texto,id_aluno_fk,id_atividade_fk, dt_envio):
     conexao = criar_conexao()
     cursor = conexao.cursor()
 
 
     cursor.execute("""
         INSERT INTO redacoes
-        (tema, texto, id_aluno_fk,id_atividade_fk)
-        VALUES(?,?,?,?)
+        (tema, texto, id_aluno_fk,id_atividade_fk, data_envio)
+        VALUES(?,?,?,?,?)
 
 
-    """, (tema,texto,id_aluno_fk,id_atividade_fk))
+    """, (tema,texto,id_aluno_fk,id_atividade_fk, dt_envio))
 
 
     conexao.commit()

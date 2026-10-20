@@ -40,7 +40,7 @@ function criarLinhaDaPendente(redacao, dados) {
     const botaoCorrigir = document.createElement("a");
     botaoCorrigir.className = "btn btn-amarelo btn-sm";
     botaoCorrigir.textContent = "Corrigir";
-    botaoCorrigir.href = `correcao.html?id=${redacao.id_redacao}`;
+    botaoCorrigir.href = `professor-correcao.html?id=${redacao.id_redacao}`;
 
     celulaDoBotao.append(botaoCorrigir);
 

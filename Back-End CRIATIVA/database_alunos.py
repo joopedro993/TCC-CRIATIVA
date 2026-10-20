@@ -36,7 +36,7 @@ def listar_aluno():
     cursor = conexao.cursor()
 
     cursor.execute("""
-        SELECT id_aluno, nome, email
+        SELECT id_aluno, nome, email, id_turma_fk
         FROM alunos
     """)
 

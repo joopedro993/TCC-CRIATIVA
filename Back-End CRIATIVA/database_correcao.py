@@ -15,7 +15,6 @@ def criar_banco_correcoes():
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS correcoes(
             id_correcao INTEGER PRIMARY KEY AUTOINCREMENT,
-            conteudo TEXT NOT NULL,
             competencia_1 INTEGER,
             competencia_2 INTEGER,
             competencia_3 INTEGER,
