@@ -63,7 +63,7 @@ function descreverAtividade(atividade, dados) {
             botao: {
                 texto: "Ver correção",
                 classe: "btn btn-roxo",
-                endereco: `resultados.html?redacao=${redacao.id_redacao}`
+                endereco: `aluno-consulta-correcao.html?redacao=${redacao.id_redacao}`
             }
         };
     }

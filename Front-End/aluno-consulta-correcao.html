@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Correção de Redação | CRIATIVA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <!-- Mesma ordem usada nas outras páginas: styles > turmas > areas -->
+    <link rel="stylesheet" href="assets/styles.css">
+    <link rel="stylesheet" href="assets/turmas.css">
+    <link rel="stylesheet" href="assets/areas.css">
+    <link rel="icon" href="assets/images/Logo-Simplificada.png">
+
+    <!-- Apenas o que não existe nos CSS atuais. Pode ser movido para assets/correcao.css -->
+    <style>
+        .correcao-texto {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.05em;
+            line-height: 1.9;
+            text-align: justify;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .correcao-texto p {
+            text-indent: 2em;
+            margin-bottom: 12px;
+        }
+
+        .correcao-lateral {
+            position: sticky;
+            top: 110px;
+        }
+
+        .competencia {
+            padding: 16px 20px;
+            border-radius: 20px;
+            border: 2px solid rgb(240, 238, 238);
+            background: rgba(255, 255, 255, 0.4);
+            margin-bottom: 12px;
+        }
+
+        .competencia-nome {
+            font-weight: 700;
+            color: #9500ff;
+            margin-bottom: 2px;
+        }
+
+        .competencia-desc {
+            font-size: 0.9em;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .correcao-meta {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .correcao-meta strong {
+            color: #000;
+        }
+
+        .correcao-acoes .btn {
+            font-size: 1.1em !important;
+        }
+
+        .correcao-sugestao {
+            font-size: 0.95em;
+            padding: 12px 16px;
+            border-radius: 16px;
+            background: rgba(149, 0, 255, 0.08);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <a href="index.html" class="logo">
+            <img src="assets/images/logo-criativa.png" alt="CRIATIVA"></a>
+
+        <nav class="navbar">
+            <a href="atividades-aluno.html">Atividades</a>
+            <button id="btnSair" class="link-sair" type="button">Sair</button>
+        </nav>
+    </header>
+
+    <main>
+        <section class="turmas">
+            <div class="container-fluid">
+                <div class="row justify-content-center px-md-5">
+                    <div class="col-12 col-xl-11">
+
+                        <!-- Título e dados da entrega -->
+                        <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
+                            <div>
+                                <h1 class="turmas-titulo mb-2">Resultado da <span>correção</span></h1>
+                                <p class="turmas-resumo mb-0 correcao-meta">
+                                    Redação enviada em: <strong id="dataEnvio">00/00/0000</strong>
+                                </p>
+                                <p class="turmas-resumo mb-0 correcao-meta">
+                                    Correção enviada em: <strong id="dataEnvio">00/00/0000</strong>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="row gy-4 turmas-modal">
+
+                            <!-- Coluna principal: tema + texto do aluno -->
+                            <div class="col-12 col-lg-7">
+
+                                <div class="turmas-vidro area-painel mb-4">
+                                    <h2 class="acordeao-nome mb-2">Tema</h2>
+                                    <!-- Vem do banco de temas definido pelo professor -->
+                                    <p class="mb-0" id="tema">Tema da atividade.</p>
+                                </div>
+
+                                <div class="turmas-vidro area-painel">
+                                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                                        <h2 class="acordeao-nome mb-0">Texto do aluno</h2>
+                                        <span class="acordeao-info"><span id="palavras">0</span> palavras &middot;
+                                            <span id="paragrafos">0</span> parágrafos &middot;
+                                            <span id="caracteres">0</span> / 1862 caracteres</span>
+                                    </div>
+
+                                    <!-- Somente leitura: preencher com o texto enviado pelo aluno, um <p> por parágrafo -->
+                                    <article class="correcao-texto" id="textoAluno">
+                                        <p>Parágrafo de introdução da redação do aluno aparece aqui.</p>
+                                        <p>Parágrafo de desenvolvimento 1.</p>
+                                        <p>Parágrafo de desenvolvimento 2.</p>
+                                        <p>Parágrafo de conclusão.</p>
+                                    </article>
+                                </div>
+                            </div>
+
+                            <!-- Coluna lateral: nota, competências e feedback -->
+                            <div class="col-12 col-lg-5">
+                                <div class="correcao-lateral">
+
+                                    <div class="row g-3 mb-4">
+                                        <div class="col-6">
+                                            <div class="turmas-vidro area-stat">
+                                                <div class="area-stat-num" id="notaTotal">0</div>
+                                                <div class="area-stat-label">Nota final (0 a 1000)</div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+
+                                    <div class="turmas-vidro area-painel">
+                                        <h2 class="acordeao-nome mb-3">Avaliação</h2>
+
+                                        <ul class="nav area-abas" id="abasCorrecao" role="tablist">
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link active" data-bs-toggle="tab"
+                                                    data-bs-target="#abaCompetencias" type="button"
+                                                    role="tab">Competências</button>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link" data-bs-toggle="tab"
+                                                    data-bs-target="#abaFeedback" type="button"
+                                                    role="tab">Feedback</button>
+                                            </li>
+                                        </ul>
+
+                                        <div class="tab-content">
+
+                                            <!-- Aba 1: 5 competências, 0 a 200 cada -->
+                                            <div class="tab-pane fade show active" id="abaCompetencias" role="tabpanel">
+                                                <div class="competencia">
+                                                    <p class="competencia-nome">Competência 1</p>
+                                                    <p class="competencia-desc">Domínio da norma culta da língua.</p>
+                                                    <label for="nota1" class="visually-hidden">Nota da competência 1</label>
+                                                    <p class="area-stat-num" id="nota1"></p>
+                                                </div>
+                                                <div class="competencia">
+                                                    <p class="competencia-nome">Competência 2</p>
+                                                    <p class="competencia-desc">Compreensão do tema e estrutura dissertativa.</p>
+                                                    <label for="nota2" class="visually-hidden">Nota da competência 2</label>
+                                                    <p class="area-stat-num" id="nota2"></p>
+                                                </div>
+                                                <div class="competencia">
+                                                    <p class="competencia-nome">Competência 3</p>
+                                                    <p class="competencia-desc">Seleção e organização de argumentos e repertório.</p>
+                                                    <label for="nota3" class="visually-hidden">Nota da competência 3</label>
+                                                    <p class="area-stat-num" id="nota3"></p>
+                                                </div>
+                                                <div class="competencia">
+                                                    <p class="competencia-nome">Competência 4</p>
+                                                    <p class="competencia-desc">Coesão e mecanismos linguísticos.</p>
+                                                    <label for="nota4" class="visually-hidden">Nota da competência 4</label>
+                                                    <p class="area-stat-num" id="nota4"></p>
+                                                </div>
+                                                <div class="competencia mb-0">
+                                                    <p class="competencia-nome">Competência 5</p>
+                                                    <p class="competencia-desc">Proposta de intervenção.</p>
+                                                    <label for="nota5" class="visually-hidden">Nota da competência 5</label>
+                                                    <p class="area-stat-num" id="nota5"></p>
+                                                </div>
+                                            </div>
+
+                                            <!-- Aba 2: comentário geral + sugestão da IA -->
+                                            <div class="tab-pane fade" id="abaFeedback" role="tabpanel">
+                                                <label for="feedback" class="turmas-label">Comentário para o aluno</label>
+                                                <p class="correcao-texto" id="nota5">batata quente fria</p>
+
+                                                
+                                            </div>
+                                        </div>
+
+                                        
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="row align-items-center py-4">
+                <div class="col-12 col-md-4 text-center text-md-start mb-3 mb-md-0">
+                    <img src="assets/images/logo-criativa.png" class="footer-logo" alt="CRIATIVA">
+                    <p class="footer-tagline">Projeto acadêmico de TCC</p>
+                </div>
+
+                <div class="col-12 col-md-4 text-center mb-3 mb-md-0">
+                    <p class="footer-title">Desenvolvido por</p>
+                    <p class="footer-devs">
+                        João Pedro Jesus &middot; Maria Victória Ferreira<br>
+                        Alexandre Dangoni &middot; Elias Gabriel Félix
+                    </p>
+                </div>
+
+                <div class="col-12 col-md-4 text-center text-md-end">
+                    <p class="footer-copy">&copy; 2026 CRIATIVA. Todos os direitos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+
+    <script src="js/aluno-base.js"></script>
+    <script src="#"></script>
+</body>
+
+</html>

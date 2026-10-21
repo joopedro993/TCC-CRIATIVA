@@ -75,6 +75,66 @@ function atualizarNotaTotal() {
     pegarPorId("competenciasPreenchidas").textContent = `${preenchidas}/5`;
 }
 
+// ------------------------------------------------------------
+// RASCUNHO (guardado só neste navegador)
+// ------------------------------------------------------------
+
+// Cada aluno e cada atividade têm o seu próprio rascunho
+// ------------------------------------------------------------
+// 4.1 RASCUNHO (fica guardado só neste navegador)
+// Guarda as 5 notas e o comentário. Cada professor tem um rascunho
+// por redação, por isso a chave leva os dois ids.
+// ------------------------------------------------------------
+ 
+const chaveDoRascunho = () => `rascunho:${id_professor}:${id_Redacao}`;
+ 
+// Guarda no navegador o que está nos campos agora.
+// Devolve true se deu certo e false se o navegador não permitiu.
+function salvarRascunho() {
+    const rascunho = {
+        notas: [...camposDeNota].map((campo) => campo.value),
+        comentario: pegarPorId("feedback").value
+    };
+ 
+    try {
+        localStorage.setItem(chaveDoRascunho(), JSON.stringify(rascunho));
+        return true;
+    } catch {
+        return false;
+    }
+}
+ 
+// Coloca nos campos o rascunho guardado, se existir.
+// Devolve true se encontrou um rascunho.
+function carregarRascunho() {
+    try {
+        const textoGuardado = localStorage.getItem(chaveDoRascunho());
+        if (!textoGuardado) return false;
+ 
+        const rascunho = JSON.parse(textoGuardado);
+ 
+        camposDeNota.forEach((campo, indice) => {
+            campo.value = rascunho.notas?.[indice] ?? "";
+        });
+ 
+        pegarPorId("feedback").value = rascunho.comentario ?? "";
+        atualizarNotaTotal();
+        return true;
+    } catch {
+        // sem acesso ao armazenamento: começa com os campos vazios
+        return false;
+    }
+}
+ 
+// Apaga o rascunho (usado depois que a correção é salva de verdade)
+function apagarRascunho() {
+    try {
+        localStorage.removeItem(chaveDoRascunho());
+    } catch {
+        // sem acesso ao armazenamento: não há o que apagar
+    }
+}
+
 
 // ------------------------------------------------------------
 // 4. MOSTRAR A REDAÇÃO E A CORREÇÃO
