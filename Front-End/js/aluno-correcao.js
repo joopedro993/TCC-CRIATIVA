@@ -1,16 +1,19 @@
 // ============================================================
-// professor-correcao.js
+// aluno-correcao.js
 //
-// Script da página professor-correcao.html.
-// Precisa ser carregado DEPOIS do professor-base.js.
+// Script da página aluno-consulta-correcao.html.
+// Precisa ser carregado DEPOIS do aluno-base.js.
 //
 // A página é aberta com o id da redação no endereço:
-//   professor-correcao.html?id=7
+//   aluno-consulta-correcao.html?redacao=7
 //
 // O que este arquivo faz:
-//   1. Mostra a redação do aluno (tema, texto, nome, turma...).
-//   2. Soma as notas das 5 competências enquanto o professor avalia.
-//   3. Salva a correção na API (POST se for nova, PUT se já existir).
+//   1. Mostra a redação que o aluno escreveu (tema, texto, datas...).
+//   2. Mostra a correção do professor: nota de cada competência,
+//      nota final e comentário.
+//   3. Avisa se a redação ainda não foi corrigida.
+//
+// Esta página é só de consulta: o aluno não altera nada aqui.
 // ============================================================
 
 
@@ -18,34 +21,12 @@
 // 1. DADOS DA PÁGINA
 // ------------------------------------------------------------
 
-// Id da redação, lido do endereço (?id=7)
-const idAtividade = Number(new URLSearchParams(location.search).get("atividade"));
-
-// As 5 listas de nota (uma por competência)
-const camposDeNota = document.querySelectorAll(".nota-comp");
-
-// Notas possíveis em cada competência
-const NOTAS_POSSIVEIS = [0, 40, 80, 120, 160, 200];
-
-// Se a redação já foi corrigida, guarda a correção aqui
-let correcaoExistente = null;
-
-// Id que a API exige ao criar uma correção nova (maior id atual + 1)
-let proximoIdDaCorrecao = 1;
+// Id da redação, lido do endereço (?redacao=7)
+const idDaRedacao = Number(new URLSearchParams(location.search).get("redacao"));
 
 
 // ------------------------------------------------------------
-// 2. LEITORES DE CAMPOS (mesma ideia do professor-base.js)
-// ------------------------------------------------------------
-
-// Id da redação a que uma correção pertence
-function obterIdDaRedacaoDaCorrecao(correcao) {
-    return Number(correcao?.id_redacao_fk ?? correcao?.id_redacao);
-}
-
-
-// ------------------------------------------------------------
-// 4. MOSTRAR A REDAÇÃO E A CORREÇÃO
+// 2. MOSTRAR A REDAÇÃO
 // ------------------------------------------------------------
 
 // Mostra o texto do aluno (um <p> por parágrafo) e as estatísticas
@@ -62,120 +43,66 @@ function mostrarTexto(texto) {
         areaDoTexto.append(elemento);
     });
 
-    pegarPorId("paragrafos").textContent = paragrafos.length;
-    pegarPorId("palavras").textContent = textoCompleto ? textoCompleto.split(/\s+/).length : 0;
-    pegarPorId("caracteres").textContent = textoCompleto.length;
-}
-
-// ------------------------------------------------------------
-// 5. SALVAR A CORREÇÃO
-// ------------------------------------------------------------
-
-async function salvarCorrecao() {
-    const notas = [...camposDeNota].map((campo) => campo.value);
-    const comentario = pegarPorId("feedback").value.trim();
-
-    // Marca em vermelho as competências que faltam
-    camposDeNota.forEach((campo) => campo.classList.toggle("is-invalid", campo.value === ""));
-
-    if (notas.includes("")) {
-        mostrarErro("Avalie as 5 competências antes de salvar.", "status");
-        return;
-    }
-
-    if (!comentario) {
-        mostrarErro("Escreva um comentário para o aluno.", "status");
-        return;
-    }
-
-    // Monta o corpo exatamente como a rota /correcao espera
-    const dadosDaCorrecao = {
-        id_correcao: correcaoExistente ? Number(correcaoExistente.id_correcao) : proximoIdDaCorrecao,
-        id_redacao: idDaRedacao,
-        id_professor: idProfessor,
-        competencia_1: Number(notas[0]),
-        competencia_2: Number(notas[1]),
-        competencia_3: Number(notas[2]),
-        competencia_4: Number(notas[3]),
-        competencia_5: Number(notas[4]),
-        comentario,
-        data_correcao: dataDeHoje()
-    };
-
-    try {
-        if (correcaoExistente) {
-            await chamarApi(`/correcao/${dadosDaCorrecao.id_correcao}`, {
-                method: "PUT",
-                body: JSON.stringify(dadosDaCorrecao)
-            });
-        } else {
-            await chamarApi("/correcao", {
-                method: "POST",
-                body: JSON.stringify(dadosDaCorrecao)
-            });
-        }
-
-        // Daqui em diante, salvar de novo atualiza esta mesma correção
-        correcaoExistente = dadosDaCorrecao;
-        mostrarSituacao(true);
-        console.log("Correção salva e devolvida ao aluno.");
-        location.href = "area-professor.html";
-        console.log("Correção salva e devolvida ao aluno.");
-    } catch (erro) {
-        mostrarErro(erro.message, "status");
-    }
+    escreverTexto("paragrafos", paragrafos.length);
+    escreverTexto("palavras", textoCompleto ? textoCompleto.split(/\s+/).length : 0);
+    escreverTexto("caracteres", textoCompleto.length);
 }
 
 
 // ------------------------------------------------------------
-// 6. INICIAR A PÁGINA
+// 3. MOSTRAR A CORREÇÃO
+// ------------------------------------------------------------
+
+// Mostra as 5 notas, a nota final e o comentário do professor.
+// Recebe um objeto no formato { competencias, notaTotal, comentario, dataCorrecao }
+// (o mesmo que o aluno-base.js monta em correcaoPorRedacao).
+function mostrarCorrecao(correcao) {
+    correcao.competencias.forEach((nota, indice) => {
+        escreverTexto(`nota${indice + 1}`, nota);
+    });
+
+    escreverTexto("notaTotal", correcao.notaTotal);
+    escreverTexto("dataCorrecao", formatarData(correcao.dataCorrecao));
+    escreverTexto("comentario", correcao.comentario || "O professor não deixou comentário.");
+}
+
+
+// ------------------------------------------------------------
+// 4. INICIAR A PÁGINA
 // ------------------------------------------------------------
 
 async function iniciar() {
-    montarListasDeNota();
-
     try {
         const dados = await carregarDadosDoAluno();
 
-        // Procura só entre as redações deste professor
-        const atividade = dados.atividades.find((item) => Number(item.id_atividade) === idAtividade);
+        // Só acha redações escritas por este aluno e atividades da turma dele
+        const redacao = dados.redacoes.find(
+            (item) => Number(item.id_redacao) === idDaRedacao
+        );
+        const atividade = dados.atividades.find(
+            (item) => Number(item.id_atividade) === obterIdDaAtividadeDaRedacao(redacao)
+        );
 
-        const redadao = dados.redacoes.find((item) => Number(item.a))
-
-        if (!redacao) {
-            mostrarErro("Redação não encontrada.", "status");
+        if (!atividade || !redacao) {
+            mostrarErro("Redação não encontrada.");
             return;
         }
 
-        const aluno = dados.alunos.find(
-            (item) => Number(item.id_aluno) === obterIdDoAlunoDaRedacao(redacao)
-        );
-        const turma = dados.turmas.find(
-            (item) => Number(item.id_turma) === obterIdDaTurmaDoAluno(aluno)
-        );
+        escreverTexto("tema", obterTituloDaAtividade(atividade) ?? "—");
+        escreverTexto("dataEnvio", formatarData(obterDataDeEnvio(redacao)));
+        mostrarTexto(obterTextoDaRedacao(redacao));
 
-        pegarPorId("alunoNome").textContent = aluno?.nome ?? "—";
-        pegarPorId("alunoTurma").textContent = turma?.nome ?? "—";
-        pegarPorId("dataEnvio").textContent = formatarData(obterDataDeEnvio(redacao));
-        pegarPorId("tema").textContent = dados.obterTituloDoTema(redacao.tema);
-        mostrarTexto(redacao.texto);
+        // Se a redação ainda não tem correção, avisa e para por aqui
+        const correcao = dados.correcaoPorRedacao.get(idDaRedacao);
 
-        // Descobre se já existe correção e qual será o próximo id
-        const todasAsCorrecoes = await buscarLista("/correcao");
+        if (!correcao) {
+            mostrarErro("Esta redação ainda não foi corrigida pelo professor.");
+            return;
+        }
 
-        proximoIdDaCorrecao =
-            Math.max(0, ...todasAsCorrecoes.map((correcao) => Number(correcao.id_correcao) || 0)) + 1;
-
-        correcaoExistente =
-            todasAsCorrecoes.find(
-                (correcao) => obterIdDaRedacaoDaCorrecao(correcao) === idDaRedacao
-            ) ?? null;
-
-        if (correcaoExistente) preencherCorrecao(correcaoExistente);
-
-        mostrarSituacao(Boolean(correcaoExistente));
+        mostrarCorrecao(correcao);
     } catch (erro) {
-        mostrarErro(erro.message, "status");
+        mostrarErro(erro.message);
     }
 }
 

@@ -18,7 +18,7 @@
 //   palavras, btnSalvar, btnEnviar, status, alerta.
 // ============================================================
 
-const LIMITE_DE_CARACTERES = 1862;
+const LIMITE_DE_CARACTERES = 3500;
 const PAGINA_INICIAL_DO_ALUNO = "atividades-aluno.html";
 
 // Número da atividade, lido do endereço da página (?atividade=3)

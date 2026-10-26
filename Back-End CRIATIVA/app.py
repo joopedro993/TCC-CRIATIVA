@@ -2,6 +2,10 @@
 # receber requisições e retornar respostas em JSON
 from flask import Flask, request, jsonify
 
+from dotenv import load_dotenv
+from google import genai
+#client = genai.Client()
+
 # Importa o CORS para permitir requisições de outras origens
 from flask_cors import CORS
 
@@ -965,8 +969,82 @@ def cadastrar_tema():
     # Retorna uma mensagem de sucesso com o status HTTP 201
     return jsonify({"mensagem": "Tema cadastrado com sucesso"}), 201
 
+'''    #=========================================IA'S====================================================
 
-# Verifica se este arquivo está sendo executado diretamente
+    load_dotenv()
+
+    # =====================================================================
+    # PROMPT DE SISTEMA E CONFIGURAÇÃO DAS REGRAS RÍGIDAS DA IA
+    # =====================================================================
+
+    # Define as instruções de comportamento que impedem a IA de dar respostas prontas.
+    # O uso de strings multilinhas (""") permite estruturar regras claras.
+    SYSTEM_INSTRUCTION = """
+    Você é um orientador pedagógico de redação automatizado para um site acadêmico.
+    REGRAS RÍGIDAS:
+    1. NUNCA escreva redações, introduções, parágrafos ou trechos prontos para o aluno copiar e colar.
+    2. Ajude o aluno exclusivamente apontando caminhos, focando em gramática, coesão, coerência, estruturação de argumentos ou sugerindo repertórios socioculturais gerais.
+    3. Se o aluno enviar um texto ou pedir algo fora do contexto de redação ou estudos, recuse cordialmente e oriente-o a focar na sua produção textual.
+    """
+
+    # =====================================================================
+    # FUNÇÃO DE AUDITORIA E BANCO DE DADOS
+    # =====================================================================
+
+    def salvar_interacao_banco(usuario_id, texto_aluno, resposta_ia):
+        # Ponto reservado para inserir a lógica de persistência (SQLAlchemy, SQLite, MySQL).
+        # Atualmente imprime no terminal para fins de testes e controle visual.
+        print(f"\n[BANCO DE DADOS] Salvando interação para o usuário ID: {usuario_id}")
+        print(f"Texto base do aluno: {texto_aluno[:50]}...")
+        print(f"Resposta gerada pela IA: {resposta_ia[:50]}...\n")
+
+    # =====================================================================
+    # ROTA DA API PARA PROCESSAR A SUGESTÃO DE REDAÇÃO
+    # =====================================================================
+
+    @app.route("/api/sugestao-redacao", methods=["POST"])
+    def sugestao_redacao():
+        # Extrai os dados enviados pelo corpo da requisição do JavaScript (Frontend)
+        dados = request.json
+        usuario_id = dados.get("usuario_id", 1) # Identificador do aluno (padrão 1 caso não venha)
+        texto_atual = dados.get("texto", "")     # Texto que está no editor do site
+
+        # Validação inicial: impede requisições vazias para poupar processamento da IA
+        if not texto_atual.strip():
+            return jsonify({"erro": "O editor está vazio. Escreva algo antes de pedir ajuda à IA."}), 400
+
+        try:
+            # Concatena as instruções de sistema, as regras e o rascunho atual do aluno
+            prompt_completo = f"""
+            {SYSTEM_INSTRUCTION}
+            
+            Este é o texto que o aluno escreveu até o momento:
+            ---
+            {texto_atual}
+            ---
+            Por favor, forneça uma orientação construtiva ou aponte o que pode melhorar, respeitando rigorosamente as regras.
+            """
+
+            # Envia a instrução montada para o modelo Gemini via SDK oficial
+            response = client.models.generate_content(
+                model="gemini-2.5-flash",
+                contents=prompt_completo,
+            )
+
+            # Extrai o texto gerado pela resposta do modelo de IA
+            resposta_ia = response.text
+
+            # Registra a interação no banco de dados para controle institucional/empresa
+            salvar_interacao_banco(usuario_id, texto_atual, resposta_ia)
+
+            # Retorna a sugestão pedagógica com sucesso (Status HTTP 200) para o JavaScript
+            return jsonify({"sugestao": resposta_ia}), 200
+
+        except Exception as erro:
+            # Tratamento de exceções gerais caso ocorra falha na conexão ou na API
+            return jsonify({"erro": f"Erro interno ao consultar a IA: {str(erro)}"}), 500
+'''
+    # Verifica se este arquivo está sendo executado diretamente
 if __name__ == "__main__":
 
     # Inicia o servidor Flask na porta 5010

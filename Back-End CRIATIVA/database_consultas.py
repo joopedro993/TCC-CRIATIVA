@@ -79,7 +79,7 @@ def adicionar_consulta(id_consulta,id_redacao_fk,conteudo):
 
     # Insere os dados informados na tabela indicada pelo comando SQL
     cursor.execute("""
-        INSERT INTO turmas (id_consulta,id_redacao_fk,conteudo)
+        INSERT INTO consultas (id_consulta,id_redacao_fk,conteudo)
         VALUES (?,?,?)
     """, (id_consulta,id_redacao_fk,conteudo))
     

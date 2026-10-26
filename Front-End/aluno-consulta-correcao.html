@@ -81,10 +81,10 @@
     </style>
 </head>
 
-<body>
+<body class="areas">
     <header class="header">
-        <a href="index.html" class="logo">
-            <img src="assets/images/logo-criativa.png" alt="CRIATIVA"></a>
+        <a href="atividades-aluno.html" class="logo">
+            <img src="assets/images/Logo-AreaAluno.png" alt="CRIATIVA"></a>
 
         <nav class="navbar">
             <a href="atividades-aluno.html">Atividades</a>
@@ -106,7 +106,7 @@
                                     Redação enviada em: <strong id="dataEnvio">00/00/0000</strong>
                                 </p>
                                 <p class="turmas-resumo mb-0 correcao-meta">
-                                    Correção enviada em: <strong id="dataEnvio">00/00/0000</strong>
+                                    Correção enviada em: <strong id="dataCorrecao">00/00/0000</strong>
                                 </p>
                             </div>
                         </div>
@@ -209,7 +209,7 @@
                                             <!-- Aba 2: comentário geral + sugestão da IA -->
                                             <div class="tab-pane fade" id="abaFeedback" role="tabpanel">
                                                 <label for="feedback" class="turmas-label">Comentário para o aluno</label>
-                                                <p class="correcao-texto" id="nota5">batata quente fria</p>
+                                                <p class="correcao-texto" id="comentario"></p>
 
                                                 
                                             </div>
@@ -256,7 +256,7 @@
         crossorigin="anonymous"></script>
 
     <script src="js/aluno-base.js"></script>
-    <script src="#"></script>
+    <script src="js/aluno-correcao.js"></script>
 </body>
 
 </html>
