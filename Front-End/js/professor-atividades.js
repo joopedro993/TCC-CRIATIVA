@@ -175,7 +175,10 @@ pegarPorId("formAtividade").addEventListener("submit", async (evento) => {
             try {
                 const parsed = JSON.parse(descricaoDoTema);
                 if (Array.isArray(parsed)) descricaoDoTema = parsed.join("\n\n");
-            } catch (e) {}
+            } catch {
+                // texto comum: um parágrafo por bloco separado por linha em branco
+                return String(valor).split(/\n{2,}/).filter((texto) => texto.trim());
+            }
         }
 
         const idTemaValor = Number(pegarPorId("selTema").value);

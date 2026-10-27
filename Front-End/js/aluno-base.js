@@ -240,18 +240,38 @@ function obterNotaTotalDaCorrecao(correcao) {
     return Number(correcao?.nota_total ?? somaDasCompetencias);
 }
 
-// Os textos motivadores de um tema são guardados como texto JSON (uma lista).
-// Esta função devolve sempre uma lista de textos, qualquer que seja o formato.
+// Os textos motivadores de um tema são guardados como um objeto estruturado ou JSON.
+// Esta função devolve uma lista de objetos contendo o título e o conteúdo de cada texto.
 function lerTextosMotivadores(valor) {
     if (!valor) return [];
-    if (Array.isArray(valor)) return valor.map(String);
 
-    try {
-        const lido = JSON.parse(valor);
-        return Array.isArray(lido) ? lido.map(String) : [String(lido)];
-    } catch {
-        return [String(valor)];
+    let lido = valor;
+    if (typeof valor === "string") {
+        try {
+            lido = JSON.parse(valor);
+        } catch {
+            return [{ titulo: "", conteudo: String(valor) }];
+        }
     }
+
+    const arrayDeTextos = 
+        lido?.textos_motivadores?.textos || 
+        lido?.textos || 
+        (Array.isArray(lido) ? lido : null);
+
+    if (Array.isArray(arrayDeTextos)) {
+        return arrayDeTextos.map((item) => {
+            if (typeof item === "object" && item !== null) {
+                return {
+                    titulo: item.titulo ?? "",
+                    conteudo: item.conteudo ?? item.texto ?? ""
+                };
+            }
+            return { titulo: "", conteudo: String(item) };
+        });
+    }
+
+    return [{ titulo: "", conteudo: String(lido) }];
 }
 
 

@@ -98,14 +98,28 @@ function mostrarAtividade(atividade) {
     const areaDosTextos = pegarPorId("textosMotivadores");
 
     if (areaDosTextos) {
-        // A descrição da atividade guarda os textos motivadores do tema
+        // Obtém a lista de objetos { titulo, conteudo }
         const textos = lerTextosMotivadores(atividade.descricao);
 
         areaDosTextos.replaceChildren(
-            ...textos.map((texto) => {
+            ...textos.map((item) => {
+                const container = document.createElement("div");
+                container.className = "mb-3"; // Espaçamento opcional entre os textos
+
+                // Se houver título, cria um elemento de destaque para ele
+                if (item.titulo) {
+                    const tituloElem = document.createElement("h5");
+                    tituloElem.textContent = item.titulo;
+                    container.append(tituloElem);
+                }
+
+                // Cria o parágrafo com o conteúdo do texto motivador
                 const paragrafo = document.createElement("p");
-                paragrafo.textContent = texto;
-                return paragrafo;
+                paragrafo.classList.add("redacao-texto")
+                paragrafo.textContent = item.conteudo;
+                container.append(paragrafo);
+
+                return container;
             })
         );
     }

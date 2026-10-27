@@ -207,7 +207,7 @@ def listar_atividades_por_turma(id_turma):
     # a data de disponibilização e o prazo das atividades
     # que pertencem à turma informada
     cursor.execute("""
-                   SELECT id_atividade, titulo, tema, data_disponibilizacao, prazo
+                   SELECT id_atividade, titulo, tema, data_disponibilizacao, prazo,descricao
                    FROM atividades
                    WHERE id_turma_fk = ?""",
                    (id_turma,))
