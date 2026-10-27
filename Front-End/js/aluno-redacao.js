@@ -6,7 +6,7 @@
 //
 // O que faz:
 //   - mostra o tema, os textos motivadores e o prazo da atividade;
-//   - conta os caracteres (limite de 1862) com uma barra de progresso;
+//   - conta os caracteres (limite de 3500) com uma barra de progresso;
 //   - guarda um rascunho no navegador (a API ainda não tem rota de rascunho);
 //   - envia a redação final para a API (POST /redacoes).
 //   - bloqueia a escrita quando a atividade ainda não abriu, já foi

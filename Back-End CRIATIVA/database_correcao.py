@@ -48,6 +48,8 @@ def criar_banco_correcoes():
             REFERENCES professores(id_professor)
         )               
     """)
+    conexao.commit()
+    conexao.close()
     
     # Define as colunas da tabela e suas chaves estrangeiras
 

@@ -86,7 +86,7 @@ function atualizarNotaTotal() {
 // por redação, por isso a chave leva os dois ids.
 // ------------------------------------------------------------
  
-const chaveDoRascunho = () => `rascunho:${id_professor}:${id_Redacao}`;
+const chaveDoRascunho = () => `rascunho:${idProfessor}:${idDaRedacao}`;
  
 // Guarda no navegador o que está nos campos agora.
 // Devolve true se deu certo e false se o navegador não permitiu.
@@ -182,6 +182,9 @@ function preencherCorrecao(correcao) {
 // 5. SALVAR A CORREÇÃO
 // ------------------------------------------------------------
 
+const botaoDevolver = pegarPorId("btnDevolver");
+
+
 async function salvarCorrecao() {
     const notas = [...camposDeNota].map((campo) => campo.value);
     const comentario = pegarPorId("feedback").value.trim();
@@ -213,6 +216,7 @@ async function salvarCorrecao() {
         data_correcao: dataDeHoje()
     };
 
+    botaoDevolver.disabled = true;
     try {
         if (correcaoExistente) {
             await chamarApi(`/correcao/${dadosDaCorrecao.id_correcao}`, {
@@ -229,11 +233,13 @@ async function salvarCorrecao() {
         // Daqui em diante, salvar de novo atualiza esta mesma correção
         correcaoExistente = dadosDaCorrecao;
         mostrarSituacao(true);
-        console.log("Correção salva e devolvida ao aluno.");
+        apagarRascunho()
+        window.alert("Correção salva e devolvida ao aluno.");
         location.href = "area-professor.html";
-        console.log("Correção salva e devolvida ao aluno.");
+
     } catch (erro) {
         mostrarErro(erro.message, "status");
+        botaoDevolver.disabled = false;
     }
 }
 
