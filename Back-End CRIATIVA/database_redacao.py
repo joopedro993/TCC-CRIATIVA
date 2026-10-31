@@ -143,33 +143,6 @@ def buscar_redacao_por_id(id_redacao):
     # Caso contrário, retorna None
     return dict(redacao) if redacao else None
 
-
-# Atualiza a nota e o feedback de uma redação
-def atualizar_redacao(id_redacao,nota,feedback):
-    # Cria uma conexão com o banco de dados
-    conexao = criar_conexao()
-
-    # Cria um cursor para executar comandos SQL
-    cursor = conexao.cursor()
-
-    # Atualiza a nota e o feedback da redação
-    # correspondente ao ID informado
-    cursor.execute("""
-        UPDATE redacoes
-        SET nota = ?, feedback = ?
-        WHERE id_redacao = ?
-
-
-    """, (nota,feedback,id_redacao))
-
-
-    # Salva as alterações no banco de dados
-    conexao.commit()
-
-    # Fecha a conexão com o banco de dados
-    conexao.close()
-
-
 # Exclui uma redação pelo seu ID
 def excluir_redacao(id_redacao):
     # Cria uma conexão com o banco de dados
