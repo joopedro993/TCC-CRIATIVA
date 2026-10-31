@@ -240,26 +240,17 @@ def login_professores():
 
     # Verifica se o email ou a senha estão vazios
     if not email or not senha:
-        # Retorna um erro com o status HTTP 400
         return jsonify({"erro": "Email e senha são obrigatórios"}), 400
 
     # Verifica se as credenciais do professor são válidas
     professor = verificar_login_professores(email, senha)
 
-    # Exibe o resultado da verificação no terminal
-    print("RESULTADO DO LOGIN:", professor)
-
     # Verifica se o login falhou
     if professor is None:
-        # Retorna o status HTTP 401 para credenciais inválidas
         return jsonify({"erro": "Email ou senha incorretos"}), 401
 
     # Cria um token contendo o ID do professor e seu tipo de usuário
     token = serializador.dumps({"id": professor["id_professor"], "tipo": "professor"})
-
-    # Verifica a validade e o prazo máximo do token
-    # O limite informado é de 3600 segundos, equivalente a uma hora
-    serializador.loads(token, max_age=3600)
 
     # Retorna a mensagem de sucesso, os dados do professor e o token
     return (
@@ -272,7 +263,6 @@ def login_professores():
         ),
         200,
     )
-
 
 # ===============================ALUNOS====================================================================
 
