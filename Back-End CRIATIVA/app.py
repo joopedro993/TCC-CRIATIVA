@@ -639,27 +639,6 @@ def obter_redacao(id_redacao):
     # Retorna os dados da redação no formato JSON
     return jsonify(redacao)
 
-
-# Define a rota para atualizar uma redação pelo ID
-@app.route("/redacoes/<int:id_redacao>", methods=["PUT"])
-def editar_redacao(id_redacao):
-
-    # Recupera os dados enviados na requisição
-    dados = request.get_json()
-
-    # Obtém a nota da redação
-    nota = dados.get("nota")
-
-    # Obtém o feedback da correção
-    feedback = dados.get("feedback")
-
-    # Atualiza a nota e o feedback da redação
-    atualizar_redacao(id_redacao, nota, feedback)
-
-    # Retorna uma mensagem confirmando a atualização
-    return jsonify({"mensagem": "Redação atualizada com sucesso"})
-
-
 # Define a rota para excluir uma redação pelo ID
 @app.route("/redacoes/<int:id_redacao>", methods=["DELETE"])
 def deletar_redacao(id_redacao):
