@@ -189,3 +189,18 @@ def excluir_redacao(id_redacao):
 
     # Fecha a conexão com o banco de dados
     conexao.close()
+
+def corrigir_datas_antigas():
+    conexao = criar_conexao()
+    cursor = conexao.cursor()
+    
+    # Atualiza todos os registos onde data_envio é "Não Consta"
+    cursor.execute("""
+        UPDATE redacoes 
+        SET data_envio = '2026-01-01' 
+        WHERE data_envio = 'Não Consta'
+    """)
+    
+    conexao.commit()
+    print(f"Registos atualizados com sucesso: {cursor.rowcount}")
+    conexao.close()
