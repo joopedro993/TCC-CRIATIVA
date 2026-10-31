@@ -692,13 +692,14 @@ def cadastrar_atividade():
     # Obtém o identificador do tema relacionado
     id_tema = dados.get("id_tema")
 
-    # Verifica se todos os campos indicados foram preenchidos
-    if not all([titulo, tema, descricao, data_disponibilizacao, prazo, id_turma]):
+   # Verifica se todos os campos indicados foram preenchidos (incluindo o id_tema)
+    if not all([titulo, id_tema, descricao, data_disponibilizacao, prazo, id_turma]):
         # Retorna um erro caso algum campo esteja vazio
         return jsonify({"erro": "Todos os campos são obrigatórios"}), 400
 
-    # Cadastra a atividade com seus dados e identificadores relacionados
-    adicionar_atividade(titulo, tema, descricao, data_disponibilizacao, prazo, id_tema, id_turma)
+    # Cadastra a atividade (removemos a duplicação do id_tema)
+    # Certifique-se de que a ordem dos argumentos aqui coincide com a sua função no banco de dados:
+    adicionar_atividade(titulo, id_tema, descricao, data_disponibilizacao, prazo, id_turma)
 
     # Retorna uma mensagem de sucesso com o status HTTP 201
     return jsonify({"mensagem": "Atividade cadastrada com sucesso"}), 201
