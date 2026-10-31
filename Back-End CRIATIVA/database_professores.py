@@ -212,7 +212,7 @@ def buscar_professor_por_id(id_professor):
 
     # Seleciona todos os dados do professor correspondente ao ID
     cursor.execute("""
-        SELECT *
+        SELECT id_professor, nome, email
         FROM professores
         WHERE id_professor = ?
     """, (id_professor,))
