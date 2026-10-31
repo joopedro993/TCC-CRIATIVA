@@ -119,7 +119,7 @@ def editar_professor(id_professor, nome, email, senha):
     # correspondente ao ID informado
     cursor.execute("""
         UPDATE professores
-        SET nome = ?, email = ?, senha = ?
+        SET nome = ?, email = ?, senha = ?, id_escola_fk = ?
         WHERE id_professor = ?
     """, (nome, email, senha_hash, id_professor))
 
