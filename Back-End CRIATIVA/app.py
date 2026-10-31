@@ -606,13 +606,13 @@ def cadastrar_redacao():
     # Obtém o identificador da atividade relacionada
     id_atividade = dados.get("id_atividade")
 
-    # Obtém a data de envio da redação
-    data_envio = dados.get("data_envio")
-
     # Verifica se os campos obrigatórios foram preenchidos
     if not tema or not texto or not id_aluno or not id_atividade:
         # Retorna um erro com o status HTTP 400
-        return jsonify({"erro": "tema, texto e id_aluno são obrigatorios"}), 400
+        return jsonify({"erro": "tema, texto, id_atividade e id_aluno são obrigatórios"}), 400
+    
+    #Define a data atual com base na data presente no envio do usuário automaticamente
+    data_envio = date.today().isoformat()
 
     # Salva a redação no banco de dados
     adicionar_redacao(tema, texto, id_aluno, id_atividade, data_envio)
