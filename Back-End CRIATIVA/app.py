@@ -585,9 +585,17 @@ def buscar_turmas_por_professor(id_professor):
 # Define a rota para listar todas as redações
 @app.route("/redacoes", methods=["GET"])
 def buscar_redacoes():
-
-    # Recupera e retorna a lista de redações
-    return jsonify(listar_redacoes())
+    # Verifica se o token foi enviado no cabeçalho da requisição
+    token = request.headers.get("Authorization")
+    
+    if not token:
+        return jsonify({"erro": "Acesso negado. Token de autenticação em falta."}), 401
+    
+    # (Opcional) Aqui podes validar o token se tiveres uma lógica para isso
+    
+    # Se o token existir, continua a lógica normal para buscar e retornar as redações
+    redacoes = buscar_todas_as_redacoes() # Exemplo de função do banco
+    return jsonify(redacoes), 200
 
 
 # Define a rota para cadastrar uma nova redação
