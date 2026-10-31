@@ -143,7 +143,7 @@ def atualizar_aluno(id_aluno,nome,email,senha):
     # Atualiza o nome, o email e a senha do aluno correspondente ao ID
     cursor.execute("""
         UPDATE alunos
-        SET nome = ?, email = ?, senha = ?
+        SET nome = ?, email = ?, senha = ?, id_turma_fk = ?
         WHERE id_aluno = ?
     """,(nome,email,senha_hash,id_aluno))
 
