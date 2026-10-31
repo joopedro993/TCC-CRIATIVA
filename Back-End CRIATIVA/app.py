@@ -45,6 +45,9 @@ import os
 # Importa a biblioteca json para trabalhar com dados no formato JSON
 import json
 
+# Importa a biblioteca time para trabalhar com datas atuais e atualizadas automaticamente
+from datetime import date
+
 
 # Cria um serializador para gerar e verificar tokens assinados
 # Utiliza a chave secreta definida nas variáveis de ambiente
@@ -860,24 +863,41 @@ def cadastrar_correcao():
 
 
 # O bloco abaixo contém uma rota de edição de correção
-# que está desativada porque foi colocada dentro de aspas triplas
-"""@app.route("/correcao/<int:id_correcao>", methods=["PUT"])
+@app.route("/correcao/<int:id_correcao>", methods=["PUT"])
 def editar_correcao(id_correcao):
     dados = request.get_json()
 
-    id_redacao_fk = dados("id_redacao")
-    id_professor_fk = dados("id_professor")
-    competencia_1 = dados("competencia_1")
-    competencia_2 = dados("competencia_2")
-    competencia_3 = dados("competencia_3")
-    competencia_4 = dados("competencia_4")
-    competencia_5 = dados("competencia_5")
+    id_redacao_fk = dados.get("id_redacao")
+    id_professor_fk = dados.get("id_professor")
+    competencia_1 = dados.get("competencia_1")
+    competencia_2 = dados.get("competencia_2")
+    competencia_3 = dados.get("competencia_3")
+    competencia_4 = dados.get("competencia_4")
+    competencia_5 = dados.get("competencia_5")
+    comentario = dados.get("comentario")
+
+    # Verifica se os campos obrigatórios foram preenchidos
+    if not all([
+        id_redacao_fk,
+        id_professor_fk,
+        competencia_1 is not None,
+        competencia_2 is not None,
+        competencia_3 is not None,
+        competencia_4 is not None,
+        competencia_5 is not None,
+        comentario
+    ]):
+        return jsonify({"erro": "Todos os campos obrigatórios são necessários para atualizar"}), 400
+
+    # Calcula a nota total somando as competências
     nota_total = (
         competencia_1 + competencia_2 + competencia_3 + competencia_4 + competencia_5
     )
-    comentario = dados("comentario")
-    data_correcao = dados("data_correcao")
+    
+    # Define a data da correção automaticamente pelo servidor
+    data_correcao = date.today().isoformat()
 
+    # Chama a função do banco de dados para atualizar
     atualizar_correcao(
         id_correcao,
         id_redacao_fk,
@@ -892,7 +912,7 @@ def editar_correcao(id_correcao):
         data_correcao,
     )
 
-    return jsonify({"mensagem": "Correção atualizada com sucesso"}), 200"""
+    return jsonify({"mensagem": "Correção atualizada com sucesso"}), 200
 
 
 # =========================================TEMA============================================================
