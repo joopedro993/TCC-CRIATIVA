@@ -836,9 +836,6 @@ def cadastrar_correcao():
     # Obtém o comentário da correção
     comentario = dados.get("comentario")
 
-    # Obtém a data em que a correção foi realizada
-    data_correcao = dados.get("data_correcao")
-
     # Verifica se todos os campos indicados foram preenchidos
     if not all(
         [
@@ -850,8 +847,7 @@ def cadastrar_correcao():
             competencia_3,
             competencia_4,
             competencia_5,
-            comentario,
-            data_correcao,
+            comentario
         ]
     ):
         # Retorna um erro caso algum campo esteja vazio
@@ -861,6 +857,9 @@ def cadastrar_correcao():
     nota_total = (
             competencia_1 + competencia_2 + competencia_3 + competencia_4 + competencia_5
         )
+    
+    # Define a data da correção automaticamente pelo servidor (evita erros e dados incorretos)
+    data_correcao = date.today().isoformat()
     
     # Salva a correção no banco de dados
     adicionar_correcao(
