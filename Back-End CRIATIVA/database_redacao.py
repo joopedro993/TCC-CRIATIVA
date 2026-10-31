@@ -35,6 +35,9 @@ def criar_banco_redacao():
             data_envio TEXT NOT NULL,
             id_atividade_fk INTEGER NOT NULL,
             id_aluno_fk INTEGER NOT NULL,
+
+            -- Impede que o mesmo aluno envie mais de uma redação para a mesma atividade
+            UNIQUE(id_aluno_fk, id_atividade_fk),
             
             
             FOREIGN KEY(id_aluno_fk)
@@ -78,6 +81,15 @@ def adicionar_redacao(tema,texto,id_aluno_fk,id_atividade_fk, dt_envio):
 
     # Fecha a conexão com o banco de dados
     conexao.close()
+    return True # Retorna True indicando que deu tudo certo
+
+except sqlite3.IntegrityError:
+        # Se cair aqui, significa que a restrição UNIQUE foi violada
+        # (ou seja, o aluno já enviou uma redação para essa atividade)
+        if 'conexao' in locals() and conexao:
+            conexao.close()
+            
+        return False  # Retorna False indicando que já existe um envio
 
 
 # Lista todas as redações cadastradas no banco de dados
