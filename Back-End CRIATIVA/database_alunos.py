@@ -209,7 +209,7 @@ def buscar_aluno_por_id(id_aluno):
 
     # Seleciona todas as colunas do aluno correspondente ao ID
     cursor.execute("""
-        SELECT *
+        SELECT id_aluno, nome, email, id_turma_fk
         FROM alunos
         WHERE id_aluno = ?
 
