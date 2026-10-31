@@ -80,7 +80,7 @@ def listar_correcao():
 
 
 # Adiciona uma nova correção ao banco de dados
-def adicionar_correcao(id_correcao,id_redacao_fk,id_professor_fk,competencia_1,competencia_2,competencia_3,competencia_4,competencia_5,nota_total,comentario,data_correcao):
+def adicionar_correcao(id_redacao_fk,id_professor_fk,competencia_1,competencia_2,competencia_3,competencia_4,competencia_5,nota_total,comentario,data_correcao):
     # Cria uma conexão com o banco de dados
     conexao = criar_conexao()
 
@@ -97,12 +97,13 @@ def adicionar_correcao(id_correcao,id_redacao_fk,id_professor_fk,competencia_1,c
     
     # Salva a nova correção no banco de dados
     conexao.commit()
+    correcao = cursor.lastrowid
 
     # Fecha a conexão com o banco de dados
     conexao.close()
     
     # Retorna o ID da correção informado
-    return id_correcao
+    return correcao
 
 
 # Busca uma correção pelo seu ID

@@ -839,7 +839,7 @@ def cadastrar_correcao():
     # Verifica se todos os campos indicados foram preenchidos
     if not all(
         [
-                
+            
             id_redacao_fk,
             id_professor_fk,
             competencia_1,

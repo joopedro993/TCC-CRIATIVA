@@ -44,6 +44,7 @@ function atualizarContador() {
 
     const texto = editor.value.trim();
     escreverTexto("palavras", texto ? texto.split(/\s+/).length : 0);
+    escreverTexto("paragrafos", texto ? texto.split(/\n+/).filter((p) => p.trim()).length : 0);
 
     const barra = pegarPorId("barra");
 
@@ -228,7 +229,7 @@ botaoEnviar?.addEventListener("click", async () => {
                 texto: texto,
                 id_aluno: idAluno,
                 id_atividade: idDaAtividade,
-                data_envio: dataDeHoje()
+                data_correcao: dataDeHoje()
             })
         });
 

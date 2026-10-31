@@ -16,6 +16,57 @@
     <link rel="stylesheet" href="assets/areas.css">
     <link rel="stylesheet" href="assets/turmas.css">
     <link rel="icon" href="assets/images/Logo-Simplificada.png">
+    <style>
+        /* Modal da IA */
+        .ia-conversa {
+            max-height: 340px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 4px;
+        }
+
+        .ia-mensagem {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 16px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .ia-aluno {
+            align-self: flex-end;
+            background: #9500ff;
+            color: #fff;
+        }
+
+        .ia-resposta {
+            align-self: flex-start;
+            background: rgba(149, 0, 255, 0.08);
+            color: #000;
+        }
+
+        .ia-pensando {
+            opacity: 0.6;
+            font-style: italic;
+        }
+
+        .ia-sugestao {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85em;
+            font-weight: 600;
+            border: 2px solid rgb(225, 223, 223);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.75);
+        }
+
+        .ia-sugestao:hover {
+            border-color: #9500ff;
+            color: #9500ff;
+        }
+    </style>
 </head>
 
 <body class="areas">
@@ -54,7 +105,7 @@
                                     <label for="editor" class="visually-hidden">Texto da redação</label>
                                     <textarea id="editor" class="form-control redacao-editor" maxlength="3500"
                                         placeholder="Organize suas ideias, argumentos, parágrafos e repertórios..."
-                                        aria-describedby="contador"></textarea>
+                                        aria-describedby="contador" style="text-align: justify;"></textarea>
 
                                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mt-3">
                                         <span id="contador" class="redacao-contador" aria-live="polite">0 / 3500
@@ -97,9 +148,8 @@
                                     <h2 class="redacao-subtitulo">Aprenda com o <span>processo:</span></h2>
                                     <p class="redacao-texto">A IA oferece sugestões para auxiliar na construção, sem
                                         substituir o pensamento do estudante.</p>
-                                    <button type="button" class="btn btn-roxo w-100" id="btnSugestao">Pedir
-                                        sugestão</button>
-                                    <div class="redacao-sugestao mt-3 d-none" id="sugestao" aria-live="polite"></div>
+                                    <button type="button" class="btn btn-roxo w-100" id="btnSugestao" data-bs-toggle="modal"
+                                        data-bs-target="#modalIA">Consultar a IA</button>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -119,6 +169,49 @@
             </div>
         </section>
     </main>
+
+    <div class="modal fade turmas-modal" id="modalIA" tabindex="-1" aria-labelledby="tituloModalIA" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-4" id="tituloModalIA">Consulte a IA</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+
+                <div class="modal-body">
+                    <p class="redacao-texto mb-3">A IA ajuda você a pensar, sem escrever o texto no seu lugar.
+                        Escolha uma sugestão ou escreva a sua pergunta.</p>
+
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <button type="button" class="btn btn-sm ia-sugestao"
+                            data-pergunta="Como posso começar a minha introdução?">Como começar a introdução?</button>
+                        <button type="button" class="btn btn-sm ia-sugestao"
+                            data-pergunta="Minha tese está clara? Me dê um retorno sobre ela.">Minha tese está
+                            clara?</button>
+                        <button type="button" class="btn btn-sm ia-sugestao"
+                            data-pergunta="Que repertórios posso usar neste tema?">Ideias de repertório</button>
+                        <button type="button" class="btn btn-sm ia-sugestao"
+                            data-pergunta="Como montar uma boa proposta de intervenção para este tema?">Proposta de
+                            intervenção</button>
+                    </div>
+
+                    <div id="conversaIA" class="ia-conversa" aria-live="polite"></div>
+                    <p class="text-danger fw-semibold mt-2 mb-0 d-none" id="avisoIA" role="alert"></p>
+                    <button type="button" class="btn btn-link btn-sm p-0 mt-2" id="btnLimparIA">Limpar conversa</button>
+                </div>
+
+                <div class="modal-footer">
+                    <form id="formularioIA" class="w-100 d-flex gap-2 align-items-end">
+                        <label for="perguntaIA" class="visually-hidden">Sua pergunta para a IA</label>
+                        <textarea id="perguntaIA" class="form-control" rows="2" maxlength="500"
+                            placeholder="Escreva a sua pergunta... (Enter envia, Shift + Enter pula linha)"></textarea>
+                        <button type="submit" class="btn btn-roxo" id="btnEnviarIA"
+                            style="font-size: 1.1em">Enviar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <footer class="footer">
         <div class="container-fluid">
@@ -149,6 +242,7 @@
 
     <script src="js/aluno-base.js"></script>
     <script src="js/aluno-redacao.js"></script>
+    <script src="js/aluno-ia.js"></script>
 
 </body>
 
