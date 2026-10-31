@@ -664,42 +664,35 @@ def buscar_atividades():
     return jsonify(listar_atividades())
 
 
-# Define a rota para cadastrar uma atividade
 @app.route("/atividades", methods=["POST"])
 def cadastrar_atividade():
 
     # Recupera os dados enviados na requisição
     dados = request.get_json()
 
-    # Obtém o título da atividade
+    # Obtém todos os campos necessários
     titulo = dados.get("titulo")
-
-    # Obtém o tema da atividade
-    tema = dados.get("tema")
-
-    # Obtém a descrição da atividade
+    tema = dados.get("tema")  # <--- Captura o tema textual
     descricao = dados.get("descricao")
-
-    # Obtém a data de disponibilização da atividade
     data_disponibilizacao = dados.get("data_disponibilizacao")
-
-    # Obtém o prazo para realizar a atividade
     prazo = dados.get("prazo")
-
-    # Obtém o identificador da turma relacionada
     id_turma = dados.get("id_turma")
-
-    # Obtém o identificador do tema relacionado
     id_tema = dados.get("id_tema")
 
-   # Verifica se todos os campos indicados foram preenchidos (incluindo o id_tema)
+    # Validação incluindo o id_tema para evitar o erro 500 no banco
     if not all([titulo, id_tema, descricao, data_disponibilizacao, prazo, id_turma]):
-        # Retorna um erro caso algum campo esteja vazio
-        return jsonify({"erro": "Todos os campos são obrigatórios"}), 400
+        return jsonify({"erro": "Todos os campos obrigatórios devem ser preenchidos"}), 400
 
-    # Cadastra a atividade (removemos a duplicação do id_tema)
-    # Certifique-se de que a ordem dos argumentos aqui coincide com a sua função no banco de dados:
-    adicionar_atividade(titulo, id_tema, descricao, data_disponibilizacao, prazo, id_turma)
+    # Passa exatamente os 7 argumentos na ordem correta que a função do banco exige
+    adicionar_atividade(
+        titulo, 
+        tema, 
+        descricao, 
+        data_disponibilizacao, 
+        prazo, 
+        id_tema, 
+        id_turma
+    )
 
     # Retorna uma mensagem de sucesso com o status HTTP 201
     return jsonify({"mensagem": "Atividade cadastrada com sucesso"}), 201
