@@ -86,6 +86,13 @@ function carregarRascunho() {
     }
 }
 
+function apagarRascunho() {
+    try {
+        localStorage.removeItem(chaveDoRascunho());
+    } catch {
+    }
+}
+
 
 // ------------------------------------------------------------
 // MOSTRAR A ATIVIDADE E BLOQUEAR QUANDO NÃO DÁ PARA ESCREVER
@@ -234,7 +241,7 @@ botaoEnviar?.addEventListener("click", async () => {
         });
 
         // Enviada: o rascunho não é mais necessário
-        localStorage.removeItem(chaveDoRascunho());
+        apagarRascunho();
         location.href = PAGINA_INICIAL_DO_ALUNO;
     } catch (erro) {
         mostrarErro(erro.message);

@@ -106,7 +106,7 @@ async function efetuarCadastro(event) {
                     body: JSON.stringify(aluno)
                 });
 
-            const novoAluno = await resposta.json();
+            const novoAluno = await resposta.json().catch(() => ({}));
 
             if (resposta.ok) {
                 window.alert("Cadastro efetuado, faça seu Login!");
