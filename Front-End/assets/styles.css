@@ -29,7 +29,6 @@
 * {
     margin: 0;
     padding: 0;
-    font-family: "Poppins", sans-serif;
     box-sizing: border-box;
 }
 
@@ -53,7 +52,7 @@ main {
     overflow: hidden;
     min-height: 100vh;
     padding: 130px 0 64px;
-    background: url('/Front-End/assets/images/background.png') no-repeat center/cover;
+    background: url('images/background.png') no-repeat center/cover;
 }
 
 /* Classe responsável pela caixa de conteúdo que está na primeira seção, com os botões e o texto chamativo */
@@ -395,7 +394,7 @@ seja .btn-amarelo ou .btn-roxo */
         font-size: 1.2em;
     }
 
-    * {
+    html {
         font-size: 95%;
     }
 

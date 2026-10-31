@@ -9,7 +9,7 @@
     display: flex;
     align-items: center;
     padding: 120px 0 48px;
-    background: url('/Front-End/assets/images/background.png') no-repeat center/cover;
+    background: url('images/background.png') no-repeat center/cover;
 }
 
 .login::before,

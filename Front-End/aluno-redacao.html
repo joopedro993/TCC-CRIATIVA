@@ -16,57 +16,7 @@
     <link rel="stylesheet" href="assets/areas.css">
     <link rel="stylesheet" href="assets/turmas.css">
     <link rel="icon" href="assets/images/Logo-Simplificada.png">
-    <style>
-        /* Modal da IA */
-        .ia-conversa {
-            max-height: 340px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            padding: 4px;
-        }
-
-        .ia-mensagem {
-            max-width: 85%;
-            padding: 10px 14px;
-            border-radius: 16px;
-            line-height: 1.5;
-            white-space: pre-wrap;
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        .ia-aluno {
-            align-self: flex-end;
-            background: #9500ff;
-            color: #fff;
-        }
-
-        .ia-resposta {
-            align-self: flex-start;
-            background: rgba(149, 0, 255, 0.08);
-            color: #000;
-        }
-
-        .ia-pensando {
-            opacity: 0.6;
-            font-style: italic;
-        }
-
-        .ia-sugestao {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.85em;
-            font-weight: 600;
-            border: 2px solid rgb(225, 223, 223);
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.75);
-        }
-
-        .ia-sugestao:hover {
-            border-color: #9500ff;
-            color: #9500ff;
-        }
-    </style>
+    
 </head>
 
 <body class="areas">
@@ -87,6 +37,7 @@
                     <div class="col-12 col-xl-11">
 
                         <h1 class="redacao-titulo mb-4">Construa sua <span>redação</span></h1>
+                        <div class="alert alert-warning d-none" id="alerta" role="alert"></div>
 
                         <div class="row gy-4">
 

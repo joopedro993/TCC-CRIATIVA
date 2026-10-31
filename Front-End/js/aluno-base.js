@@ -26,7 +26,7 @@
 // ------------------------------------------------------------
 
 // Endereço da API Flask
-const URL_DA_API = "http://127.0.0.1:5010";
+const apiURL = "http://127.0.0.1:5010";
 
 // Atalho para achar um elemento da página pelo id
 const pegarPorId = (id) => document.getElementById(id);
@@ -93,7 +93,7 @@ async function chamarApi(caminho, opcoes = {}) {
     // Só avisa que o corpo é JSON quando existe um corpo (POST, PUT...)
     if (opcoes.body) cabecalhos["Content-Type"] = "application/json";
 
-    const resposta = await fetch(URL_DA_API + caminho, { ...opcoes, headers: cabecalhos });
+    const resposta = await fetch(apiURL + caminho, { ...opcoes, headers: cabecalhos });
 
     // 401 = sessão inválida ou expirada
     if (resposta.status === 401) sair();

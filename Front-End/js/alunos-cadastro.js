@@ -1,4 +1,4 @@
-const api_url = "http://127.0.0.1:5010";
+const apiURL = "http://127.0.0.1:5010";
 
 const email = document.getElementById('input-email');
 const senha = document.getElementById('input-senha');
@@ -8,7 +8,7 @@ const professor = document.getElementById("select-professor")
 const turma = document.getElementById("select-turma");
 const alerta = document.getElementById('alerta');
 const toggle = document.getElementById('toggleSenha');
-
+const btnCadastrar = document.getElementById('btnCadastrar')
 
 const formulario = document.getElementById("form-cadastro");
 
@@ -39,7 +39,6 @@ formulario.addEventListener('submit', (event) => {
 
     efetuarCadastro(event);
 
-    console.log('Cadastro enviado: ', email.value)
 
 });
 
@@ -64,63 +63,22 @@ function preencherSelect(select, itens, campoId) {
 
 
 async function carregarEscolas() {
-    const resposta = await fetch(`${api_url}/escolas`);
+    const resposta = await fetch(`${apiURL}/escolas`);
     preencherSelect(escola, await resposta.json(), "id_escola")
-    // const escolas = await resposta.json();
-
-    // const selectEscolas = document.getElementById("select-escola");
-
-    // escolas.forEach(escola => {
-    //     selectEscolas.innerHTML += `
-    //     <option value="${escola.id_escola}">
-    //         ${escola.nome}
-    //     </option>
-    //     `
-
-    // });
-
-
+  
 };
 
 async function carregarProfessores(id_escola) {
     preencherSelect(turma, [], "id_turma");
-    const resposta = await fetch(`${api_url}/professores/escola/${id_escola}`);
+    const resposta = await fetch(`${apiURL}/professores/escola/${id_escola}`);
     preencherSelect(professor, await resposta.json(), "id_professor");
-
-    // const professores = await resposta.json();
-
-    // const selectProfessores = document.getElementById("select-professor");
-
-    // selectProfessores.innerHTML = `<option value="">Selecione seu professor</option>`;
-
-    // professores.forEach(professor => {
-    //     selectProfessores.innerHTML += `
-    //     <option value="${professor.id_professor}">
-    //         ${professor.nome}
-    //     </option>
-    //     `
-    // });
-
 
 }
 
 async function carregarTurmas(id_professor) {
-    const resposta = await fetch(`${api_url}/turmas/professores/${id_professor}`);
+    const resposta = await fetch(`${apiURL}/turmas/professores/${id_professor}`);
     preencherSelect(turma, await resposta.json(), "id_turma")
-    // const turmas = await resposta.json();
-
-    // const selectTurmas = document.getElementById("select-turma");
-
-    // selectTurmas.innerHTML = `<option value="">Selecione sua turma</option>`;
-
-    // turmas.forEach(turma => {
-    //     selectTurmas.innerHTML += `
-    //     <option value="${turma.id_turma}">
-    //         ${turma.nome}
-    //     </option>
-    //     `
-    // });
-
+    
 };
 
 async function efetuarCadastro(event) {
@@ -136,29 +94,37 @@ async function efetuarCadastro(event) {
             email: emailAluno,
             nome: nomeAluno,
             senha: senhaAluno,
-            turma: turmaAluno
+            turma: Number(turmaAluno)
         }
+        btnCadastrar.disabled = true;
+        try {
+            const resposta = await fetch(
+                `${apiURL}/alunos`,
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(aluno)
+                });
 
-        const resposta = await fetch(
-            `${api_url}/alunos`,
-            {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(aluno)
-            });
+            const novoAluno = await resposta.json();
 
-        const novoAluno = await resposta.json();
-        console.log(novoAluno);
+            if (resposta.ok) {
+                window.alert("Cadastro efetuado, faça seu Login!");
+                formulario.reset();
+                
+                window.location.replace("login-alunos.html");
+                return;
 
-        if (resposta.ok) {
-            window.alert("Cadastro efetuado, faça seu Login!");
-            window.location.replace("login-alunos.html");
-        } else {
+            }
+
             mostrarErro(novoAluno.erro || "Não foi possível concluir o cadastro.");
-            return;
-        }
 
-        formulario.reset();
+        } catch {
+            mostrarErro("Não foi possível conectar ao servidor.")
+
+        }
+        btnCadastrar.disabled = false;
+
     };
 };
 

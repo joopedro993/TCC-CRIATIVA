@@ -11,7 +11,7 @@
     overflow: hidden;
     min-height: 100vh;
     padding: 130px 0 64px;
-    background: url('/Front-End/assets/images/background.png') no-repeat center/cover;
+    background: url('images/background.png') no-repeat center/cover;
 }
  
 .turmas::before,

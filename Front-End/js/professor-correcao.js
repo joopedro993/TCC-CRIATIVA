@@ -85,9 +85,15 @@ function atualizarNotaTotal() {
 // Guarda as 5 notas e o comentário. Cada professor tem um rascunho
 // por redação, por isso a chave leva os dois ids.
 // ------------------------------------------------------------
- 
+
 const chaveDoRascunho = () => `rascunho:${idProfessor}:${idDaRedacao}`;
- 
+
+pegarPorId("btnSalvar")?.addEventListener("click", () => {
+    pegarPorId("status").textContent = salvarRascunho()
+        ? "Rascunho salvo neste navegador."
+        : "Não foi possível salvar o rascunho.";
+});
+
 // Guarda no navegador o que está nos campos agora.
 // Devolve true se deu certo e false se o navegador não permitiu.
 function salvarRascunho() {
@@ -95,7 +101,7 @@ function salvarRascunho() {
         notas: [...camposDeNota].map((campo) => campo.value),
         comentario: pegarPorId("feedback").value
     };
- 
+
     try {
         localStorage.setItem(chaveDoRascunho(), JSON.stringify(rascunho));
         return true;
@@ -103,20 +109,20 @@ function salvarRascunho() {
         return false;
     }
 }
- 
+
 // Coloca nos campos o rascunho guardado, se existir.
 // Devolve true se encontrou um rascunho.
 function carregarRascunho() {
     try {
         const textoGuardado = localStorage.getItem(chaveDoRascunho());
         if (!textoGuardado) return false;
- 
+
         const rascunho = JSON.parse(textoGuardado);
- 
+
         camposDeNota.forEach((campo, indice) => {
             campo.value = rascunho.notas?.[indice] ?? "";
         });
- 
+
         pegarPorId("feedback").value = rascunho.comentario ?? "";
         atualizarNotaTotal();
         return true;
@@ -125,7 +131,7 @@ function carregarRascunho() {
         return false;
     }
 }
- 
+
 // Apaga o rascunho (usado depois que a correção é salva de verdade)
 function apagarRascunho() {
     try {
@@ -204,7 +210,6 @@ async function salvarCorrecao() {
 
     // Monta o corpo exatamente como a rota /correcao espera
     const dadosDaCorrecao = {
-        id_correcao: correcaoExistente ? Number(correcaoExistente.id_correcao) : proximoIdDaCorrecao,
         id_redacao: idDaRedacao,
         id_professor: idProfessor,
         competencia_1: Number(notas[0]),
@@ -278,15 +283,18 @@ async function iniciar() {
         // Descobre se já existe correção e qual será o próximo id
         const todasAsCorrecoes = await buscarLista("/correcao");
 
-        proximoIdDaCorrecao =
-            Math.max(0, ...todasAsCorrecoes.map((correcao) => Number(correcao.id_correcao) || 0)) + 1;
-
         correcaoExistente =
             todasAsCorrecoes.find(
                 (correcao) => obterIdDaRedacaoDaCorrecao(correcao) === idDaRedacao
             ) ?? null;
 
         if (correcaoExistente) preencherCorrecao(correcaoExistente);
+        else if (carregarRascunho()) pegarPorId("status").textContent = "Rascunho recuperado.";
+
+        if (correcaoExistente) {
+            botaoDevolver.disabled = true;
+            pegarPorId("status").textContent = "Esta redação já foi corrigida.";
+        }
 
         mostrarSituacao(Boolean(correcaoExistente));
     } catch (erro) {

@@ -3,7 +3,9 @@ const email = document.getElementById('email');
 const senha = document.getElementById('senha');
 const alerta = document.getElementById('alerta');
 const toggle = document.getElementById('toggleSenha');
-const api_url = "http://127.0.0.1:5010"
+const btnEntrar = document.getElementById('btnEntrar');
+const apiURL = "http://127.0.0.1:5010";
+
 
 toggle.addEventListener('click', () => {
     const visivel = senha.type === 'text';
@@ -25,28 +27,37 @@ form.addEventListener('submit', (event) => {
 
     efetuarLogin()
 
-    console.log('Login enviado:', email.value);
 });
 
 async function efetuarLogin() {
     const emailLancar = document.getElementById('email').value.toLowerCase().trim();
     const senhaLancar = document.getElementById('senha').value.trim();
-    const resposta = await fetch(
-        `${api_url}/professores/login`,
-        {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({emailLancar, senhaLancar })
-        }
-    );
-    const body = await resposta.json();
+    btnEntrar.disabled = true;
+    try {
+        const resposta = await fetch(
+            `${apiURL}/professores/login`,
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ emailLancar, senhaLancar })
+            }
+        );
+        const body = await resposta.json();
 
-    if (resposta.ok){
-        localStorage.setItem("token", body.token);
-        window.location.replace("area-professor.html");
-    } else{
-        window.alert(body.erro)
+        if (resposta.ok && body.token) {
+            localStorage.setItem("token", body.token);
+            window.location.replace("area-professor.html");
+            return;
+        }
+
+        mostrarErro(body.erro || "Não foi possível entrar.");
+
+    } catch {
+        mostrarErro("Não foi possível conectar ao servidor.")
+
     }
+    
+    btnEntrar.disabled = false;
 }
 
 

@@ -229,7 +229,7 @@ botaoEnviar?.addEventListener("click", async () => {
                 texto: texto,
                 id_aluno: idAluno,
                 id_atividade: idDaAtividade,
-                data_correcao: dataDeHoje()
+                data_envio: dataDeHoje()
             })
         });
 
