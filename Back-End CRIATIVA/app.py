@@ -614,12 +614,15 @@ def cadastrar_redacao():
     #Define a data atual com base na data presente no envio do usuário automaticamente
     data_envio = date.today().isoformat()
 
-    # Salva a redação no banco de dados
-    adicionar_redacao(tema, texto, id_aluno, id_atividade, data_envio)
+    # Tenta salvar a redação no banco de dados
+    sucesso = adicionar_redacao(tema, texto, id_aluno, id_atividade, data_envio)
+
+    # Se a função retornar False, significa que o aluno já enviou uma redação para esta atividade
+    if not sucesso:
+        return jsonify({"erro": "O aluno já enviou uma redação para esta atividade."}), 400
 
     # Retorna uma mensagem de sucesso com o status HTTP 201
     return jsonify({"mensagem": "Redação cadastrada com sucesso"}), 201
-
 
 # Define a rota para consultar uma redação pelo ID
 @app.route("/redacoes/<int:id_redacao>", methods=["GET"])
