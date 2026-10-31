@@ -162,7 +162,7 @@ def atualizar_professor(id_professor):
     # Verifica se os campos obrigatórios foram preenchidos
     if not nome or not email or not senha or not escola:
         # Retorna um erro caso algum campo esteja vazio
-        return jsonify({"erro": "Nome, email e senha são obrigatórios"}), 400
+        return jsonify({"erro": "Nome, email, escola e senha são obrigatórios"}), 400
 
     # Atualiza os dados do professor no banco de dados
     resultado = editar_professor(id_professor, nome, email, senha, escola)
