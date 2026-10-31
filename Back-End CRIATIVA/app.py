@@ -231,21 +231,12 @@ def login_professores():
     # Recupera os dados enviados na requisição
     dados = request.get_json()
 
-    # Exibe os dados recebidos no terminal para depuração
-    print("DADOS RECEBIDOS:", dados)
-
     # Obtém o email informado e remove espaços nas extremidades,
     # convertendo as letras para minúsculas
     email = dados.get("emailLancar").strip().lower()
 
     # Obtém a senha informada
     senha = dados.get("senhaLancar")
-
-    # Exibe o email no terminal para depuração
-    print("EMAIL:", email)
-
-    # Exibe a senha recebida no terminal para depuração
-    print("SENHA RECEBIDA:", senha)
 
     # Verifica se o email ou a senha estão vazios
     if not email or not senha:
