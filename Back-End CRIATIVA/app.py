@@ -48,12 +48,10 @@ import os
 import json
 
 
-# Carrega as variáveis do arquivo .env antes de configurar a chave secreta.
-load_dotenv()
-SECRET_KEY = os.environ.get("SECRET_KEY")
-if not SECRET_KEY:
-    raise RuntimeError("Defina SECRET_KEY no arquivo .env antes de iniciar o Back-End.")
-serializador = URLSafeTimedSerializer(SECRET_KEY)
+# Cria um serializador para gerar e verificar tokens assinados
+# Utiliza a chave secreta definida nas variáveis de ambiente
+# Caso ela não exista, utiliza o valor padrão informado
+serializador = URLSafeTimedSerializer(os.environ.get("SECRET_KEY", "criativa-dev123"))
 
 # Cria a aplicação Flask
 app = Flask(__name__)
