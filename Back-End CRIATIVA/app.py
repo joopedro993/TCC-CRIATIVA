@@ -575,7 +575,7 @@ def buscar_redacoes():
     # (Opcional) Aqui podes validar o token se tiveres uma lógica para isso
     
     # Se o token existir, continua a lógica normal para buscar e retornar as redações
-    redacoes = buscar_todas_as_redacoes() # Exemplo de função do banco
+    redacoes = listar_redacoes() # Exemplo de função do banco
     return jsonify(redacoes), 200
 
 

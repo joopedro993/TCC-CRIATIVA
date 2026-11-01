@@ -36,6 +36,8 @@ const lerToken = () => localStorage.getItem("token");
 // Encerra a sessão: apaga o token e volta para a tela de login
 function sair() {
     localStorage.removeItem("token");
+    localStorage.removeItem("nome");
+
     location.href = "login-professor.html";
 }
 
