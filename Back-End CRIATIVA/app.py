@@ -45,14 +45,21 @@ import os
 # Importa a biblioteca json para trabalhar com dados no formato JSON
 import json
 
-# Importa a biblioteca time para trabalhar com datas atuais e atualizadas automaticamente
-from datetime import date
 
+# Carrega as variáveis definidas no arquivo .env
+load_dotenv()
 
-# Cria um serializador para gerar e verificar tokens assinados
-# Utiliza a chave secreta definida nas variáveis de ambiente
-# Caso ela não exista, utiliza o valor padrão informado
-serializador = URLSafeTimedSerializer(os.environ.get("SECRET_KEY", "criativa-dev123"))
+# Obtém a chave secreta usada para assinar e verificar tokens
+SECRET_KEY = os.environ.get("SECRET_KEY")
+
+# Impede a inicialização do backend quando a chave não estiver configurada
+if not SECRET_KEY:
+    raise RuntimeError(
+        "Defina SECRET_KEY no arquivo .env antes de iniciar o Back-End."
+    )
+
+# Cria o serializador usando a chave secreta configurada
+serializador = URLSafeTimedSerializer(SECRET_KEY)
 
 # Cria a aplicação Flask
 app = Flask(__name__)
@@ -165,7 +172,7 @@ def atualizar_professor(id_professor):
     # Verifica se os campos obrigatórios foram preenchidos
     if not nome or not email or not senha or not escola:
         # Retorna um erro caso algum campo esteja vazio
-        return jsonify({"erro": "Nome, email, escola e senha são obrigatórios"}), 400
+        return jsonify({"erro": "Nome, email e senha são obrigatórios"}), 400
 
     # Atualiza os dados do professor no banco de dados
     resultado = editar_professor(id_professor, nome, email, senha, escola)
@@ -231,6 +238,9 @@ def login_professores():
     # Recupera os dados enviados na requisição
     dados = request.get_json()
 
+    # Exibe os dados recebidos no terminal para depuração
+    print("DADOS RECEBIDOS:", dados)
+
     # Obtém o email informado e remove espaços nas extremidades,
     # convertendo as letras para minúsculas
     email = dados.get("emailLancar").strip().lower()
@@ -238,19 +248,34 @@ def login_professores():
     # Obtém a senha informada
     senha = dados.get("senhaLancar")
 
+    # Exibe o email no terminal para depuração
+    print("EMAIL:", email)
+
+    # Exibe a senha recebida no terminal para depuração
+    print("SENHA RECEBIDA:", senha)
+
     # Verifica se o email ou a senha estão vazios
     if not email or not senha:
+        # Retorna um erro com o status HTTP 400
         return jsonify({"erro": "Email e senha são obrigatórios"}), 400
 
     # Verifica se as credenciais do professor são válidas
     professor = verificar_login_professores(email, senha)
 
+    # Exibe o resultado da verificação no terminal
+    print("RESULTADO DO LOGIN:", professor)
+
     # Verifica se o login falhou
     if professor is None:
+        # Retorna o status HTTP 401 para credenciais inválidas
         return jsonify({"erro": "Email ou senha incorretos"}), 401
 
     # Cria um token contendo o ID do professor e seu tipo de usuário
     token = serializador.dumps({"id": professor["id_professor"], "tipo": "professor"})
+
+    # Verifica a validade e o prazo máximo do token
+    # O limite informado é de 3600 segundos, equivalente a uma hora
+    serializador.loads(token, max_age=3600)
 
     # Retorna a mensagem de sucesso, os dados do professor e o token
     return (
@@ -263,6 +288,7 @@ def login_professores():
         ),
         200,
     )
+
 
 # ===============================ALUNOS====================================================================
 
@@ -566,17 +592,9 @@ def buscar_turmas_por_professor(id_professor):
 # Define a rota para listar todas as redações
 @app.route("/redacoes", methods=["GET"])
 def buscar_redacoes():
-    # Verifica se o token foi enviado no cabeçalho da requisição
-    token = request.headers.get("Authorization")
-    
-    if not token:
-        return jsonify({"erro": "Acesso negado. Token de autenticação em falta."}), 401
-    
-    # (Opcional) Aqui podes validar o token se tiveres uma lógica para isso
-    
-    # Se o token existir, continua a lógica normal para buscar e retornar as redações
-    redacoes = buscar_todas_as_redacoes() # Exemplo de função do banco
-    return jsonify(redacoes), 200
+
+    # Recupera e retorna a lista de redações
+    return jsonify(listar_redacoes())
 
 
 # Define a rota para cadastrar uma nova redação
@@ -598,23 +616,20 @@ def cadastrar_redacao():
     # Obtém o identificador da atividade relacionada
     id_atividade = dados.get("id_atividade")
 
+    # Obtém a data de envio da redação
+    data_envio = dados.get("data_envio")
+
     # Verifica se os campos obrigatórios foram preenchidos
     if not tema or not texto or not id_aluno or not id_atividade:
         # Retorna um erro com o status HTTP 400
-        return jsonify({"erro": "tema, texto, id_atividade e id_aluno são obrigatórios"}), 400
-    
-    #Define a data atual com base na data presente no envio do usuário automaticamente
-    data_envio = date.today().isoformat()
+        return jsonify({"erro": "tema, texto e id_aluno são obrigatorios"}), 400
 
-    # Tenta salvar a redação no banco de dados
-    sucesso = adicionar_redacao(tema, texto, id_aluno, id_atividade, data_envio)
-
-    # Se a função retornar False, significa que o aluno já enviou uma redação para esta atividade
-    if not sucesso:
-        return jsonify({"erro": "O aluno já enviou uma redação para esta atividade."}), 400
+    # Salva a redação no banco de dados
+    adicionar_redacao(tema, texto, id_aluno, id_atividade, data_envio)
 
     # Retorna uma mensagem de sucesso com o status HTTP 201
     return jsonify({"mensagem": "Redação cadastrada com sucesso"}), 201
+
 
 # Define a rota para consultar uma redação pelo ID
 @app.route("/redacoes/<int:id_redacao>", methods=["GET"])
@@ -630,6 +645,27 @@ def obter_redacao(id_redacao):
 
     # Retorna os dados da redação no formato JSON
     return jsonify(redacao)
+
+
+# Define a rota para atualizar uma redação pelo ID
+@app.route("/redacoes/<int:id_redacao>", methods=["PUT"])
+def editar_redacao(id_redacao):
+
+    # Recupera os dados enviados na requisição
+    dados = request.get_json()
+
+    # Obtém a nota da redação
+    nota = dados.get("nota")
+
+    # Obtém o feedback da correção
+    feedback = dados.get("feedback")
+
+    # Atualiza a nota e o feedback da redação
+    atualizar_redacao(id_redacao, nota, feedback)
+
+    # Retorna uma mensagem confirmando a atualização
+    return jsonify({"mensagem": "Redação atualizada com sucesso"})
+
 
 # Define a rota para excluir uma redação pelo ID
 @app.route("/redacoes/<int:id_redacao>", methods=["DELETE"])
@@ -653,35 +689,41 @@ def buscar_atividades():
     return jsonify(listar_atividades())
 
 
+# Define a rota para cadastrar uma atividade
 @app.route("/atividades", methods=["POST"])
 def cadastrar_atividade():
 
     # Recupera os dados enviados na requisição
     dados = request.get_json()
 
-    # Obtém todos os campos necessários
+    # Obtém o título da atividade
     titulo = dados.get("titulo")
-    tema = dados.get("tema")  # <--- Captura o tema textual
+
+    # Obtém o tema da atividade
+    tema = dados.get("tema")
+
+    # Obtém a descrição da atividade
     descricao = dados.get("descricao")
+
+    # Obtém a data de disponibilização da atividade
     data_disponibilizacao = dados.get("data_disponibilizacao")
+
+    # Obtém o prazo para realizar a atividade
     prazo = dados.get("prazo")
+
+    # Obtém o identificador da turma relacionada
     id_turma = dados.get("id_turma")
+
+    # Obtém o identificador do tema relacionado
     id_tema = dados.get("id_tema")
 
-    # Validação incluindo o id_tema para evitar o erro 500 no banco
-    if not all([titulo, id_tema, descricao, data_disponibilizacao, prazo, id_turma]):
-        return jsonify({"erro": "Todos os campos obrigatórios devem ser preenchidos"}), 400
+    # Verifica se todos os campos indicados foram preenchidos
+    if not all([titulo, tema, descricao, data_disponibilizacao, prazo, id_turma]):
+        # Retorna um erro caso algum campo esteja vazio
+        return jsonify({"erro": "Todos os campos são obrigatórios"}), 400
 
-    # Passa exatamente os 7 argumentos na ordem correta que a função do banco exige
-    adicionar_atividade(
-        titulo, 
-        tema, 
-        descricao, 
-        data_disponibilizacao, 
-        prazo, 
-        id_tema, 
-        id_turma
-    )
+    # Cadastra a atividade com seus dados e identificadores relacionados
+    adicionar_atividade(titulo, tema, descricao, data_disponibilizacao, prazo, id_tema, id_turma)
 
     # Retorna uma mensagem de sucesso com o status HTTP 201
     return jsonify({"mensagem": "Atividade cadastrada com sucesso"}), 201
@@ -801,10 +843,13 @@ def cadastrar_correcao():
     # Obtém o comentário da correção
     comentario = dados.get("comentario")
 
+    # Obtém a data em que a correção foi realizada
+    data_correcao = dados.get("data_correcao")
+
     # Verifica se todos os campos indicados foram preenchidos
     if not all(
         [
-            
+                
             id_redacao_fk,
             id_professor_fk,
             competencia_1,
@@ -812,7 +857,8 @@ def cadastrar_correcao():
             competencia_3,
             competencia_4,
             competencia_5,
-            comentario
+            comentario,
+            data_correcao,
         ]
     ):
         # Retorna um erro caso algum campo esteja vazio
@@ -822,9 +868,6 @@ def cadastrar_correcao():
     nota_total = (
             competencia_1 + competencia_2 + competencia_3 + competencia_4 + competencia_5
         )
-    
-    # Define a data da correção automaticamente pelo servidor (evita erros e dados incorretos)
-    data_correcao = date.today().isoformat()
     
     # Salva a correção no banco de dados
     adicionar_correcao(
@@ -846,41 +889,24 @@ def cadastrar_correcao():
 
 
 # O bloco abaixo contém uma rota de edição de correção
-@app.route("/correcao/<int:id_correcao>", methods=["PUT"])
+# que está desativada porque foi colocada dentro de aspas triplas
+"""@app.route("/correcao/<int:id_correcao>", methods=["PUT"])
 def editar_correcao(id_correcao):
     dados = request.get_json()
 
-    id_redacao_fk = dados.get("id_redacao")
-    id_professor_fk = dados.get("id_professor")
-    competencia_1 = dados.get("competencia_1")
-    competencia_2 = dados.get("competencia_2")
-    competencia_3 = dados.get("competencia_3")
-    competencia_4 = dados.get("competencia_4")
-    competencia_5 = dados.get("competencia_5")
-    comentario = dados.get("comentario")
-
-    # Verifica se os campos obrigatórios foram preenchidos
-    if not all([
-        id_redacao_fk,
-        id_professor_fk,
-        competencia_1 is not None,
-        competencia_2 is not None,
-        competencia_3 is not None,
-        competencia_4 is not None,
-        competencia_5 is not None,
-        comentario
-    ]):
-        return jsonify({"erro": "Todos os campos obrigatórios são necessários para atualizar"}), 400
-
-    # Calcula a nota total somando as competências
+    id_redacao_fk = dados("id_redacao")
+    id_professor_fk = dados("id_professor")
+    competencia_1 = dados("competencia_1")
+    competencia_2 = dados("competencia_2")
+    competencia_3 = dados("competencia_3")
+    competencia_4 = dados("competencia_4")
+    competencia_5 = dados("competencia_5")
     nota_total = (
         competencia_1 + competencia_2 + competencia_3 + competencia_4 + competencia_5
     )
-    
-    # Define a data da correção automaticamente pelo servidor
-    data_correcao = date.today().isoformat()
+    comentario = dados("comentario")
+    data_correcao = dados("data_correcao")
 
-    # Chama a função do banco de dados para atualizar
     atualizar_correcao(
         id_correcao,
         id_redacao_fk,
@@ -895,7 +921,7 @@ def editar_correcao(id_correcao):
         data_correcao,
     )
 
-    return jsonify({"mensagem": "Correção atualizada com sucesso"}), 200
+    return jsonify({"mensagem": "Correção atualizada com sucesso"}), 200"""
 
 
 # =========================================TEMA============================================================
