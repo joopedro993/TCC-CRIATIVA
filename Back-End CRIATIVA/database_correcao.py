@@ -1,12 +1,11 @@
 # Importa a biblioteca sqlite3 para trabalhar com o banco de dados
 import sqlite3
-import os
 
 
 # Cria e configura uma conexão com o banco de dados
 def criar_conexao():
     # Conecta ao banco de dados banco.db
-    conexao = sqlite3.connect(os.path.join(os.path.dirname(os.path.abspath(__file__)), "banco.db"))
+    conexao = sqlite3.connect("banco.db")
 
     # Permite acessar os dados das consultas pelo nome das colunas
     conexao.row_factory = sqlite3.Row
@@ -49,12 +48,6 @@ def criar_banco_correcoes():
             REFERENCES professores(id_professor)
         )               
     """)
-    # Evita duplicação da mesma correção pelo mesmo professor,
-    # permitindo que uma redação receba correções de professores diferentes.
-    cursor.execute("""
-        CREATE UNIQUE INDEX IF NOT EXISTS ux_correcao_redacao_professor
-        ON correcoes(id_redacao_fk, id_professor_fk)
-    """)
     conexao.commit()
     conexao.close()
     
@@ -94,15 +87,6 @@ def adicionar_correcao(id_redacao_fk,id_professor_fk,competencia_1,competencia_2
     # Cria um cursor para executar comandos SQL
     cursor = conexao.cursor()
 
-    # Evita uma correção duplicada do mesmo professor para a mesma redação.
-    duplicada = cursor.execute(
-        "SELECT 1 FROM correcoes WHERE id_redacao_fk = ? AND id_professor_fk = ? LIMIT 1",
-        (id_redacao_fk, id_professor_fk)
-    ).fetchone()
-    if duplicada:
-        conexao.close()
-        raise sqlite3.IntegrityError("Este professor já cadastrou uma correção para esta redação")
-
     # Insere os dados da correção na tabela correcoes
     # São armazenadas as notas, o comentário, a data,
     # o ID da redação e o ID do professor responsável
@@ -113,12 +97,13 @@ def adicionar_correcao(id_redacao_fk,id_professor_fk,competencia_1,competencia_2
     
     # Salva a nova correção no banco de dados
     conexao.commit()
+    correcao = cursor.lastrowid
 
     # Fecha a conexão com o banco de dados
     conexao.close()
     
-    # Retorna o ID gerado pelo banco de dados
-    return cursor.lastrowid
+    # Retorna o ID da correção informado
+    return correcao
 
 
 # Busca uma correção pelo seu ID

@@ -106,7 +106,3 @@ def excluir_escolas(id_escola):
 
     # Retorna a quantidade de registros excluídos
     return linhas_afetadas
-
-    
-    
-    

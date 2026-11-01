@@ -1,13 +1,11 @@
 # Importa a biblioteca sqlite3 para trabalhar com o banco de dados
 import sqlite3
-import os
-from datetime import date
 
 
 # Cria e configura uma conexão com o banco de dados
 def criar_conexao():
     # Conecta ao banco de dados banco.db
-    conexao = sqlite3.connect(os.path.join(os.path.dirname(os.path.abspath(__file__)), "banco.db"))
+    conexao = sqlite3.connect("banco.db")
 
     # Permite acessar os dados das consultas pelo nome das colunas
     conexao.row_factory = sqlite3.Row
@@ -34,9 +32,12 @@ def criar_banco_redacao():
             id_redacao INTEGER PRIMARY KEY AUTOINCREMENT,
             tema TEXT NOT NULL,
             texto TEXT NOT NULL,
-            data_envio TEXT NOT NULL DEFAULT (date('now')),
+            data_envio TEXT NOT NULL,
             id_atividade_fk INTEGER NOT NULL,
             id_aluno_fk INTEGER NOT NULL,
+
+            -- Impede que o mesmo aluno envie mais de uma redação para a mesma atividade
+            UNIQUE(id_aluno_fk, id_atividade_fk),
             
             
             FOREIGN KEY(id_aluno_fk)
@@ -56,24 +57,13 @@ def criar_banco_redacao():
 
 
 # Adiciona uma nova redação ao banco de dados
-def adicionar_redacao(tema,texto,id_aluno_fk,id_atividade_fk, dt_envio=None):
+def adicionar_redacao(tema,texto,id_aluno_fk,id_atividade_fk, dt_envio):
     # Cria uma conexão com o banco de dados
     conexao = criar_conexao()
 
     # Cria um cursor para executar comandos SQL
     cursor = conexao.cursor()
-    if not dt_envio:
-        dt_envio = date.today().isoformat()
 
-    # Impede que o mesmo aluno envie mais de uma redação para a mesma atividade,
-    # inclusive quando o banco antigo já continha duplicatas e o índice não pôde ser criado.
-    duplicada = cursor.execute(
-        "SELECT 1 FROM redacoes WHERE id_aluno_fk = ? AND id_atividade_fk = ? LIMIT 1",
-        (id_aluno_fk, id_atividade_fk)
-    ).fetchone()
-    if duplicada:
-        conexao.close()
-        raise sqlite3.IntegrityError("O aluno já enviou uma redação para esta atividade")
 
     # Insere o tema, o texto, o ID do aluno,
     # o ID da atividade e a data de envio da redação
@@ -91,6 +81,15 @@ def adicionar_redacao(tema,texto,id_aluno_fk,id_atividade_fk, dt_envio=None):
 
     # Fecha a conexão com o banco de dados
     conexao.close()
+    return True # Retorna True indicando que deu tudo certo
+
+except sqlite3.IntegrityError:
+        # Se cair aqui, significa que a restrição UNIQUE foi violada
+        # (ou seja, o aluno já enviou uma redação para essa atividade)
+        if 'conexao' in locals() and conexao:
+            conexao.close()
+            
+        return False  # Retorna False indicando que já existe um envio
 
 
 # Lista todas as redações cadastradas no banco de dados
@@ -144,7 +143,6 @@ def buscar_redacao_por_id(id_redacao):
     # Caso contrário, retorna None
     return dict(redacao) if redacao else None
 
-
 # Exclui uma redação pelo seu ID
 def excluir_redacao(id_redacao):
     # Cria uma conexão com o banco de dados
@@ -160,9 +158,22 @@ def excluir_redacao(id_redacao):
     """, (id_redacao,))
 
     # Salva a exclusão no banco de dados
-    linhas_afetadas = cursor.rowcount
     conexao.commit()
 
     # Fecha a conexão com o banco de dados
     conexao.close()
-    return linhas_afetadas
+
+def corrigir_datas_antigas():
+    conexao = criar_conexao()
+    cursor = conexao.cursor()
+    
+    # Atualiza todos os registos onde data_envio é "Não Consta"
+    cursor.execute("""
+        UPDATE redacoes 
+        SET data_envio = '2026-01-01' 
+        WHERE data_envio = 'Não Consta'
+    """)
+    
+    conexao.commit()
+    print(f"Registos atualizados com sucesso: {cursor.rowcount}")
+    conexao.close()
