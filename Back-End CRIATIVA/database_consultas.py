@@ -116,5 +116,3 @@ def buscar_consulta_por_id(id_consulta):
     # Retorna a consulta como dicionário se ela existir
     # Caso contrário, retorna None
     return dict(consulta) if consulta else None
-
-    
