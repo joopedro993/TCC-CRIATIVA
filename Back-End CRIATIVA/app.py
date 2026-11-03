@@ -826,9 +826,9 @@ def cadastrar_correcao():
     data_correcao = dados.get("data_correcao")
 
     # Verifica se todos os campos indicados foram preenchidos
-    if not all(
-        [
-                
+if any(
+        v is None or v == ""
+        for v in [
             id_redacao_fk,
             id_professor_fk,
             competencia_1,
@@ -840,7 +840,7 @@ def cadastrar_correcao():
             data_correcao,
         ]
     ):
-        # Retorna um erro caso algum campo esteja vazio
+        # Retorna um erro caso algum campo esteja vazio ou ausente
         return jsonify({"erro": "Todos os campos são obrigatórios"}), 400
 
     # Calcula a nota total somando as cinco competências
