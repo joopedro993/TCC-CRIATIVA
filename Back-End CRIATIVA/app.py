@@ -803,8 +803,6 @@ def cadastrar_correcao():
     # Recupera os dados enviados na requisição
     dados = request.get_json()
 
-    # Obtém o ID da correção
-    id_correcao = dados.get("id_correcao")
 
     # Obtém o ID da redação que será corrigida
     id_redacao_fk = dados.get("id_redacao")
@@ -826,22 +824,22 @@ def cadastrar_correcao():
     data_correcao = dados.get("data_correcao")
 
     # Verifica se todos os campos indicados foram preenchidos
-if any(
-        v is None or v == ""
-        for v in [
-            id_redacao_fk,
-            id_professor_fk,
-            competencia_1,
-            competencia_2,
-            competencia_3,
-            competencia_4,
-            competencia_5,
-            comentario,
-            data_correcao,
-        ]
-    ):
-        # Retorna um erro caso algum campo esteja vazio ou ausente
-        return jsonify({"erro": "Todos os campos são obrigatórios"}), 400
+    if any(
+            v is None or v == ""
+            for v in [
+                id_redacao_fk,
+                id_professor_fk,
+                competencia_1,
+                competencia_2,
+                competencia_3,
+                competencia_4,
+                competencia_5,
+                comentario,
+                data_correcao,
+            ]
+        ):
+            # Retorna um erro caso algum campo esteja vazio ou ausente
+            return jsonify({"erro": "Todos os campos são obrigatórios"}), 400
 
     # Calcula a nota total somando as cinco competências
     nota_total = (
