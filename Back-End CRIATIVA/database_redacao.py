@@ -58,32 +58,33 @@ def criar_banco_redacao():
 
 # Adiciona uma nova redação ao banco de dados
 def adicionar_redacao(tema,texto,id_aluno_fk,id_atividade_fk, dt_envio):
-    # Cria uma conexão com o banco de dados
-    conexao = criar_conexao()
+    try:
+        # Cria uma conexão com o banco de dados
+        conexao = criar_conexao()
 
-    # Cria um cursor para executar comandos SQL
-    cursor = conexao.cursor()
-
-
-    # Insere o tema, o texto, o ID do aluno,
-    # o ID da atividade e a data de envio da redação
-    cursor.execute("""
-        INSERT INTO redacoes
-        (tema, texto, id_aluno_fk,id_atividade_fk, data_envio)
-        VALUES(?,?,?,?,?)
+        # Cria um cursor para executar comandos SQL
+        cursor = conexao.cursor()
 
 
-    """, (tema,texto,id_aluno_fk,id_atividade_fk, dt_envio))
+        # Insere o tema, o texto, o ID do aluno,
+        # o ID da atividade e a data de envio da redação
+        cursor.execute("""
+            INSERT INTO redacoes
+            (tema, texto, id_aluno_fk,id_atividade_fk, data_envio)
+            VALUES(?,?,?,?,?)
 
 
-    # Salva a redação no banco de dados
-    conexao.commit()
+        """, (tema,texto,id_aluno_fk,id_atividade_fk, dt_envio))
 
-    # Fecha a conexão com o banco de dados
-    conexao.close()
-    return True # Retorna True indicando que deu tudo certo
 
-except sqlite3.IntegrityError:
+        # Salva a redação no banco de dados
+        conexao.commit()
+
+        # Fecha a conexão com o banco de dados
+        conexao.close()
+        return True # Retorna True indicando que deu tudo certo
+
+    except sqlite3.IntegrityError:
         # Se cair aqui, significa que a restrição UNIQUE foi violada
         # (ou seja, o aluno já enviou uma redação para essa atividade)
         if 'conexao' in locals() and conexao:
